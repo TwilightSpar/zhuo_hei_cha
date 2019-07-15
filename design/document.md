@@ -5,10 +5,9 @@
 - [流程](#流程)
 - [类](#类)
 
----
 
 ## 项目概要
-一个承载着记忆的网页应用。。。
+一个承载着记忆的网页应用
 
 ## 流程
 
@@ -34,10 +33,11 @@
 ### 结尾阶段
 1. 统计结果，计算进贡
 
+<br>
 
-### 类
+## 类
 
-#### Card
+### Card
 - 成员变量
 
    |变量名|数据类型|描述|取值范围|
@@ -52,7 +52,7 @@
    |identifyHand|hand: `Card[]`|[`enum PokerHand`](#enum-PokerHand)|判定hand的种类|
    |compareHands|hand1: `Card[]`, hand2: `Card[]`|`int`|比较hand1和hand2的大小|
 
-#### Player
+### Player
 - 成员变量
 
    |变量名|数据类型|描述|取值范围|
@@ -66,7 +66,7 @@
    |---|---|---|---|
    |playCards|cards: Card[]|`void`(*！需要讨论！*)|玩家出牌|
 
-#### Game
+### Game
 - 成员变量
 
    |变量名|数据类型|描述|取值范围|
@@ -75,9 +75,9 @@
    |lastPlayedCards|`Card[]`|上次出的牌|n/a|
    |players|`Player[]`|场上玩家|n/a|
    |remainingPlayers|`Player[]`|场上剩余玩家|n/a|
-   |？|？|进贡、亮黑叉信息|？|
+   |TBD|TBD|进贡、亮黑叉信息|TBD|
 
-#### enum CardSuit
+### enum CardSuit
 - 取值：
   - HEARTS (红桃)
   - DIAMONDS (方片)
@@ -85,9 +85,9 @@
   - SPADES (黑桃)
   - JOKERS (王)
 
-#### enum PokerHand
+### enum PokerHand
 - 取值(有待补全):
-  - NOTHING (什么都不是。。。)
+  - NOTHING (什么都不是)
   - PAIR (对)
   - STRAIGHT (顺)
   - STRAIGHT_FLUSH (同花顺)
