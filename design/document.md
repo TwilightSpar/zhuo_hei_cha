@@ -39,38 +39,43 @@
 
 #### Card
 - 成员变量
-    |变量名|数据类型|描述|取值范围|
-    |---|---|---|---|
-    |ID|`int`|牌的编号|0-53|
-    |suit|`enum CardSuit`|牌的花色|[enum CardSuit](#enum-CardSuit)|
-    |pip|`int`|牌的点数|0-12 (王牌只能取0,1)|
+
+   |变量名|数据类型|描述|取值范围|
+   |---|---|---|---|
+   |ID|`int`|牌的编号|0-53|
+   |suit|`enum CardSuit`|牌的花色|[enum CardSuit](#enum-CardSuit)|
+   |pip|`int`|牌的点数|0-12 (王牌只能取0,1)|
 - 类函数
-    |函数名|参数|返回类型|描述|
-    |---|---|---|---|
-    |identifyHand|hand: `Card[]`|[`enum PokerHand`](#enum-PokerHand)|判定hand的种类|
-    |compareHands|hand1: `Card[]`, hand2: `Card[]`|`int`|比较hand1和hand2的大小|
+
+   |函数名|参数|返回类型|描述|
+   |---|---|---|---|
+   |identifyHand|hand: `Card[]`|[`enum PokerHand`](#enum-PokerHand)|判定hand的种类|
+   |compareHands|hand1: `Card[]`, hand2: `Card[]`|`int`|比较hand1和hand2的大小|
 
 #### Player
 - 成员变量
-    |变量名|数据类型|描述|取值范围|
-    |---|---|---|---|
-    |cards|`Card[]`|手牌|n/a|
-    |ID|`int`|玩家序号|0-3|
+
+   |变量名|数据类型|描述|取值范围|
+   |---|---|---|---|
+   |cards|`Card[]`|手牌|n/a|
+   |ID|`int`|玩家序号|0-3|
 
 - 成员函数
-    |函数名|参数|返回类型|描述|
-    |---|---|---|---|
-    |playCards|cards: Card[]|`void`(*！需要讨论！*)|玩家出牌|
+
+   |函数名|参数|返回类型|描述|
+   |---|---|---|---|
+   |playCards|cards: Card[]|`void`(*！需要讨论！*)|玩家出牌|
 
 #### Game
 - 成员变量
-    |变量名|数据类型|描述|取值范围|
-    |---|---|---|---|
-    |deck|`Card[]`|牌堆|n/a|
-    |lastPlayedCards|`Card[]`|上次出的牌|n/a|
-    |players|`Player[]`|场上玩家|n/a|
-    |remainingPlayers|`Player[]`|场上剩余玩家|n/a|
-    |？|？|进贡、亮黑叉信息|？|
+
+   |变量名|数据类型|描述|取值范围|
+   |---|---|---|---|
+   |deck|`Card[]`|牌堆|n/a|
+   |lastPlayedCards|`Card[]`|上次出的牌|n/a|
+   |players|`Player[]`|场上玩家|n/a|
+   |remainingPlayers|`Player[]`|场上剩余玩家|n/a|
+   |？|？|进贡、亮黑叉信息|？|
 
 #### enum CardSuit
 - 取值：
