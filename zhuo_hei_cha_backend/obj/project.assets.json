@@ -8,19 +8,23 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "/Users/billzhang/.nuget/packages/": {}
+    "C:\\Users\\yangy\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/billzhang/zhuo_hei_cha/zhuo_hei_cha_backend/zhuo_hei_cha_backend.csproj",
+      "projectUniqueName": "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj",
       "projectName": "zhuo_hei_cha_backend",
-      "projectPath": "/Users/billzhang/zhuo_hei_cha/zhuo_hei_cha_backend/zhuo_hei_cha_backend.csproj",
-      "packagesPath": "/Users/billzhang/.nuget/packages/",
-      "outputPath": "/Users/billzhang/zhuo_hei_cha/zhuo_hei_cha_backend/obj/",
+      "projectPath": "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj",
+      "packagesPath": "C:\\Users\\yangy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "/Users/billzhang/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\yangy\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -59,7 +63,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.200/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
       }
     }
   }
