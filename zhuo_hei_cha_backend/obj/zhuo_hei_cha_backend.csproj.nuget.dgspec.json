@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj": {}
+    "c:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj": {
+    "c:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj",
+        "projectUniqueName": "c:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj",
         "projectName": "zhuo_hei_cha_backend",
-        "projectPath": "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj",
+        "projectPath": "c:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\zhuo_hei_cha_backend.csproj",
         "packagesPath": "C:\\Users\\yangy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\obj\\",
+        "outputPath": "c:\\Users\\yangy\\Documents\\twilight\\zhuo_hei_cha\\zhuo_hei_cha_backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -38,6 +38,20 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.6.1, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
