@@ -26,9 +26,11 @@ namespace zhuo_hei_cha_backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            // services.AddCors(options => options.AddDefaultPolicy(builder => {
-            //         builder.WithOrigins("http://localhost:3000", "http://localhost:5000", "http://192.168.0.16:3000");
-            //     }));
+            services.AddCors(options => options.AddDefaultPolicy(builder => {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +45,7 @@ namespace zhuo_hei_cha_backend
 
             app.UseRouting();
 
-            // app.UseCors();
+            app.UseCors();
 
             app.UseAuthorization();
 
