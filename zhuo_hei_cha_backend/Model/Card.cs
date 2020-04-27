@@ -3,35 +3,24 @@ using System.Collections.Generic;
 
 // understand the attribute of a card
 public class Card{
-    private int cardNumber;
+    private readonly int _id;
+    public static readonly int CARD_MAX = 53;
 
     public Card(int cardNumber)
     {
-        if(cardNumber<0 || cardNumber>53)
+        if(cardNumber<0 || cardNumber>CARD_MAX)
             throw new Exception("cardNumber is invalid");
-        this.cardNumber = cardNumber;
+        this._id = cardNumber;
     }
 
-    public Color color()
+    public Suit Suit
     {
-        if(cardNumber<13)
-            return Color.Space;
-        else if(cardNumber<26)
-            return Color.Space;
-        else if(cardNumber<39)
-            return Color.Space;
-        else if(cardNumber<52)
-            return Color.Space;
-        else if(cardNumber == 53)
-            return Color.SmallJoker;
-        else return Color.BigJoker;
+        get{return (Suit)(_id/13);}        
     }
 
-    // jokers' number are 52 and 53
-    public int number()
+    // jokers' number are 0 and 1
+    public int Number
     {
-        if(cardNumber>=0 && cardNumber<52)
-            return (cardNumber+3)%13;
-        else return cardNumber;
+        get{return _id%13;}
     }
 }
