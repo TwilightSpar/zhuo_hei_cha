@@ -9,8 +9,8 @@ namespace ModelTest
         public void number0ShouldBeBlack3()
         {
             var black3 = new Card(0);
-            Assert.Equal(Color.Space, black3.color());
-            Assert.Equal(3, black3.number());
+            Assert.Equal(Suit.Spade, black3.Suit);
+            Assert.Equal(3, black3.Number);
         }
     }
 }
