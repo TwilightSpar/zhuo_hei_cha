@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public class Hand
 {
@@ -18,8 +17,11 @@ public class Hand
             handName = "pair";
         else if(ISFlush(cards))
             handName = "flush";
-        
-            
+        else
+        {
+            throw new Exception("not a valid hand");
+        }
+
             
         // CardValueFactory a = new CardValueFactory(cards);
         switch(handName)
@@ -37,15 +39,14 @@ public class Hand
                         break;
                     }
                 if(isStraightFlush)
-                {
                     foreach(var card in cards)
                         card.Number += 13;
-                }
-                cardValue = new FlushCardValue(cards[0].Number, cards.Count);
+                
+                cardValue = new FlushCardValue(cards[cards.Count-1].Number, cards.Count);
                 break;
             case "pair":
                 int pairNumber = IsPair(cards);
-                cardValue = new PairCardValue(cards[0].Number,pairNumber);
+                cardValue = new PairCardValue(cards[cards.Count-1].Number,pairNumber);
                 break;
             // case "hong":
             //     cardValue = new HongCardValue(3,5);
@@ -63,23 +64,62 @@ public class Hand
 
     private bool ISFlush(List<Card> cards)
     {
-        for(int i=0; i<cards.Count-1; i++){
-            if(cards[i].Number + 1 != cards[i+1].Number)
+        if(cards.Count<3)
             return false;
+        
+        // if the flush is A23, then the order is 3A2, so here i adjust the order.
+        // if there are 3 to 2, then change it to A to K does not matter.
+        if((cards[0].Number == 3) && (cards[cards.Count-1].Number == 15))
+        {
+            var two = cards[cards.Count-1];
+            var Ace = cards[cards.Count-2];
+            cards.RemoveRange(cards.Count-2, 2);
+            cards.Insert(0, two);
+            cards.Insert(0, Ace);            
+        }
+
+        else if(cards[cards.Count-1].Number == 15)      // no KA2
+            return false;
+
+
+        for(int i=0; i<cards.Count-1; i++){
+            if(((cards[i].Number + 1) % 13) != (cards[i+1].Number % 13))
+                return false;
         }
         return true;
     }
 
     private int IsPair(List<Card> pair){
-        if(pair.Count % 2 == 1)
+        if((pair.Count % 2 == 1) || (pair.Count == 4))  // no tractor: 3344
+            return -1;
+
+        if((pair[0].Number == 3) && (pair[pair.Count-1].Number == 15))
+        {
+            var two = pair[pair.Count-1];
+            var two2 = pair[pair.Count-2];
+            var Ace = pair[pair.Count-3];
+            var Ace2 = pair[pair.Count-4];
+            pair.RemoveRange(pair.Count-4, 4);
+            pair.Insert(0, two);
+            pair.Insert(0, two2);
+            pair.Insert(0, Ace);
+            pair.Insert(0, Ace2);            
+        }
+        
+        else if(pair[pair.Count-1].Number == 15)     // no KKAA22
             return -1;
         int i = 0;
-        for(; i< pair.Count/2; i++){
-            if(pair[2*i].Number != pair[2*i+1].Number)
+        for(; i< pair.Count/2; i++){            
+            if((pair[2*i].Number != pair[2*i+1].Number))
                 return -1;
         }
-        Console.Write(i);
-        return i;
+        i=0;
+        for(; i< pair.Count/2-1; i++){
+            // no 335577 should be continuous
+            if(((pair[2*i].Number + 1) % 13) != (pair[2*(i+1)].Number % 13))
+                return -1;
+        }
+        return i+1;
     }
 
 

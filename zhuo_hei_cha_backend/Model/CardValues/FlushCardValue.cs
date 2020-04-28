@@ -1,11 +1,11 @@
 public class FlushCardValue : CardValue
 {
-    private int firstNumber;
+    private int lastNumber;
     private int flushSize;
 
     public FlushCardValue(int v1, int v2)
     {
-        this.firstNumber = v1;
+        this.lastNumber = v1;
         this.flushSize = v2;
     }
 
@@ -14,6 +14,6 @@ public class FlushCardValue : CardValue
         var a = (FlushCardValue)otherValue;
         if(this.flushSize != a.flushSize)
             return true;
-        else return this.firstNumber >= a.firstNumber;
+        else return this.lastNumber >= a.lastNumber;
     }
 }
