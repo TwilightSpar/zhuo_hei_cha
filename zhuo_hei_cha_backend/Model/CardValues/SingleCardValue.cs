@@ -7,9 +7,6 @@ public class SingleCardValue: CardValue{
     
     public override bool CompareValue(CardValue otherValue){
         var a = (SingleCardValue)otherValue;
-        if (this.cardNumber > a.cardNumber)
-            return true;
-        else
-            return false;
+        return this.cardNumber >= a.cardNumber;
     }
 }
