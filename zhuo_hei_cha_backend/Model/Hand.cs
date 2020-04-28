@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Hand
 {
 	string handName;
-	int group = 0; //( single, flush(straightFlush=顺+13), pair<(hong<plane<大飞机… )<(boom<轰炸机,…)<cats)(4 level)
+	int group = 1; //( single, flush(straightFlush=顺+13), pair<(hong<plane<大飞机… )<(boom<轰炸机,…)<cats)(4 level)
 	CardValue cardValue;  
 
     public Hand(List<Card> cards){
@@ -39,10 +39,9 @@ public class Hand
                         break;
                     }
                 if(isStraightFlush)
-                    foreach(var card in cards)
-                        card.Number += 13;
-                
-                cardValue = new FlushCardValue(cards[cards.Count-1].Number, cards.Count);
+                    cardValue = new FlushCardValue(cards[cards.Count-1].Number+13, cards.Count);
+                else
+                    cardValue = new FlushCardValue(cards[cards.Count-1].Number, cards.Count);
                 break;
             case "pair":
                 int pairNumber = IsPair(cards);
@@ -116,7 +115,7 @@ public class Hand
         i=0;
         for(; i< pair.Count/2-1; i++){
             // no 335577 should be continuous
-            if(((pair[2*i].Number + 1) % 13) != (pair[2*(i+1)].Number % 13))
+            if(((pair[2*i].Number + 1) )% 13 != (pair[2*(i+1)].Number % 13))
                 return -1;
         }
         return i+1;
