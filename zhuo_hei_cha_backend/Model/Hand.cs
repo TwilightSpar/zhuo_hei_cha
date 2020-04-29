@@ -73,7 +73,6 @@ public class Hand
         }
     
         throw new Exception("not a valid hand");
-               
     }
 
     private bool IsCats(List<Card> cards)
@@ -201,13 +200,15 @@ public class Hand
         // checking consecutive numbers
         const int ACE_VALUE = 14;
         const int TWO_VALUE = 15;
-        var cardValues = (List<int>)cardGroups
+        var cardValues = cardGroups
             .Select(group => group.Value)
             .Select(value => (value == TWO_VALUE) ? 2: value)
-            .OrderBy(value => value);
+            .OrderBy(value => value)
+            .ToList();
 
         if (cardValues.Contains(ACE_VALUE))
-        if (AreNumbersConsecutive(cardValues))
+            cardValues.Insert(0, 1);
+        if (AreNumbersConsecutive(cardValues, cardGroups.Count()))
         {
             resultType = tempType;
             return cardValues.Last();
@@ -216,7 +217,7 @@ public class Hand
         return -1;
     }
 
-    private bool AreNumbersConsecutive(List<int> numbers)
+    private bool AreNumbersConsecutive(List<int> numbers, int length)
     {
         // assume numbers are sorted in ascending order without duplicates
 
@@ -224,6 +225,8 @@ public class Hand
         {
             if (numbers[i + 1] != numbers[i] + 1)
                 return false;
+            length--;
+            if (length == 0) break;
         }
 
         return true;

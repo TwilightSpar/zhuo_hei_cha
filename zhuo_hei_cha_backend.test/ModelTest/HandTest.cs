@@ -70,6 +70,15 @@ namespace HandTest
         }
 
         [Fact]
+        public void QToAHongIsGreaterThanA23Hong()
+        {   
+            // var QToAHong = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24), new Card(35), new Card(36), new Card(37) });
+            var A23Hong = new Hand(new List<Card>{new Card(11), new Card(12),new Card(13), new Card(24), new Card(25), new Card(26), new Card(37), new Card(38), new Card(39) });
+            // Assert.True(QToAHong.CompareHand(A23Hong));
+            
+        }
+
+        [Fact]
         public void CatsIsTheBiggest()
         {   
             var QToAPair = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24) });
@@ -78,9 +87,5 @@ namespace HandTest
             
         }
 
-
-
-
-        
     }
 }
