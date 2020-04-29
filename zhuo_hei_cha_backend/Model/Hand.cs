@@ -46,7 +46,16 @@ public class Hand
             return;
         }
 
-        
+        // checking for Hong or Bomb
+        HongOrBomb type;
+        int returnValue = IsHongOrBomb(cards, out type);
+        if (returnValue > 0)
+        {
+            handName = type.ToString();
+            cardValue = new HongCardValue(returnValue, cards.Count() / (int)type);
+            group = (type == HongOrBomb.hong) ? 2 : 3;
+            return;
+        }
         
         if(IsCats(cards))
         {
@@ -54,13 +63,9 @@ public class Hand
             group = 4;
             return;
         }
-        
-        else
-        {
-            throw new Exception("not a valid hand");
-        }
-
-        
+    
+        throw new Exception("not a valid hand");
+               
     }
 
     private bool IsCats(List<Card> cards)
@@ -74,20 +79,6 @@ public class Hand
         return true;
     }
 
-
-
-    private bool AreNumbersConsecutive(List<int> numbers)
-    {
-        // assume numbers are sorted in ascending order without duplicates
-
-        for (int i = 0; i < numbers.Count() - 1; ++i)
-        {
-            if (numbers[i + 1] != numbers[i] + 1)
-                return false;
-        }
-
-        return true;
-    }
 
     // return -1 if not a Pair; otherwise, return its value
     // (that is determined by value of the end of the Pair sequence)
@@ -158,6 +149,77 @@ public class Hand
         return tempFlush[cardLength-1].Number;
     }
 
+
+    enum HongOrBomb { hong = 3, bomb = 4, neither }
+
+    // return -1 if not a Hong or Bomb; otherwise, return its value
+    // (that is determined by value of the end of the Hong sequence)
+    private int IsHongOrBomb(List<Card> cards, out HongOrBomb resultType)
+    {
+        resultType = HongOrBomb.neither;
+
+        // a Hong or Bomb must have at least 3 cards
+        if (cards.Count() < 3)
+            return -1;
+
+        var cardGroups = cards.GroupBy(
+            card => card.Number,
+            (cardNumber, cardNumberGroup) => new
+            {
+                Value = cardNumber,
+                Repetition = cardNumberGroup.Count()
+            });
+        
+        // checking card repetitions
+        var repetitionGroups = cardGroups.GroupBy(group => group.Repetition);
+        
+        // a Hong or a Bomb cannot have cards that repeat different number of times
+        if (repetitionGroups.Count() != 1)
+            return -1;
+
+        HongOrBomb tempType = HongOrBomb.neither;
+        switch (repetitionGroups.First().Key)
+        {
+            case (int)HongOrBomb.hong:
+                tempType = HongOrBomb.hong;
+                break;
+            case (int)HongOrBomb.bomb:
+                tempType = HongOrBomb.bomb;
+                break;
+            default:
+                return -1;
+        }
+
+        // checking consecutive numbers
+        const int ACE_VALUE = 14;
+        const int TWO_VALUE = 15;
+        var cardValues = (List<int>)cardGroups
+            .Select(group => group.Value)
+            .Select(value => (value == TWO_VALUE) ? 2: value)
+            .OrderBy(value => value);
+
+        if (cardValues.Contains(ACE_VALUE))
+        if (AreNumbersConsecutive(cardValues))
+        {
+            resultType = tempType;
+            return cardValues.Last();
+        }
+
+        return -1;
+    }
+
+    private bool AreNumbersConsecutive(List<int> numbers)
+    {
+        // assume numbers are sorted in ascending order without duplicates
+
+        for (int i = 0; i < numbers.Count() - 1; ++i)
+        {
+            if (numbers[i + 1] != numbers[i] + 1)
+                return false;
+        }
+
+        return true;
+    }
 
     // 先比大级别，级别一样但是类型不一样，先出的上家大，如果类别一样，进入比值环节。
     public bool CompareHand(Hand yourHand)
