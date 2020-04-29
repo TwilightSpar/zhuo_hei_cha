@@ -52,8 +52,16 @@ public class Hand
         if (returnValue > 0)
         {
             handName = type.ToString();
-            cardValue = new HongCardValue(returnValue, cards.Count() / (int)type);
-            group = (type == HongOrBomb.hong) ? 2 : 3;
+            if (type == HongOrBomb.hong)
+            {
+                cardValue = new HongCardValue(returnValue, cards.Count() / (int)type);
+                group = 2;
+            }
+            else
+            {
+                cardValue = new BombCardValue(returnValue, cards.Count() / (int)type);
+                group = 3;
+            }
             return;
         }
         
