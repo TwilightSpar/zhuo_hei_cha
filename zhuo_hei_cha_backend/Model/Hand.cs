@@ -15,8 +15,10 @@ public class Hand
             handName = "single";
         else if(IsPair(cards)>0)
             handName = "pair";
-        else if(ISFlush(cards))
+        else if(IsFlush(cards))
             handName = "flush";
+        else if(IsCats(cards))
+            handName = "cats";
         else
         {
             throw new Exception("not a valid hand");
@@ -53,15 +55,27 @@ public class Hand
             // case "boom":
             //     cardValue = new BoomCardValue(3,5);
             //     break;
-            // case "cats":
-            //     cardValue = new CatsCardValue();
-            //     break;
+            case "cats":
+                cardValue = new CatsCardValue();
+                group = 4;
+                break;
 
 
         }
     }
 
-    private bool ISFlush(List<Card> cards)
+    private bool IsCats(List<Card> cards)
+    {
+        if(cards.Count != 2)
+            return false;
+        if(cards[0].Suit != cards[1].Suit)
+            return false;
+        if(cards[0].Suit != Suit.Joker)
+            return false;
+        return true;
+    }
+
+    private bool IsFlush(List<Card> cards)
     {
         if(cards.Count<3)
             return false;

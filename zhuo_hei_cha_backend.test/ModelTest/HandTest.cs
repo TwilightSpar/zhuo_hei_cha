@@ -11,7 +11,7 @@ namespace HandTest
         {   
             var onePair = new Hand(new List<Card>{new Card(11), new Card(24)});
             var threePair = new Hand(new List<Card>{new Card(0), new Card(13)});
-            Assert.Equal(true, onePair.CompareHand(threePair));
+            Assert.True(onePair.CompareHand(threePair));
             
         }
 
@@ -20,7 +20,7 @@ namespace HandTest
         {   
             var QToAPair = new Hand(new List<Card>{new Card(11), new Card(24), new Card(10), new Card(23), new Card(9), new Card(22)});
             var threeToFivePair = new Hand(new List<Card>{new Card(0), new Card(13), new Card(1), new Card(14), new Card(2), new Card(15)});
-            Assert.Equal(true, QToAPair.CompareHand(threeToFivePair));
+            Assert.True(QToAPair.CompareHand(threeToFivePair));
             
         }
 
@@ -32,7 +32,7 @@ namespace HandTest
             { 
                 var KA2 = new Hand(new List<Card>{new Card(10), new Card(11), new Card(12)});
                 var threeToFivePair = new Hand(new List<Card>{new Card(0), new Card(1), new Card(2)});
-                Assert.Equal(true, KA2.CompareHand(threeToFivePair));
+                Assert.True(KA2.CompareHand(threeToFivePair));
             }
             catch(Exception e){
                 exception = 1;
@@ -47,7 +47,7 @@ namespace HandTest
         {   
             var QToAFlush = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9)});
             var threeToFiveFlush = new Hand(new List<Card>{new Card(0), new Card(1),new Card(2)});
-            Assert.Equal(true, QToAFlush.CompareHand(threeToFiveFlush));
+            Assert.True(QToAFlush.CompareHand(threeToFiveFlush));
             
         }
 
@@ -56,7 +56,7 @@ namespace HandTest
         {   
             var QToAFlush = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9)});
             var A23Flush = new Hand(new List<Card>{new Card(11), new Card(12),new Card(13)});
-            Assert.Equal(true, QToAFlush.CompareHand(A23Flush));
+            Assert.True(QToAFlush.CompareHand(A23Flush));
             
         }
 
@@ -65,9 +65,17 @@ namespace HandTest
         {   
             var QToAPair = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24) });
             var A23Pair = new Hand(new List<Card>{new Card(11), new Card(12),new Card(13), new Card(24), new Card(25), new Card(26) });
-            Assert.Equal(true, QToAPair.CompareHand(A23Pair));
+            Assert.True(QToAPair.CompareHand(A23Pair));
             
         }
 
+        [Fact]
+        public void CatsIsTheBiggest()
+        {   
+            var QToAPair = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24) });
+            var Cat = new Hand(new List<Card>{new Card(52), new Card(53)});
+            Assert.False(QToAPair.CompareHand(Cat));
+            
+        }
     }
 }
