@@ -46,23 +46,7 @@ public class Hand
             return;
         }
 
-        var hongLastValue = IsHong(cards);
-        if(hongLastValue > 0)
-        {
-            handName = "hong";
-            cardValue = new HongCardValue(IsHong(cards), cards.Count / 3);
-            group = 2;
-            return;
-        }
-
-        var boomLastValue = IsBoom(cards);
-        if(boomLastValue > 0)
-        {
-            handName = "hong";
-            cardValue = new HongCardValue(IsBoom(cards), cards.Count / 4);
-            group = 3;
-            return;
-        }
+        
         
         if(IsCats(cards))
         {
@@ -75,10 +59,6 @@ public class Hand
         {
             throw new Exception("not a valid hand");
         }
-
-        
-            //     cardValue = new BoomCardValue(3,5);
-        
 
         
     }
@@ -94,49 +74,7 @@ public class Hand
         return true;
     }
 
-    private int IsBoom(List<Card> cards)
-    {
-        return -1;
-    }
 
-    // return -1 if not a Hong; otherwise, return its value
-    // (that is determined by value of the end of the Hong sequence)
-    private int IsHong(List<Card> cards)
-    {
-        var cardGroups = cards.GroupBy(
-            card => card.Number,
-            (cardNumber, cardNumberGroup) => new
-            {
-                Value = cardNumber,
-                Repetition = cardNumberGroup.Count()
-            });
-        
-        // checking card repetitions
-        const int HONG_REPETITION_COUNT = 3;
-        foreach (var group in cardGroups)
-        {
-            if (group.Repetition != HONG_REPETITION_COUNT)
-                return -1;
-        }
-
-        // checking consecutive numbers
-        const int ACE_VALUE = 14;
-        const int TWO_VALUE = 15;
-        var cardValues = (List<int>)cardGroups
-            .Select(group => group.Value)
-            .Select(value => (value == TWO_VALUE) ? 2: value);
-
-        if (cardValues.Contains(ACE_VALUE))
-        {
-            // we add another copy of ACE at the beginning and treat it as 1
-            cardValues.Insert(0, 1);
-        }
-
-        if (AreNumbersConsecutive(cardValues))
-            return cardValues.Last();
-
-        return -1;
-    }
 
     private bool AreNumbersConsecutive(List<int> numbers)
     {
