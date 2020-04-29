@@ -24,8 +24,17 @@ public class Hand
             handName = "flush";
         else if(IsCats(cards))
             handName = "cats";
-        else if(IsHong(cards) > 0)
-            handName = "hong";
+        
+        // checking for Hong or Bomb
+        HongOrBomb type;
+        int returnValue = IsHongOrBomb(cards, out type);
+        if (returnValue > 0)
+        {
+            handName = type.ToString();
+            cardValue = new HongCardValue(returnValue, cards.Count() / (int)type);
+            group = (type == HongOrBomb.hong) ? 2 : 3;
+            return;
+        }
         else
         {
             throw new Exception("not a valid hand");
@@ -56,13 +65,6 @@ public class Hand
                 int pairNumber = IsPair(cards);
                 cardValue = new PairCardValue(cards[cards.Count-1].Number,pairNumber);
                 break;
-            case "hong":
-                cardValue = new HongCardValue(IsHong(cards), cards.Count() / 3);
-                group = 2;
-                break;
-            // case "boom":
-            //     cardValue = new BoomCardValue(3,5);
-            //     break;
             case "cats":
                 cardValue = new CatsCardValue();
                 group = 4;
@@ -143,10 +145,18 @@ public class Hand
         return i+1;
     }
 
-    // return -1 if not a Hong; otherwise, return its value
+    enum HongOrBomb { hong = 3, bomb = 4, neither }
+
+    // return -1 if not a Hong or Bomb; otherwise, return its value
     // (that is determined by value of the end of the Hong sequence)
-    private int IsHong(List<Card> cards)
+    private int IsHongOrBomb(List<Card> cards, out HongOrBomb resultType)
     {
+        resultType = HongOrBomb.neither;
+
+        // a Hong or Bomb must have at least 3 cards
+        if (cards.Count() < 3)
+            return -1;
+
         var cardGroups = cards.GroupBy(
             card => card.Number,
             (cardNumber, cardNumberGroup) => new
@@ -156,10 +166,22 @@ public class Hand
             });
         
         // checking card repetitions
-        const int HONG_REPETITION_COUNT = 3;
-        foreach (var group in cardGroups)
+        var repetitionGroups = cardGroups.GroupBy(group => group.Repetition);
+        
+        // a Hong or a Bomb cannot have cards that repeat different number of times
+        if (repetitionGroups.Count() != 1)
+            return -1;
+
+        HongOrBomb tempType = HongOrBomb.neither;
+        switch (repetitionGroups.First().Key)
         {
-            if (group.Repetition != HONG_REPETITION_COUNT)
+            case (int)HongOrBomb.hong:
+                tempType = HongOrBomb.hong;
+                break;
+            case (int)HongOrBomb.bomb:
+                tempType = HongOrBomb.bomb;
+                break;
+            default:
                 return -1;
         }
 
@@ -168,7 +190,8 @@ public class Hand
         const int TWO_VALUE = 15;
         var cardValues = (List<int>)cardGroups
             .Select(group => group.Value)
-            .Select(value => (value == TWO_VALUE) ? 2: value);
+            .Select(value => (value == TWO_VALUE) ? 2: value)
+            .OrderBy(value => value);
 
         if (cardValues.Contains(ACE_VALUE))
         {
@@ -177,7 +200,10 @@ public class Hand
         }
 
         if (AreNumbersConsecutive(cardValues))
+        {
+            resultType = tempType;
             return cardValues.Last();
+        }
 
         return -1;
     }
