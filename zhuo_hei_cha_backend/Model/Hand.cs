@@ -18,58 +18,69 @@ public class Hand
             cardValue = new SingleCardValue(cards[0].Number);
             return;
         }
-        if(IsPair(cards)>0)
-            handName = "pair";
-        else if(IsFlush(cards))
+        
+        var flushLastValue = IsFlush(cards);
+        if(flushLastValue > 0)
+        {
             handName = "flush";
-        else if(IsCats(cards))
-            handName = "cats";
-        else if(IsHong(cards) > 0)
+            //  tell straight Flush
+            bool isStraightFlush = true;
+            foreach(var card in cards)
+                if(card.Suit != cards[0].Suit)
+                {
+                    isStraightFlush = false;
+                    break;
+                }
+            if(isStraightFlush)
+                cardValue = new FlushCardValue(flushLastValue+13, cards.Count);
+            else
+                cardValue = new FlushCardValue(flushLastValue, cards.Count);
+            return;
+        }
+        
+        var pairLastValue = IsPair(cards);
+        if(pairLastValue>0)
+        {
+            handName = "pair";
+            cardValue = new PairCardValue(pairLastValue,cards.Count / 2);
+            return;
+        }
+
+        var hongLastValue = IsHong(cards);
+        if(hongLastValue > 0)
+        {
             handName = "hong";
+            cardValue = new HongCardValue(IsHong(cards), cards.Count / 3);
+            group = 2;
+            return;
+        }
+
+        var boomLastValue = IsBoom(cards);
+        if(boomLastValue > 0)
+        {
+            handName = "hong";
+            cardValue = new HongCardValue(IsBoom(cards), cards.Count / 4);
+            group = 3;
+            return;
+        }
+        
+        if(IsCats(cards))
+        {
+            handName = "cats";
+            group = 4;
+            return;
+        }
+        
         else
         {
             throw new Exception("not a valid hand");
         }
 
-            
-        // CardValueFactory a = new CardValueFactory(cards);
-        switch(handName)
-        {
-            case "single": 
-                
-                break;
-            case "flush":
-                //  tell straight Flush
-                bool isStraightFlush = true;
-                foreach(var card in cards)
-                    if(card.Suit != cards[0].Suit)
-                    {
-                        isStraightFlush = false;
-                        break;
-                    }
-                if(isStraightFlush)
-                    cardValue = new FlushCardValue(cards[cards.Count-1].Number+13, cards.Count);
-                else
-                    cardValue = new FlushCardValue(cards[cards.Count-1].Number, cards.Count);
-                break;
-            case "pair":
-                int pairNumber = IsPair(cards);
-                cardValue = new PairCardValue(cards[cards.Count-1].Number,pairNumber);
-                break;
-            case "hong":
-                cardValue = new HongCardValue(IsHong(cards), cards.Count() / 3);
-                group = 2;
-                break;
-            // case "boom":
+        
             //     cardValue = new BoomCardValue(3,5);
-            //     break;
-            case "cats":
-                cardValue = new CatsCardValue();
-                group = 4;
-                break;
+        
 
-
-        }
+        
     }
 
     private bool IsCats(List<Card> cards)
@@ -83,64 +94,9 @@ public class Hand
         return true;
     }
 
-    private bool IsFlush(List<Card> cards)
+    private int IsBoom(List<Card> cards)
     {
-        if(cards.Count<3)
-            return false;
-        
-        // if the flush is A23, then the order is 3A2, so here i adjust the order.
-        // if there are 3 to 2, then change it to A to K does not matter.
-        if((cards[0].Number == 3) && (cards[cards.Count-1].Number == 15))
-        {
-            var two = cards[cards.Count-1];
-            var Ace = cards[cards.Count-2];
-            cards.RemoveRange(cards.Count-2, 2);
-            cards.Insert(0, two);
-            cards.Insert(0, Ace);
-        }
-
-        else if(cards[cards.Count-1].Number == 15)      // no KA2
-            return false;
-
-
-        for(int i=0; i<cards.Count-1; i++){
-            if(((cards[i].Number + 1) % 13) != (cards[i+1].Number % 13))
-                return false;
-        }
-        return true;
-    }
-
-    private int IsPair(List<Card> pair){
-        if((pair.Count % 2 == 1) || (pair.Count == 4))  // no tractor: 3344
-            return -1;
-
-        if((pair[0].Number == 3) && (pair[pair.Count-1].Number == 15))
-        {
-            var two = pair[pair.Count-1];
-            var two2 = pair[pair.Count-2];
-            var Ace = pair[pair.Count-3];
-            var Ace2 = pair[pair.Count-4];
-            pair.RemoveRange(pair.Count-4, 4);
-            pair.Insert(0, two);
-            pair.Insert(0, two2);
-            pair.Insert(0, Ace);
-            pair.Insert(0, Ace2);
-        }
-        
-        else if(pair[pair.Count-1].Number == 15)     // no KKAA22
-            return -1;
-        int i = 0;
-        for(; i< pair.Count/2; i++){            
-            if((pair[2*i].Number != pair[2*i+1].Number))
-                return -1;
-        }
-        i=0;
-        for(; i< pair.Count/2-1; i++){
-            // no 335577 should be continuous
-            if(((pair[2*i].Number + 1) )% 13 != (pair[2*(i+1)].Number % 13))
-                return -1;
-        }
-        return i+1;
+        return -1;
     }
 
     // return -1 if not a Hong; otherwise, return its value
@@ -194,6 +150,76 @@ public class Hand
 
         return true;
     }
+
+    // return -1 if not a Pair; otherwise, return its value
+    // (that is determined by value of the end of the Pair sequence)
+    private int IsPair(List<Card> cards){
+        int cardLength = cards.Count;
+        if((cardLength % 2 == 1) || (cardLength == 4))  // no tractor: 3344
+            return -1;
+
+        var tempCards = cards.Select(card => new Card(card)).ToList();
+        if((tempCards[0].Number == 3) && (tempCards[cardLength-1].Number == 15))
+        {
+            var two = tempCards[cardLength-1];
+            var two2 = tempCards[cardLength-2];
+            var Ace = tempCards[cardLength-3];
+            var Ace2 = tempCards[cardLength-4];
+            tempCards.RemoveRange(cardLength-4, 4);
+            tempCards.Insert(0, two);
+            tempCards.Insert(0, two2);
+            tempCards.Insert(0, Ace);
+            tempCards.Insert(0, Ace2);
+        }
+        
+        else if(tempCards[cardLength-1].Number == 15)     // no KKAA22
+            return -1;
+        
+        // check pair
+        for(int i = 0; i< cardLength/2; i++){            
+            if((tempCards[2*i].Number != tempCards[2*i+1].Number))
+                return -1;
+        }
+
+        // check continueous pair
+        for(int i = 0; i< cardLength/2-1; i++){            
+            if(((tempCards[2*i].Number + 1) )% 13 != (tempCards[2*(i+1)].Number % 13))
+                return -1;
+        }
+        return tempCards[cardLength-1].Number;
+    }
+
+    // return -1 if not a Flush; otherwise, return its value
+    // (that is determined by value of the end of the Flush sequence)
+    private int IsFlush(List<Card> cards)
+    {
+        int cardLength = cards.Count;
+        if(cardLength<3)
+            return -1;
+        
+        // if the flush is A23, then the order is 3A2, so here i adjust the order.
+        // if there are 3 to 2, then change it to A to K does not matter.
+        var tempFlush = cards.Select(card => new Card(card)).ToList();
+        if((tempFlush[0].Number == 3) && (tempFlush[cardLength-1].Number == 15))
+        {
+            var two = tempFlush[cardLength-1];
+            var Ace = tempFlush[cardLength-2];
+            tempFlush.RemoveRange(cardLength-2, 2);
+            tempFlush.Insert(0, two);
+            tempFlush.Insert(0, Ace);
+        }
+
+        else if(tempFlush[cardLength-1].Number == 15)      // no KA2
+            return -1;
+
+
+        for(int i=0; i<cardLength-1; i++){
+            if(((tempFlush[i].Number + 1) % 13) != (tempFlush[i+1].Number % 13))
+                return -1;
+        }
+        return tempFlush[cardLength-1].Number;
+    }
+
 
     // 先比大级别，级别一样但是类型不一样，先出的上家大，如果类别一样，进入比值环节。
     public bool CompareHand(Hand yourHand)

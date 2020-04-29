@@ -14,6 +14,11 @@ public class Card{
 
     }
 
+    public Card(Card previousCard)
+    {
+        _id = previousCard._id;
+    }
+
     public Suit Suit
     {
         get{return (Suit)(_id/13);}        
