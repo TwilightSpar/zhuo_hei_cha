@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Hand
 {
@@ -17,6 +18,8 @@ public class Hand
             handName = "pair";
         else if(ISFlush(cards))
             handName = "flush";
+        else if (IsHong(cards) > 0)
+            handName = "hong";
         else
         {
             throw new Exception("not a valid hand");
@@ -46,6 +49,9 @@ public class Hand
             case "pair":
                 int pairNumber = IsPair(cards);
                 cardValue = new PairCardValue(cards[cards.Count-1].Number,pairNumber);
+                break;
+            case "hong":
+                cardValue = new HongCardValue(IsHong(cards), cards.Count() / 3);
                 break;
             // case "hong":
             //     cardValue = new HongCardValue(3,5);
@@ -121,6 +127,57 @@ public class Hand
         return i+1;
     }
 
+    // return -1 if not a Hong; otherwise, return its value
+    // (that is determined by value of the end of the Hong sequence)
+    private int IsHong(List<Card> cards)
+    {
+        var cardGroups = cards.GroupBy(
+            card => card.Number,
+            (cardNumber, cardNumberGroup) => new
+            {
+                Value = cardNumber,
+                Repetition = cardNumberGroup.Count()
+            });
+        
+        // checking card repetitions
+        const int HONG_REPETITION_COUNT = 3;
+        foreach (var group in cardGroups)
+        {
+            if (group.Repetition != HONG_REPETITION_COUNT)
+                return -1;
+        }
+
+        // checking consecutive numbers
+        const int ACE_VALUE = 14;
+        const int TWO_VALUE = 15;
+        var cardValues = (List<int>)cardGroups
+            .Select(group => group.Value)
+            .Select(value => (value == TWO_VALUE) ? 2: value);
+
+        if (cardValues.Contains(ACE_VALUE))
+        {
+            // we add another copy of ACE at the beginning and treat it as 1
+            cardValues.Insert(0, 1);
+        }
+
+        if (AreNumbersConsecutive(cardValues))
+            return cardValues.Last();
+
+        return -1;
+    }
+
+    private bool AreNumbersConsecutive(List<int> numbers)
+    {
+        // assume numbers are sorted in ascending order without duplicates
+
+        for (int i = 0; i < numbers.Count() - 1; ++i)
+        {
+            if (numbers[i + 1] != numbers[i] + 1)
+                return false;
+        }
+
+        return true;
+    }
 
     // 先比大级别，级别一样但是类型不一样，先出的上家大，如果类别一样，进入比值环节。
     public bool CompareHand(Hand yourHand)
