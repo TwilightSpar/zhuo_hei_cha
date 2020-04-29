@@ -6,6 +6,28 @@ namespace HandTest
 {
     public class HandTest
     {
+        private static readonly Card THREE_OF_SPADE = new Card(0);
+        private static readonly Card QUEEN_OF_SPADE = new Card(9);
+        private static readonly Card KING_OF_SPADE = new Card(10);
+        private static readonly Card ACE_OF_SPADE = new Card(11);
+        private static readonly Card TWO_OF_SPADE = new Card(12);
+        private static readonly Card THREE_OF_HEART = new Card(13);
+        private static readonly Card QUEEN_OF_HEART = new Card(22);
+        private static readonly Card KING_OF_HEART = new Card(23);
+        private static readonly Card ACE_OF_HEART = new Card(24);
+        private static readonly Card TWO_OF_HEART = new Card(25);
+        private static readonly Card THREE_OF_DIAMOND = new Card(26);
+        private static readonly Card QUEEN_OF_DIAMOND = new Card(35);
+        private static readonly Card KING_OF_DIAMOND = new Card(36);
+        private static readonly Card ACE_OF_DIAMOND = new Card(37);
+        private static readonly Card TWO_OF_DIAMOND = new Card(38);
+        private static readonly Card THREE_OF_CLUB = new Card(39);
+        private static readonly Card QUEEN_OF_CLUB = new Card(48);
+        private static readonly Card KING_OF_CLUB = new Card(49);
+        private static readonly Card ACE_OF_CLUB = new Card(50);
+        private static readonly Card TWO_OF_CLUB = new Card(51);
+
+        
         [Fact]
         public void OnePairIsGreaterThanThreePair()
         {   
@@ -72,10 +94,69 @@ namespace HandTest
         [Fact]
         public void QToAHongIsGreaterThanA23Hong()
         {   
-            // var QToAHong = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24), new Card(35), new Card(36), new Card(37) });
-            var A23Hong = new Hand(new List<Card>{new Card(11), new Card(12),new Card(13), new Card(24), new Card(25), new Card(26), new Card(37), new Card(38), new Card(39) });
-            // Assert.True(QToAHong.CompareHand(A23Hong));
-            
+            var QToAHong = new Hand(new List<Card>
+            {
+                QUEEN_OF_SPADE, KING_OF_SPADE, ACE_OF_SPADE,
+                QUEEN_OF_HEART, KING_OF_HEART, ACE_OF_HEART,
+                QUEEN_OF_DIAMOND, KING_OF_DIAMOND, ACE_OF_DIAMOND
+            });
+            var A23Hong = new Hand(new List<Card>
+            {
+                ACE_OF_SPADE, TWO_OF_SPADE, THREE_OF_HEART,
+                ACE_OF_HEART, TWO_OF_HEART, THREE_OF_DIAMOND,
+                ACE_OF_DIAMOND, TWO_OF_DIAMOND, THREE_OF_CLUB
+            });
+            Assert.True(QToAHong.CompareHand(A23Hong));
+        }
+
+        [Fact]
+        public void ThreeHongIsGreaterThanQKAFlush()
+        {
+            var threeHong = new Hand(new List<Card>
+            {
+                THREE_OF_HEART, THREE_OF_DIAMOND, THREE_OF_CLUB
+            });
+            var QKAFlush = new Hand(new List<Card>
+            {
+                QUEEN_OF_SPADE, KING_OF_SPADE, ACE_OF_SPADE
+            });
+            Assert.True(threeHong.CompareHand(QKAFlush));
+        }
+
+        [Fact]
+        public void ThreeBombIsGreaterThanQToAHong()
+        {
+            var threeBomb = new Hand(new List<Card>
+            {
+                THREE_OF_SPADE, THREE_OF_HEART, THREE_OF_DIAMOND, THREE_OF_CLUB
+            });
+            var QToAHong = new Hand(new List<Card>
+            {
+                QUEEN_OF_SPADE, KING_OF_SPADE, ACE_OF_SPADE,
+                QUEEN_OF_HEART, KING_OF_HEART, ACE_OF_HEART,
+                QUEEN_OF_DIAMOND, KING_OF_DIAMOND, ACE_OF_DIAMOND
+            });
+            Assert.True(threeBomb.CompareHand(QToAHong));
+        }
+
+        [Fact]
+        public void QToABombIsGreaterThanA23Bomb()
+        {   
+            var QToABomb = new Hand(new List<Card>
+            {
+                QUEEN_OF_SPADE, KING_OF_SPADE, ACE_OF_SPADE,
+                QUEEN_OF_HEART, KING_OF_HEART, ACE_OF_HEART,
+                QUEEN_OF_DIAMOND, KING_OF_DIAMOND, ACE_OF_DIAMOND,
+                QUEEN_OF_CLUB, KING_OF_CLUB, ACE_OF_CLUB
+            });
+            var A23Bomb = new Hand(new List<Card>
+            {
+                ACE_OF_SPADE, TWO_OF_SPADE, THREE_OF_SPADE,
+                ACE_OF_HEART, TWO_OF_HEART, THREE_OF_HEART,
+                ACE_OF_DIAMOND, TWO_OF_DIAMOND, THREE_OF_DIAMOND,
+                ACE_OF_CLUB, TWO_OF_CLUB, THREE_OF_CLUB
+            });
+            Assert.True(QToABomb.CompareHand(A23Bomb));
         }
 
         [Fact]
