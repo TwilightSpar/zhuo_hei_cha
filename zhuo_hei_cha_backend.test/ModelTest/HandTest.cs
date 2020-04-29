@@ -77,5 +77,10 @@ namespace HandTest
             Assert.False(QToAPair.CompareHand(Cat));
             
         }
+
+
+
+
+        
     }
 }

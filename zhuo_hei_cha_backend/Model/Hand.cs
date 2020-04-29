@@ -13,18 +13,19 @@ public class Hand
         cards.Sort((x, y) => x.Number.CompareTo(y.Number)); 
 
         if(cards.Count == 1)
+        {
             handName = "single";
-        else if(IsPair(cards)>0)
+            cardValue = new SingleCardValue(cards[0].Number);
+            return;
+        }
+        if(IsPair(cards)>0)
             handName = "pair";
         else if(IsFlush(cards))
             handName = "flush";
-<<<<<<< HEAD
         else if(IsCats(cards))
             handName = "cats";
-=======
-        else if (IsHong(cards) > 0)
+        else if(IsHong(cards) > 0)
             handName = "hong";
->>>>>>> f1e76d9e5fbaf24cb873a711685786a3d4b077e7
         else
         {
             throw new Exception("not a valid hand");
@@ -35,7 +36,7 @@ public class Hand
         switch(handName)
         {
             case "single": 
-                cardValue = new SingleCardValue(cards[0].Number);
+                
                 break;
             case "flush":
                 //  tell straight Flush
@@ -57,10 +58,8 @@ public class Hand
                 break;
             case "hong":
                 cardValue = new HongCardValue(IsHong(cards), cards.Count() / 3);
+                group = 2;
                 break;
-            // case "hong":
-            //     cardValue = new HongCardValue(3,5);
-            //     break;
             // case "boom":
             //     cardValue = new BoomCardValue(3,5);
             //     break;
@@ -97,7 +96,7 @@ public class Hand
             var Ace = cards[cards.Count-2];
             cards.RemoveRange(cards.Count-2, 2);
             cards.Insert(0, two);
-            cards.Insert(0, Ace);            
+            cards.Insert(0, Ace);
         }
 
         else if(cards[cards.Count-1].Number == 15)      // no KA2
@@ -125,7 +124,7 @@ public class Hand
             pair.Insert(0, two);
             pair.Insert(0, two2);
             pair.Insert(0, Ace);
-            pair.Insert(0, Ace2);            
+            pair.Insert(0, Ace2);
         }
         
         else if(pair[pair.Count-1].Number == 15)     // no KKAA22
