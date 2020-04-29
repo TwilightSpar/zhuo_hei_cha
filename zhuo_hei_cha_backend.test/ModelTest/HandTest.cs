@@ -33,6 +33,13 @@ namespace HandTest
         private static readonly Card SMALL_JOKER = new Card(52);
         private static readonly Card BIG_JOKER = new Card(53);
 
+        [Fact]
+        public void ThreeIsGreaterThanEmptyHand()
+        {
+            var emptyHand = new Hand(new List<Card>(){});
+            var three = new Hand(new List<Card>(){THREE_OF_CLUB});
+            Assert.True(three.CompareHand(emptyHand));
+        }
         
         [Fact]
         public void OnePairIsGreaterThanThreePair()

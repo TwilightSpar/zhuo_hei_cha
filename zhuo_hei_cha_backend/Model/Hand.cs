@@ -12,6 +12,12 @@ public class Hand
     private static readonly int TWO_VALUE = 15;
 
     public Hand(List<Card> cards){
+        if (cards.Count == 0)
+        {
+            group = 0;
+            return;
+        }
+
         // tell HandType
         cards.Sort((x, y) => x.Number.CompareTo(y.Number)); 
 
