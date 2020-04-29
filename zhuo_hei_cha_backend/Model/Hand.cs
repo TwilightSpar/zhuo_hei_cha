@@ -8,6 +8,9 @@ public class Hand
 	int group = 1; //( single, flush(straightFlush=顺+13), pair<(hong<plane<大飞机… )<(boom<轰炸机,…)<cats)(4 level)
 	CardValue cardValue;  
 
+    private static readonly int ACE_VALUE = 14;
+    private static readonly int TWO_VALUE = 15;
+
     public Hand(List<Card> cards){
         // tell HandType
         cards.Sort((x, y) => x.Number.CompareTo(y.Number)); 
@@ -48,18 +51,18 @@ public class Hand
 
         // checking for Hong or Bomb
         HongOrBomb type;
-        int returnValue = IsHongOrBomb(cards, out type);
+        int returnValue = CheckHongOrBomb(cards, out type);
         if (returnValue > 0)
         {
             handName = type.ToString();
             if (type == HongOrBomb.hong)
             {
-                cardValue = new HongCardValue(returnValue, cards.Count() / (int)type);
+                cardValue = new HongCardValue(returnValue, cards.Count() / (int)HongOrBomb.hong);
                 group = 2;
             }
             else
             {
-                cardValue = new BombCardValue(returnValue, cards.Count() / (int)type);
+                cardValue = new BombCardValue(returnValue, cards.Count() / (int)HongOrBomb.bomb);
                 group = 3;
             }
             return;
@@ -159,9 +162,14 @@ public class Hand
 
     enum HongOrBomb { hong = 3, bomb = 4, neither }
 
-    // return -1 if not a Hong or Bomb; otherwise, return its value
-    // (that is determined by value of the end of the Hong sequence)
-    private int IsHongOrBomb(List<Card> cards, out HongOrBomb resultType)
+    /// <summary>
+    /// return the value of the Hong or Bomb if they cards are valid. Otherwise,
+    /// return -1.
+    /// </summary>
+    /// <param name="cards">list of cards to be checked</param>
+    /// <param name="resultType"></param>
+    /// <returns></returns>
+    private int CheckHongOrBomb(List<Card> cards, out HongOrBomb resultType)
     {
         resultType = HongOrBomb.neither;
 
@@ -198,8 +206,6 @@ public class Hand
         }
 
         // checking consecutive numbers
-        const int ACE_VALUE = 14;
-        const int TWO_VALUE = 15;
         var cardValues = cardGroups
             .Select(group => group.Value)
             .Select(value => (value == TWO_VALUE) ? 2: value)
@@ -208,28 +214,52 @@ public class Hand
 
         if (cardValues.Contains(ACE_VALUE))
             cardValues.Insert(0, 1);
-        if (AreNumbersConsecutive(cardValues, cardGroups.Count()))
-        {
+        
+        int sequenceValue = CheckConsecutiveSequence(cardValues);
+        if (sequenceValue > 0)
             resultType = tempType;
-            return cardValues.Last();
-        }
 
-        return -1;
+        return sequenceValue;
     }
 
-    private bool AreNumbersConsecutive(List<int> numbers, int length)
+    /// <summary>
+    /// Return the value of the sequence if it is consecutive.
+    /// Otherwise, return -1
+    /// </summary>
+    /// <param name="sequence">sequence of numbers to be checked, sorted in ascending order with no duplicates</param>
+    /// <param name="length">length of the pattern to be checked</param>
+    /// <returns></returns>
+    private int CheckConsecutiveSequence(List<int> sequence)
     {
-        // assume numbers are sorted in ascending order without duplicates
+        if (sequence.Count <= 1) return sequence.First();
 
-        for (int i = 0; i < numbers.Count() - 1; ++i)
+        if (sequence.Last() == ACE_VALUE)
         {
-            if (numbers[i + 1] != numbers[i] + 1)
-                return false;
-            length--;
-            if (length == 0) break;
+            bool consecutiveSoFar = true;
+            
+            // treat ACE as ACE and ignore the 1 inserted at the beginning
+            for (int i = sequence.Count - 1; i >= 2; --i)
+            {
+                if (sequence[i - 1] != sequence[i] - 1)
+                {
+                    consecutiveSoFar = false;
+                    break;
+                }
+            }
+
+            if (consecutiveSoFar) return ACE_VALUE;
+
+            // treat ACE as 1 only from this point on and remove ACE_VALUE from
+            // the end of the sequence
+            sequence = sequence.Take(sequence.Count - 1).ToList();
         }
 
-        return true;
+        for (int i = 0; i < sequence.Count - 1; ++i)
+        {
+            if (sequence[i + 1] != sequence[i] + 1) return -1;
+        }
+
+        return sequence.Last();
     }
 
     // 先比大级别，级别一样但是类型不一样，先出的上家大，如果类别一样，进入比值环节。
