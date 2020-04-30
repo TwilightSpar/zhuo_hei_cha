@@ -50,13 +50,31 @@ public class Game
     /// 
     /// </summary>
     /// <param name="playerId"></param>
-    private void AskForPlay(int playerId)
+    private void AskForPlay()
     {
-        // update dealer
-        // update lastHand
-    }
+        bool valid = false;
+        while(!valid)
+        {
+            // get users' hand. 0 if skip.
+            List<Card> userHand = new List<Card>{};
+            if(userHand.Count == 0)
+                return;
 
-    private bool isGameEnd() {return true;}
+            if(playerList[playerIndex].PlayHand(userHand, this.lastHand))
+            {
+                // tell user that the hand is valid and update their cardInHand
+                dealer = playerIndex;
+                lastHand = new Hand(userHand);
+                valid = true;
+            }
+            else
+            {
+                // tell user that the hand is not greater than the lastHand or is not valid
+            }
+
+        }
+        
+    }
 
     public void GameProcess()
     {
@@ -68,12 +86,13 @@ public class Game
             ReturnTribute();
             isGameStarted = true;
 
-            while (!isGameEnd())
+            while (isGameStarted)
             {
                 if (dealer == playerIndex)
                     lastHand = EMPTY_HAND;
                 
-                AskForPlay(playerIndex);
+                // if(!userSkip())
+                AskForPlay();
                 playerIndex = (playerIndex + 1) % playerList.Count;
             }
 
