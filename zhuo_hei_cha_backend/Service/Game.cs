@@ -8,7 +8,7 @@ public class Game
     List<Player> playerList;
     List<Player> tributeList;
     List<Player> stillPlay;     // prepare for checkEnded
-    int playerLeft = 0;         // prepare for checkEnded
+    // int playerLeft = 0;         // prepare for checkEnded
     bool isGameStarted;
 
     Hand lastHand = EMPTY_HAND;
@@ -70,13 +70,16 @@ public class Game
     /// </summary>
     private void PayTribute() 
     {
-
+        
     }
 
     /// <summary>
     /// call returnTribute in reverse order
     /// </summary>
-    private void ReturnTribute() {}	// return tribute cards
+    private void ReturnTribute() 
+    {
+
+    }
 
     // get invoked if player decided to announce Ace before game starts
     // add to public ace list
@@ -116,8 +119,11 @@ public class Game
 
     public void checkEnded()
     {
-        if(playerLeft == 1)
+        // check if Ace has finished. prepare for 2 Ace
+        if(stillPlay.Count == 1)
         {
+            tributeList.AddRange(stillPlay);
+            stillPlay.Clear();
             this.isGameStarted = false;
             return;
         }
@@ -127,7 +133,6 @@ public class Game
                 tributeList.Add(p);
                 stillPlay.Remove(p);
             }
-        playerLeft = stillPlay.Count;
     }
 
     public void GameProcess()
@@ -137,11 +142,10 @@ public class Game
         {
             InitCardList();
             PayTribute();
-            ReturnTribute();
+            ReturnTribute();            
+            tributeList = new List<Player>{};   // init tributeList
             isGameStarted = true;
 
-            // init playerLeft, stillPlay
-            playerLeft = playerList.Count;
             stillPlay =  playerList.Select(x => x).ToList();
 
             while (isGameStarted)   // skip means hand are empty
@@ -158,17 +162,21 @@ public class Game
 
             reInital();
 
-            // decide whether to play one more round here
-            // break;
+            if(!toPlayOneMoreRound())
+                break;
         }
 
-    }	// PayTribute, ReturnTribute, AskForAce, AceGoPublic, start AskForPlay(id) by turns and check whether the game is stoped.
+    }   // PayTribute, ReturnTribute, AskForAce, AceGoPublic, start AskForPlay(id) by turns and check whether the game is stoped.
+
+    private bool toPlayOneMoreRound()
+    {
+        // as what the name says.
+        return true;
+    }
 
     private void reInital()
     {
-        tributeList = new List<Player>{};
         stillPlay = new List<Player>{};
-        playerLeft = playerList.Count;
         dealer = 0;
         playerIndex = 0;   
     }
