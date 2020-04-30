@@ -8,6 +8,10 @@ public class Player
     bool BlackAce = false;
     List<Card> cardsInHand;
 
+    public bool isBlackAce()
+    {
+        return BlackAce;
+    }
     public void AddCards(List<Card> cards)
     {
         cardsInHand.AddRange(cards);

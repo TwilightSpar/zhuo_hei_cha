@@ -57,11 +57,6 @@ public class Game
         }  
     }
     
-    /// <summary>
-    /// if isGameStarted is false, stop the game and compute level and tribute and so on
-    /// put the remaining players onto the tributeList
-    /// </summary>
-    private void Stop() {}
 
     /// <summary>
     /// group tributeList according to Black ACEs
@@ -83,7 +78,10 @@ public class Game
 
     // get invoked if player decided to announce Ace before game starts
     // add to public ace list
-    private void AceGoPublic() {}	
+    private void AceGoPublic() 
+    {
+
+    }	
 
     /// <summary>
     /// Ask players whether play or not 
@@ -119,20 +117,20 @@ public class Game
 
     public void checkEnded()
     {
-        // check if Ace has finished. prepare for 2 Ace
-        if(stillPlay.Count == 1)
+        int remainingGroupCount = stillPlay.Select(x=> x.isBlackAce()).GroupBy(x=>x).Count();
+        if(remainingGroupCount == 1)        
         {
             tributeList.AddRange(stillPlay);
             stillPlay.Clear();
             this.isGameStarted = false;
             return;
         }
-        foreach(var p in stillPlay)
-            if(p.isFinished())
-            {
-                tributeList.Add(p);
-                stillPlay.Remove(p);
-            }
+        Player p = playerList[playerIndex];
+        if(p.isFinished())
+        {
+            tributeList.Add(p);
+            stillPlay.Remove(p);
+        }
     }
 
     public void GameProcess()
@@ -145,8 +143,8 @@ public class Game
             ReturnTribute();            
             tributeList = new List<Player>{};   // init tributeList
             isGameStarted = true;
-
             stillPlay =  playerList.Select(x => x).ToList();
+            AceGoPublic();
 
             while (isGameStarted)   // skip means hand are empty
             {
@@ -157,9 +155,6 @@ public class Game
                 checkEnded();
                 playerIndex = (playerIndex + 1) % playerList.Count;
             }
-
-            isGameStarted = false;
-
             reInital();
 
             if(!toPlayOneMoreRound())
@@ -178,6 +173,6 @@ public class Game
     {
         stillPlay = new List<Player>{};
         dealer = 0;
-        playerIndex = 0;   
+        playerIndex = 0;
     }
 }
