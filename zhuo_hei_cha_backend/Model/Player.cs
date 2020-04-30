@@ -22,6 +22,11 @@ public class Player
         return cardsInHand.Count != 0;
     }
 
+    public bool isFinished()
+    {
+        return this.cardsInHand.Count == 0;
+    }
+
     // sort(descending order) + set black ace
     public void OrganizeHand() 
     {
