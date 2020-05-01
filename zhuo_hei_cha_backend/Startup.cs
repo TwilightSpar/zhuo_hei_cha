@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,12 +26,16 @@ namespace zhuo_hei_cha_backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // var allowedOrigins = Configuration["CorsAllowedOrigins"];
             services.AddControllers();
-            services.AddCors(options => options.AddDefaultPolicy(builder => {
-                    builder.AllowAnyOrigin()
+            services.AddSignalR();
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder => {
+                    builder.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 }));
+            // services.AddSingleton<IHubContext<Pla>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,13 +50,14 @@ namespace zhuo_hei_cha_backend
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors("CorsPolicy");
 
-            app.UseAuthorization();
+            // app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<SampleHub>("/samplehub");
             });
         }
     }

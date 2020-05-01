@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class Game
 {
@@ -13,7 +14,7 @@ public class Game
 
     Hand lastHand = EMPTY_HAND;
 
-    int dealer = 0;
+    int dealerIndex = 0;
 
     int playerIndex = 0;    
 
@@ -102,7 +103,7 @@ public class Game
             if(playerList[playerIndex].PlayHand(userHand, this.lastHand))
             {
                 // tell user that the hand is valid and update their cardInHand
-                dealer = playerIndex;
+                dealerIndex = playerIndex;
                 lastHand = new Hand(userHand);
                 valid = true;
             }
@@ -133,12 +134,13 @@ public class Game
         }
     }
 
-    public void GameProcess()
+    public async void GameProcess()
     {
         InitPlayer();
         while (true)
         {
             InitCardList();
+            // not needed for the first round
             PayTribute();
             ReturnTribute();            
             tributeList = new List<Player>{};   // init tributeList
@@ -148,31 +150,33 @@ public class Game
 
             while (isGameStarted)   // skip means hand are empty
             {
-                if (dealer == playerIndex)
+                if (dealerIndex == playerIndex)
                     lastHand = EMPTY_HAND;
                 
                 AskForPlay();
+                // GetUserHand();
+                
                 checkEnded();
                 playerIndex = (playerIndex + 1) % playerList.Count;
             }
             reInital();
 
-            if(!toPlayOneMoreRound())
+            if(!await toPlayOneMoreRound())
                 break;
         }
 
     }   // PayTribute, ReturnTribute, AskForAce, AceGoPublic, start AskForPlay(id) by turns and check whether the game is stoped.
 
-    private bool toPlayOneMoreRound()
+    private Task<bool> toPlayOneMoreRound()
     {
         // as what the name says.
-        return true;
+        return Room.activeRoom.AskPlayOneMoreRound();
     }
 
     private void reInital()
     {
         stillPlay = new List<Player>{};
-        dealer = 0;
+        dealerIndex = 0;
         playerIndex = 0;
     }
 }

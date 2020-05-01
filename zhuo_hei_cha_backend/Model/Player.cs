@@ -4,9 +4,16 @@ using System.Collections.Generic;
 public class Player 
 {
     int id; 
+    string _name;
     object Connection;
     bool BlackAce = false;
     List<Card> cardsInHand;
+
+    public Player(string name)
+    {
+        
+        _name = name;
+    }
 
     public bool isBlackAce()
     {
@@ -82,5 +89,10 @@ public class Player
             return true;
         }
         return false;
+    }
+
+    public void GetPlayerHand()
+    {
+        
     }
 }
