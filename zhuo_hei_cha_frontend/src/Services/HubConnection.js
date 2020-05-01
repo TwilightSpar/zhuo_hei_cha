@@ -1,0 +1,1 @@
+import { HubConnectionBuilder } from '@aspnet/signalr';

@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
+import { HubConnectionBuilder } from '@aspnet/signalr';
 import './App.css';
 
 const sendRequest = () => {
@@ -7,6 +8,26 @@ const sendRequest = () => {
     .then((response) => response.json())
     .then(data => console.log(data))
 };
+
+const s = async () => {
+  const c = new HubConnectionBuilder().withUrl('http://localhost:5000/samplehub').build();
+  await c.start();
+  c.invoke('SendMessage').then(s => console.log(s)).catch(err => console.error(err));
+  // c.on('ReceiveMessage', () => {})
+
+  // c.on('a', () => {
+  //   alert('bla')
+  //   c.invoke('AnswerBlackAce', false);
+  // })
+
+
+  const AskPlayOneMoreRound = async () => {
+    // do stuff
+    await c.invoke('Return')
+  }
+  
+
+}
 
 function App() {
   return (
@@ -24,7 +45,7 @@ function App() {
         >
           Learn React
         </a>
-        <button onClick={sendRequest}></button>
+        <button onClick={s}></button>
       </header>
     </div>
   );
