@@ -10,19 +10,17 @@ public class Room
     List<Player> playerList;
     Game activeGame;
 
-    private IHubContext<PlayerHub> _hubContext;
-
     public bool playOneMore;
 
-    public Room()
-    {
-        playerList = new List<Player>();
-    }
-    // public Room(IHubContext<PlayerHub> hubContext)
+    // public Room()
     // {
-    //     _hubContext = hubContext;
     //     playerList = new List<Player>();
     // }
+    public Room()
+    {
+        // _hubContext = hubContext;
+        playerList = new List<Player>();
+    }
 
     public void AddPlayer(Player p)
     {
@@ -31,14 +29,16 @@ public class Room
 
     public async Task<bool> AskPlayOneMoreRound()
     {
-        // await _hubContext.Clients.All.SendAsync("AskPlayOneMoreRound");
+        PlayerHub ph = new PlayerHub();
+        // front-end invoke this method
+        await ph.Clients.All.SendAsync("AskPlayOneMoreRound");
 
         return playOneMore;
     }
 
     public void StartGame()
     {
-        activeGame = new Game();
+        activeGame = new Game(playerList);
         activeGame.GameProcess();
     }
 }

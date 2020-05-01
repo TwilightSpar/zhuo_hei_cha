@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class PlayerHub: Hub
@@ -15,6 +16,15 @@ public class PlayerHub: Hub
         // Room.activeRoom.playerList.Count
 
         Room.activeRoom.StartGame();
+    }
+    public async void AskForPlay()
+    {
+        await Clients.Caller.SendAsync("AskForPlay");
+    }
+
+    public static void GetUserHand(List<Card> cards)
+    {
+        PlayerHubTempData.userHand = cards;
     }
 
     public void Return(bool returnvalue)
