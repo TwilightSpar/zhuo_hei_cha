@@ -4,8 +4,7 @@ public class SampleHub: Hub
 {
     public Task SendMessage()
     {
-        string message = "Hello from the server!";
-        return Clients.All.SendAsync("ReceiveMessage", message);
+        return Clients.All.SendAsync("sampleClientMethod");
     }
 
     public Task AskBlackAce()
