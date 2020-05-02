@@ -4,11 +4,18 @@ using System.Threading.Tasks;
 
 public class PlayerHub: Hub
 {
-    public void CreatePlayerBackend(string name, string connectionId)
+    public async void CreatePlayerBackend(string name)
     {
         // connectionid and other attributes of player
-        Player player = new Player(name, connectionId);
+        Player player = new Player(name, Clients.Caller);
+        if (Room.activeRoom == null)
+        {
+            Room.activeRoom = new Room();
+        }
         Room.activeRoom.AddPlayer(player);
+
+        // no need to wait here?
+        await Clients.Caller.SendAsync("enterRoom");
     }
 
     public void StartGameBackend()
@@ -18,6 +25,19 @@ public class PlayerHub: Hub
         // Room.activeRoom.playerList.Count
 
         Room.activeRoom.StartGame();
+    }
+
+    public async void StartGame()
+    {
+        if (Room.activeRoom.CanStartGame())
+        {
+            // no need to wait here?
+            Room.activeRoom.StartGame();
+        }
+        else
+        {
+            await Clients.Caller.SendAsync("createErrorMessage", "Cannot start the game!");
+        }
     }
 
     public static void ReturnUserHandBackend(List<Card> cards)

@@ -4,19 +4,14 @@ using Microsoft.AspNetCore.SignalR;
 
 public class Room
 {
-    public static Room activeRoom = new Room();
+    public static Room activeRoom; //= new Room();
 
     int id;
     List<Player> playerList;
     Game activeGame;
 
-    // public Room()
-    // {
-    //     playerList = new List<Player>();
-    // }
     public Room()
     {
-        // _hubContext = hubContext;
         playerList = new List<Player>();
     }
 
@@ -30,7 +25,13 @@ public class Room
         BackToFront.AskPlayOneMoreRoundBackend();       
     }
 
-    public void StartGame()
+    public bool CanStartGame()
+    {
+        // return true;
+        return playerList.Count >= 3 && playerList.Count <= 5;
+    }
+
+    public async Task StartGame()
     {
         activeGame = new Game(playerList);
         activeGame.GameProcess();

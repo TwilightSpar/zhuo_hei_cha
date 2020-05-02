@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
 
 public class Player 
 {
     private string _id; 
     string _name;
-    object Connection;
+    private IClientProxy _client;
     bool isBlackAce = false;
     List<Card> cardsInHand;
 
-    public Player(string name, string connectionId)
+    public Player(string name, IClientProxy client)
     {
-        _id = connectionId;
         _name = name;
+        _client = client;
     }
 
     public void CheckAce()
