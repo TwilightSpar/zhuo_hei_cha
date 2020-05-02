@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.SignalR;
 
 public class Player 
 {
-    private string _id; 
     string _name;
     private IClientProxy _client;
     bool isBlackAce = false;
@@ -33,7 +32,7 @@ public class Player
     // return true if go public, otherwise not.
     public bool AceGoPublic()
     {
-        BackToFront.AskAceGoPublicBackend(this._id);
+        BackToFront.AskAceGoPublicBackend(_client);
         return PlayerHubTempData.aceGoPublic;
     }
 
@@ -77,9 +76,9 @@ public class Player
         p.AddCards(new List<Card>{tribute});
         p.OrganizeHand();
     }
-    public void ReturnTribute(Player p) 
+    public void ReturnTribute() 
     {
-        // ask for users
+        BackToFront.AskReturnTributeBackend(_client);
     }
 
     /// <summary>
@@ -97,23 +96,23 @@ public class Player
         }
         catch(Exception e)
         {
-            BackToFront.HandIsNotValidBackend(_id);
+            BackToFront.HandIsNotValidBackend(_client);
             return false;
         }
         if(hand.CompareHand(lastHand))
         {
             foreach(var card in cards)
                 cardsInHand.Remove(card);
-            BackToFront.HandIsValidBackend(_id);
+            BackToFront.HandIsValidBackend(_client);
             return true;
         }
-        BackToFront.HandIsNotValidBackend(_id);
+        BackToFront.HandIsNotValidBackend(_client);
         return false;
     }
 
 
     public void GetPlayerHand()
     {
-        BackToFront.AskForPlayBackend(_id);
+        BackToFront.AskForPlayBackend(_client);
     }
 }

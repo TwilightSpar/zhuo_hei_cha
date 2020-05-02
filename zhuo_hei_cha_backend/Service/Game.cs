@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 
 public class Game
 {
@@ -71,7 +69,8 @@ public class Game
     /// </summary>
     private void PayTribute()
     {
-
+        // consider sotuations that do not need totribute
+        // player1.PayTribute(player2) only tribute one card
     }
 
     /// <summary>
@@ -81,7 +80,7 @@ public class Game
     {
         for (int i = (playerList.Count - 1); i >= 0; i--)
         {
-            // playerList[i].ReturnTribute
+            // playerList[i].ReturnTribute()
         }
     }
 
@@ -101,12 +100,10 @@ public class Game
 
     /// <summary>
     /// Ask players whether play or not 
-    /// call player.HasCard, and if true, add player to tributeList
+    /// check whether player is finished, and if true, add player to tributeList
     /// 
     /// </summary>
     /// <param name="playerId"></param>
-
-
     private void AskForPlay()
     {
         bool valid = false;
@@ -148,6 +145,9 @@ public class Game
         }
     }
 
+    /// <summary>
+    /// main process
+    /// </summary>
     public void GameProcess()
     {
         while (true)
@@ -167,8 +167,6 @@ public class Game
                     lastHand = EMPTY_HAND;
 
                 AskForPlay();
-                // GetUserHand();
-
                 checkEnded();
                 playerIndex = (playerIndex + 1) % playerList.Count;
             }
@@ -178,8 +176,8 @@ public class Game
                 break;
         }
 
-    }   // PayTribute, ReturnTribute, AskForAce, AceGoPublic, start AskForPlay(id) by turns and check whether the game is stoped.
-
+    }   
+    
     private bool toPlayOneMoreRound()
     {
         // as what the name says.

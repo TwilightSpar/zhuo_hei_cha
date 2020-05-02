@@ -1,43 +1,38 @@
 using Microsoft.AspNetCore.SignalR;
 
-public class BackToFront
+public static class BackToFront
 {
-    // do some injection in startup.cs
-    private static IHubContext<PlayerHub>  _hubContext;
-    public BackToFront(IHubContext<PlayerHub> hubContext)
+    public static IHubCallerClients clients;
+    public static async void AskForPlayBackend(IClientProxy client)
     {
-        _hubContext = hubContext;
-    }
-    public static async void AskForPlayBackend(string connectionId)
-    {
-        await _hubContext.Clients.Client(connectionId).SendAsync("AskForPlayFrontend");
+        await client.SendAsync("AskForPlayFrontend");
     }
 
     public static async void AskPlayOneMoreRoundBackend()
     {
-        await _hubContext.Clients.All.SendAsync("AskPlayOneMoreRoundFrontend");
+        await clients.All.SendAsync("AskPlayOneMoreRoundFrontend");
     }
 
-    public static async void AskReturnTributeBackend()
+    public static async void AskReturnTributeBackend(IClientProxy client)
     {
-        await _hubContext.Clients.All.SendAsync("AskReturnTributeFrontend");
+        await client.SendAsync("AskReturnTributeFrontend");
     }
 
-    public static async void AskAceGoPublicBackend(string aceId)
+    public static async void AskAceGoPublicBackend(IClientProxy client)
     {
-        await _hubContext.Clients.Client(aceId).SendAsync("AskAceGoPublicFrontend");
-    }
-
-    // alert, do not need respond
-    public static async void HandIsValidBackend(string userId)
-    {
-        await _hubContext.Clients.Client(userId).SendAsync("HandIsValidFrontend");
+        await client.SendAsync("AskAceGoPublicFrontend");
     }
 
     // alert, do not need respond
-    public static async void HandIsNotValidBackend(string userId)
+    public static void HandIsValidBackend(IClientProxy client)
     {
-        await _hubContext.Clients.Client(userId).SendAsync("HandIsNotValidFrontend");
+        client.SendAsync("HandIsValidFrontend");
+    }
+
+    // alert, do not need respond
+    public static void HandIsNotValidBackend(IClientProxy client)
+    {
+        client.SendAsync("HandIsNotValidFrontend");
     }
 
 }

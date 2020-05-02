@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 
 public class Room
 {
-    public static Room activeRoom; //= new Room();
+    public static Room activeRoom; 
 
     int id;
     List<Player> playerList;
@@ -22,7 +20,7 @@ public class Room
 
     public void AskPlayOneMoreRound()
     {
-        BackToFront.AskPlayOneMoreRoundBackend();       
+        BackToFront.AskPlayOneMoreRoundBackend();     
     }
 
     public bool CanStartGame()
@@ -31,7 +29,7 @@ public class Room
         return playerList.Count >= 3 && playerList.Count <= 5;
     }
 
-    public async Task StartGame()
+    public void StartGame()
     {
         activeGame = new Game(playerList);
         activeGame.GameProcess();

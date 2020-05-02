@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class PlayerHub: Hub
 {
@@ -18,19 +17,11 @@ public class PlayerHub: Hub
         await Clients.Caller.SendAsync("enterRoom");
     }
 
-    public void StartGameBackend()
-    {
-        // frontend do:
-        // do some check
-        // Room.activeRoom.playerList.Count
-
-        Room.activeRoom.StartGame();
-    }
-
-    public async void StartGame()
+    public async void StartGameBackend()
     {
         if (Room.activeRoom.CanStartGame())
         {
+            BackToFront.clients = Clients;
             // no need to wait here?
             Room.activeRoom.StartGame();
         }
