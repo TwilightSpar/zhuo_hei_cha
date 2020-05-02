@@ -32,7 +32,7 @@ public class PlayerHub: Hub
     public void ReturnAceGoPublicBackend(bool returnvalue)
     {
         if(returnvalue)
-            PlayerHubTempData.publicAceCount += 1;
+            PlayerHubTempData.aceGoPublic = returnvalue;
     }
 
 
