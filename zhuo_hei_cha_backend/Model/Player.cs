@@ -3,22 +3,39 @@ using System.Collections.Generic;
 
 public class Player 
 {
-    int id; 
+    private string _id; 
     string _name;
     object Connection;
-    bool BlackAce = false;
+    bool isBlackAce = false;
     List<Card> cardsInHand;
 
-    public Player(string name)
+    public Player(string name, string connectionId)
     {
-        
+        _id = connectionId;
         _name = name;
     }
 
-    public bool isBlackAce()
+    public void CheckAce()
     {
-        return BlackAce;
+        foreach(var card in cardsInHand)
+        {
+            if(card.Equals(Card.BLACK_ACE))
+                isBlackAce = true;
+        }
     }
+
+    public bool IsBlackAce()
+    {
+        return isBlackAce;
+    }
+
+    // return true if go public, otherwise not.
+    public bool AceGoPublic()
+    {
+        BackToFront.AskAceGoPublicBackend(this._id);
+        return PlayerHubTempData.aceGoPublic;
+    }
+
     public void AddCards(List<Card> cards)
     {
         cardsInHand.AddRange(cards);
@@ -43,7 +60,7 @@ public class Player
     {
         cardsInHand.Sort((x, y) => y.Number.CompareTo(x.Number));
         if(cardsInHand.Contains(Card.BLACK_ACE))
-            BlackAce = true;
+            isBlackAce = true;
     }
 
     // exclude Black Ace for now
@@ -59,10 +76,9 @@ public class Player
         p.AddCards(new List<Card>{tribute});
         p.OrganizeHand();
     }
-    public List<Card> ReturnTribute(Player p) 
+    public void ReturnTribute(Player p) 
     {
         // ask for users
-        return new List<Card>(){p.cardsInHand[p.cardsInHand.Count-1]};
     }
 
     /// <summary>
@@ -80,19 +96,23 @@ public class Player
         }
         catch(Exception e)
         {
+            BackToFront.HandIsNotValidBackend(_id);
             return false;
         }
         if(hand.CompareHand(lastHand))
         {
             foreach(var card in cards)
                 cardsInHand.Remove(card);
+            BackToFront.HandIsValidBackend(_id);
             return true;
         }
+        BackToFront.HandIsNotValidBackend(_id);
         return false;
     }
 
+
     public void GetPlayerHand()
     {
-        
+        BackToFront.AskForPlayBackend(_id);
     }
 }

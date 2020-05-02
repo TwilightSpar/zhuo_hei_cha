@@ -10,4 +10,38 @@ export default class HubClient {
     private static sampleClientMethod = (): void => {
         alert('sampleClientMethod is being called by the server!')
     }
+    
+    // return a list of card that users played
+    private static AskForPlayFrontend = (conn: HubConnection): void => {
+        alert('AskForPlayFrontend is being called by the server!');
+        // get cards of user
+        // conn.on('ReturnUserHandBackend', cards)
+    }
+    
+    // return whether all users agree to play one more round
+    private static AskPlayOneMoreRoundFrontend = (conn: HubConnection): void => {
+        alert('AskPlayOneMoreRoundFrontend is being called by the server!');
+        // PlayOneMore = user1 && user2 &&...&&userN 
+        // if PlayOneMore == true
+        // conn.on('ReturnPlayOneMoreTimeBackend', PlayOneMore)
+    }
+
+    // Ask the BlackAce user, whether go public
+    private static AskAceGoPublicFrontend = (conn: HubConnection): void => {
+        alert('AskAceGoPublicFrontend is being called by the server!');
+        // PlayOneMore = user1 && user2 &&...&&userN 
+        // if PlayOneMore == true
+        // conn.on('ReturnplayOneMoreTime', PlayOneMore)
+    }
+
+    
+    // alert it is valid
+    private static HandIsValidFrontend = (): void => {
+        alert('HandIsValidFrontend is being called by the server!');        
+    }
+
+    // alert it is not valid
+    private static HandIsNotValidFrontend = (): void => {
+        alert('HandIsValidFrontend is being called by the server!');        
+    }
 }

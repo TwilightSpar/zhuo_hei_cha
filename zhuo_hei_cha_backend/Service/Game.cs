@@ -10,7 +10,6 @@ public class Game
     List<Player> playerList;
     List<Player> tributeList;
     List<Player> stillPlay;     // prepare for checkEnded
-    // int playerLeft = 0;         // prepare for checkEnded
     bool isGameStarted;
 
     Hand lastHand = EMPTY_HAND;
@@ -43,7 +42,11 @@ public class Game
                     .Select(g => g.Select(x => x.s).ToList())
                     .ToList();
         for (int i = 0; i < playerList.Count; i++)
+        {
             playerList[i].AddCards(deckForUser[i]);
+            playerList[i].CheckAce();
+        }
+
     }
 
     private void Shuffle<T>(List<T> list)
@@ -76,13 +79,23 @@ public class Game
     /// </summary>
     private void ReturnTribute()
     {
-
+        for (int i = (playerList.Count - 1); i >= 0; i--)
+        {
+            // playerList[i].ReturnTribute
+        }
     }
 
     // get invoked if player decided to announce Ace before game starts
     // add to public ace list
     private void AceGoPublic()
     {
+        foreach (var p in playerList)
+            if (p.IsBlackAce())
+                if (p.AceGoPublic())
+                {
+                    publicBlackAceList.Add(p);
+                    PlayerHubTempData.aceGoPublic = false;
+                }
 
     }
 
@@ -94,15 +107,14 @@ public class Game
     /// <param name="playerId"></param>
 
 
-    private async void AskForPlay()
+    private void AskForPlay()
     {
         bool valid = false;
         while (!valid)
         {
-            PlayerHub ph = new PlayerHub();
             // front-end invoke this method
-            string userName = "find username by playerIndex";
-            await ph.Clients.User(userName).SendAsync("AskForPlay");
+            playerList[playerIndex].GetPlayerHand();
+
             List<Card> userHand = PlayerHubTempData.userHand;
 
             if (userHand.Count == 0)
@@ -110,23 +122,17 @@ public class Game
 
             if (playerList[playerIndex].PlayHand(userHand, this.lastHand))
             {
-                // tell user that the hand is valid and update their cardInHand
                 dealerIndex = playerIndex;
                 lastHand = new Hand(userHand);
                 valid = true;
             }
-            else
-            {
-                // tell user that the hand is not greater than the lastHand or is not valid
-            }
-
         }
 
     }
 
     public void checkEnded()
     {
-        int remainingGroupCount = stillPlay.Select(x => x.isBlackAce()).GroupBy(x => x).Count();
+        int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce()).GroupBy(x => x).Count();
         if (remainingGroupCount == 1)
         {
             tributeList.AddRange(stillPlay);
@@ -142,15 +148,15 @@ public class Game
         }
     }
 
-    public async void GameProcess()
+    public void GameProcess()
     {
         while (true)
         {
-            InitCardList();
-            // not needed for the first round
+            InitCardList();         // not needed for the first round
             PayTribute();
             ReturnTribute();
             tributeList = new List<Player> { };   // init tributeList
+            publicBlackAceList = new List<Player> { };
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
             AceGoPublic();
@@ -168,16 +174,16 @@ public class Game
             }
             reInital();
 
-            if (!await toPlayOneMoreRound())
+            if (!toPlayOneMoreRound())
                 break;
         }
 
     }   // PayTribute, ReturnTribute, AskForAce, AceGoPublic, start AskForPlay(id) by turns and check whether the game is stoped.
 
-    private Task<bool> toPlayOneMoreRound()
+    private bool toPlayOneMoreRound()
     {
         // as what the name says.
-        return Room.activeRoom.AskPlayOneMoreRound();
+        return PlayerHubTempData.playOneMoreTime;
     }
 
     private void reInital()

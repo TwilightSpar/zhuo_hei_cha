@@ -4,34 +4,37 @@ using System.Threading.Tasks;
 
 public class PlayerHub: Hub
 {
-    public void CreatePlayer(string name)
+    public void CreatePlayerBackend(string name, string connectionId)
     {
-        Player player = new Player(name);
+        // connectionid and other attributes of player
+        Player player = new Player(name, connectionId);
         Room.activeRoom.AddPlayer(player);
     }
 
-    public void StartGame()
+    public void StartGameBackend()
     {
+        // frontend do:
         // do some check
         // Room.activeRoom.playerList.Count
 
         Room.activeRoom.StartGame();
     }
-    public async void AskForPlay()
-    {
-        await Clients.Caller.SendAsync("AskForPlay");
-    }
 
-    public static void GetUserHand(List<Card> cards)
+    public static void ReturnUserHandBackend(List<Card> cards)
     {
         PlayerHubTempData.userHand = cards;
     }
 
-    public void Return(bool returnvalue)
+    public void ReturnPlayOneMoreTimeBackend(bool returnvalue)
     {
-        Room.activeRoom.playOneMore = returnvalue;
-        // Room.activeRoom.isPlayOneMoreSet = true;   
+        PlayerHubTempData.playOneMoreTime = returnvalue;
     }
+    public void ReturnAceGoPublicBackend(bool returnvalue)
+    {
+        if(returnvalue)
+            PlayerHubTempData.publicAceCount += 1;
+    }
+
 
 }
 

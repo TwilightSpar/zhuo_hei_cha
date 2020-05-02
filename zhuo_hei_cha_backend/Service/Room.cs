@@ -10,8 +10,6 @@ public class Room
     List<Player> playerList;
     Game activeGame;
 
-    public bool playOneMore;
-
     // public Room()
     // {
     //     playerList = new List<Player>();
@@ -27,13 +25,9 @@ public class Room
         playerList.Add(p);
     }
 
-    public async Task<bool> AskPlayOneMoreRound()
+    public void AskPlayOneMoreRound()
     {
-        PlayerHub ph = new PlayerHub();
-        // front-end invoke this method
-        await ph.Clients.All.SendAsync("AskPlayOneMoreRound");
-
-        return playOneMore;
+        BackToFront.AskPlayOneMoreRoundBackend();       
     }
 
     public void StartGame()
