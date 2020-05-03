@@ -7,6 +7,7 @@ public class Player
     string _name;
     private IClientProxy _client;
     bool isBlackAce = false;
+    bool isPublic = false;
     List<Card> cardsInHand;
 
     public Player(string name, IClientProxy client)
@@ -28,12 +29,31 @@ public class Player
     {
         return isBlackAce;
     }
+    public bool IsPublicAce()
+    {
+        return isPublic;
+    }
+    public bool IsTwoCats()
+    {
+        return cardsInHand.Contains(new Card(52)) && cardsInHand.Contains(new Card(53));
+    }
+
+    public bool IsFourTwo()
+    {
+        return cardsInHand.Contains(new Card(12)) && cardsInHand.Contains(new Card(25))
+            && cardsInHand.Contains(new Card(38)) && cardsInHand.Contains(new Card(51));
+    }
 
     // return true if go public, otherwise not.
-    public bool AceGoPublic()
+    // if one player has two ace, no solution now
+    public void AceGoPublic()
     {
-        BackToFront.AskAceGoPublicBackend(_client);
-        return PlayerHubTempData.aceGoPublic;
+        if (isBlackAce)
+        {
+            BackToFront.AskAceGoPublicBackend(_client);
+            isPublic = PlayerHubTempData.aceGoPublic;
+            PlayerHubTempData.aceGoPublic = false;
+        }
     }
 
     public void AddCards(List<Card> cards)
@@ -43,6 +63,11 @@ public class Player
     public void ClearCard() 
     {
         cardsInHand.Clear();
+    }
+    public void clearAce()
+    {
+        isBlackAce = false;
+        isPublic = false;
     }
 
     public bool hasCard()
@@ -76,9 +101,21 @@ public class Player
         p.AddCards(new List<Card>{tribute});
         p.OrganizeHand();
     }
-    public void ReturnTribute() 
+    public void ReturnTribute(Player p, int returnNumber)
     {
-        BackToFront.AskReturnTributeBackend(_client);
+        bool valid = false;
+        while(!valid)
+        {
+            BackToFront.AskReturnTributeBackend(_client);
+            var userReturn = PlayerHubTempData.returnCards;
+        
+            if(userReturn.Count != returnNumber)
+                BackToFront.ReturnNotValidBackend(_client);
+            else
+                valid = true;
+        }
+        p.AddCards(PlayerHubTempData.returnCards);
+        p.OrganizeHand();
     }
 
     /// <summary>

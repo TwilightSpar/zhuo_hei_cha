@@ -23,6 +23,13 @@ export default class HubClient {
         // conn.on('ReturnUserHandBackend', cards)
     }
     
+    // return a list of card of which users return tribute
+    private static AskReturnTributeFrontend = (conn: HubConnection): void => {
+        alert('AskReturnTributeFrontend is being called by the server!');
+        // return tirbutes
+        // conn.on('ReturnTributeBackend', cards)
+    }
+    
     // return whether all users agree to play one more round
     private static AskPlayOneMoreRoundFrontend = (conn: HubConnection): void => {
         alert('AskPlayOneMoreRoundFrontend is being called by the server!');
@@ -48,5 +55,10 @@ export default class HubClient {
     // alert it is not valid
     private static HandIsNotValidFrontend = (): void => {
         alert('HandIsValidFrontend is being called by the server!');        
+    }
+
+    
+    private static ReturnNotValidFrontend = (): void => {
+        alert('ReturnNotValidFrontend is being called by the server!');        
     }
 }

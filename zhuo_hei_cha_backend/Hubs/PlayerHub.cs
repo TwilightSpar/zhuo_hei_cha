@@ -35,6 +35,10 @@ public class PlayerHub: Hub
     {
         PlayerHubTempData.userHand = cards;
     }
+    public static void ReturnTributeBackend(List<Card> cards)
+    {
+        PlayerHubTempData.returnCards = cards;
+    }
 
     public void ReturnPlayOneMoreTimeBackend(bool returnvalue)
     {

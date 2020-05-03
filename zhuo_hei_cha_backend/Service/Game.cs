@@ -6,7 +6,9 @@ public class Game
 {
     private static readonly Hand EMPTY_HAND = new Hand(new List<Card>() { });
     List<Player> playerList;
-    List<Player> tributeList;
+    List<Player> finishOrder;
+
+    List<List<int>> tributeList = new List<List<int>>{};
     List<Player> stillPlay;     // prepare for checkEnded
     bool isGameStarted;
 
@@ -15,9 +17,6 @@ public class Game
     int dealerIndex = 0;
 
     int playerIndex = 0;
-
-    // order of finishing
-    List<Player> publicBlackAceList;
 
     public Game(List<Player> playerList)
     {
@@ -62,6 +61,37 @@ public class Game
     }
 
 
+    private void SetTributeList()
+    {
+        for (int i = 1; i < finishOrder.Count; i++)
+        {
+            tributeList.Add(new List<int>{});
+            for (int j = 0; j < finishOrder.Count; j++)
+                tributeList[i].Add(0);
+
+        }
+
+        for (int i = 1; i < finishOrder.Count; i++)
+        {
+            var thisPlayer = finishOrder[i];
+            for (int j = i+1; j < finishOrder.Count; j++)
+            {
+                var otherPlayer = finishOrder[j];
+                if(thisPlayer.IsBlackAce() != otherPlayer.IsBlackAce())
+                    if(thisPlayer.IsPublicAce() || otherPlayer.IsPublicAce())
+                    {
+                        tributeList[i][j] = 2;
+                        tributeList[j][i] = 2;
+                    }
+                    else
+                    {
+                        tributeList[i][j] = 1;
+                        tributeList[j][i] = 1;
+                    }
+            }
+        }
+    }
+
     /// <summary>
     /// group tributeList according to Black ACEs
     /// call tribute in order
@@ -71,6 +101,22 @@ public class Game
     {
         // consider sotuations that do not need totribute
         // player1.PayTribute(player2) only tribute one card
+        // if one person have two black ace
+        if(finishOrder.Any(x => x.IsFourTwo()))
+            return;
+        for (int i = 0; i < finishOrder.Count-1; i++)
+        {
+            if(finishOrder[i].IsTwoCats())
+                continue;
+            var thisPlayer = finishOrder[i];
+            for(int j = i+1; j<playerList.Count; j++)
+            {
+                var otherPlayer = finishOrder[j];
+                for(int round = 0; round < tributeList[i][j]; round ++)
+                    otherPlayer.PayTribute(thisPlayer);
+            }
+            
+        }
     }
 
     /// <summary>
@@ -78,9 +124,19 @@ public class Game
     /// </summary>
     private void ReturnTribute()
     {
-        for (int i = (playerList.Count - 1); i >= 0; i--)
+        if(finishOrder.Any(x => x.IsFourTwo()))
+            return;
+        for (int i = finishOrder.Count-1; i > 0; i++)
         {
-            // playerList[i].ReturnTribute()
+            if(finishOrder[i].IsTwoCats())
+                continue;
+            var thisPlayer = finishOrder[i];
+            for(int j = i-1; j>=0; j--)
+            {
+                var otherPlayer = finishOrder[j];
+                otherPlayer.ReturnTribute(thisPlayer, tributeList[i][j]);
+            }
+            
         }
     }
 
@@ -89,12 +145,7 @@ public class Game
     private void AceGoPublic()
     {
         foreach (var p in playerList)
-            if (p.IsBlackAce())
-                if (p.AceGoPublic())
-                {
-                    publicBlackAceList.Add(p);
-                    PlayerHubTempData.aceGoPublic = false;
-                }
+            p.AceGoPublic();
 
     }
 
@@ -132,7 +183,7 @@ public class Game
         int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce()).GroupBy(x => x).Count();
         if (remainingGroupCount == 1)
         {
-            tributeList.AddRange(stillPlay);
+            finishOrder.AddRange(stillPlay);
             stillPlay.Clear();
             this.isGameStarted = false;
             return;
@@ -140,7 +191,7 @@ public class Game
         Player p = playerList[playerIndex];
         if (p.isFinished())
         {
-            tributeList.Add(p);
+            finishOrder.Add(p);
             stillPlay.Remove(p);
         }
     }
@@ -150,13 +201,18 @@ public class Game
     /// </summary>
     public void GameProcess()
     {
+        int roundNumber = 1;
         while (true)
         {
-            InitCardList();         // not needed for the first round
-            PayTribute();
-            ReturnTribute();
-            tributeList = new List<Player> { };   // init tributeList
-            publicBlackAceList = new List<Player> { };
+            InitCardList();
+            if(roundNumber != 1)
+            {
+                PayTribute();
+                ReturnTribute();
+            }
+            foreach(var p in playerList)
+                p.clearAce();
+            finishOrder = new List<Player> { };   // init tributeList
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
             AceGoPublic();
@@ -171,9 +227,10 @@ public class Game
                 playerIndex = (playerIndex + 1) % playerList.Count;
             }
             reInital();
-
+            
             if (!toPlayOneMoreRound())
                 break;
+            roundNumber += 1;
         }
 
     }   
@@ -186,6 +243,8 @@ public class Game
 
     private void reInital()
     {
+        foreach(var p in playerList)
+            p.ClearCard();
         stillPlay = new List<Player> { };
         dealerIndex = 0;
         playerIndex = 0;

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.SignalR;
 
 public static class BackToFront
@@ -35,4 +36,8 @@ public static class BackToFront
         client.SendAsync("HandIsNotValidFrontend");
     }
 
+    public static void ReturnNotValidBackend(IClientProxy client)
+    {
+        client.SendAsync("ReturnNotValidFrontend");
+    }
 }
