@@ -14,6 +14,11 @@ const SampleComponent: React.FunctionComponent<ISampleProps> = () => {
             <button onClick={() => initConnection(setConnection)}>Connect to server</button>
             <br />
             <button onClick={() => invokeServerMethod(connection)}>Invoke server method</button>
+            <br />
+            <button onClick={() => StartGameFrontend(connection)}>StartGame</button>
+            <br />
+            <button onClick={() => enterRoom(connection)}>enter room</button>
+            
         </div>
     );
 };
@@ -42,6 +47,23 @@ const invokeServerMethod = async (conn: HubConnection | null) => {
     }
 
     await conn.invoke('SendMessage');
+};
+
+const StartGameFrontend = async (conn: HubConnection | null) => {
+    alert('invoke startgame on the server!');
+    if (!conn) {
+        alert('Please connect to the server first!');
+        return;
+    }
+    await conn.invoke('StartGameBackend');
+};
+
+const enterRoom = async (conn: HubConnection | null) => {
+    if (!conn) {
+        alert('Please connect to the server first!');
+        return;
+    }
+    await conn.invoke('CreatePlayerBackend','aaa');
 };
 
 export default SampleComponent;

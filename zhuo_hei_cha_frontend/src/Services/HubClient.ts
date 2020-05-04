@@ -11,10 +11,6 @@ export default class HubClient {
         alert('sampleClientMethod is being called by the server!')
     }
 
-    private static StartGameFrontend = (conn: HubConnection): void => {
-        alert('sampleClientMethod is being called by the server!');
-        //conn.on('StartGameBackend')
-    }
     
     // return a list of card that users played
     private static AskForPlayFrontend = (conn: HubConnection): void => {

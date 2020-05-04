@@ -3,12 +3,12 @@ using Xunit;
 
 namespace ServiceTest
 {
-    public class UnitTest1
+    public class GameTest
     {
         [Fact]
-        public void Test1()
+        public void IniitalCardTest()
         {
-
+            
         }
     }
 }

@@ -25,7 +25,7 @@ public class Game
 
 
     // add AnnounceBlackACE button
-    private void InitCardList()	// shuffle the deck and distribute to players
+    public void InitCardList()	// shuffle the deck and distribute to players
     {
         List<Card> wholeCard = new List<Card> { };
         for (int i = 0; i < 54; i++)
