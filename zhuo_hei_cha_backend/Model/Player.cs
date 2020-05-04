@@ -12,6 +12,7 @@ public class Player
 
     public Player(string name, IClientProxy client)
     {
+        cardsInHand = new List<Card>{};
         _name = name;
         _client = client;
     }

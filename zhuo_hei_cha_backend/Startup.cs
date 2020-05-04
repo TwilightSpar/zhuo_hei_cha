@@ -58,6 +58,7 @@ namespace zhuo_hei_cha_backend
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<SampleHub>("/samplehub");
+                endpoints.MapHub<PlayerHub>("/playerhub");
             });
         }
     }

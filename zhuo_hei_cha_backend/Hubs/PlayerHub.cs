@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class PlayerHub: Hub
 {
-    public async void CreatePlayerBackend(string name)
+    public void CreatePlayerBackend(string name)
     {
         // connectionid and other attributes of player
         Player player = new Player(name, Clients.Caller);
@@ -13,8 +13,6 @@ public class PlayerHub: Hub
         }
         Room.activeRoom.AddPlayer(player);
 
-        // no need to wait here?
-        await Clients.Caller.SendAsync("enterRoom");
     }
 
     public async void StartGameBackend()

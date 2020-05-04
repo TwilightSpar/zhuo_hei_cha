@@ -39,7 +39,7 @@ export default class HubClient {
         alert('AskAceGoPublicFrontend is being called by the server!');
         // PlayOneMore = user1 && user2 &&...&&userN 
         // if PlayOneMore == true
-        // conn.on('ReturnplayOneMoreTime', PlayOneMore)
+        // conn.invoke('ReturnplayOneMoreTime', PlayOneMore)
     }
 
     
