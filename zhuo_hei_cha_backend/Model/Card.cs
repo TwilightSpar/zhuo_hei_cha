@@ -9,7 +9,7 @@ public class Card{
 
     public Card(int cardNumber)
     {        
-        if(cardNumber<0 || cardNumber>CARD_MAX)
+        if(cardNumber<0 || cardNumber>53)
             throw new Exception("cardNumber is invalid");
         this._id = cardNumber;
 
