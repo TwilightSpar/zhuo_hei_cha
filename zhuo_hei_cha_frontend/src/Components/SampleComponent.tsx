@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import HubClient from '../Services/HubClient';
 
-const signalREndpointUrl = 'http://localhost:5000/samplehub';
+const signalREndpointUrl = 'http://localhost:5000/playerhub';
 
 type ISampleProps = {}
 
@@ -63,7 +63,7 @@ const enterRoom = async (conn: HubConnection | null) => {
         alert('Please connect to the server first!');
         return;
     }
-    await conn.invoke('CreatePlayerBackend','aaa');
+    await conn.invoke('CreatePlayerBackend',"aaa");
 };
 
 export default SampleComponent;
