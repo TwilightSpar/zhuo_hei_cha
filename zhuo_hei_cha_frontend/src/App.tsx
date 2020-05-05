@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SampleComponent from './Components/SampleComponent';
+// import Home from './Components/Home';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
           Learn React
         </a>
         <SampleComponent />
+        {/* <Home /> */}
       </header>
     </div>
   );
