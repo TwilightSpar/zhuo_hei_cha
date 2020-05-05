@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class Game
 {
@@ -199,7 +200,7 @@ public class Game
     /// <summary>
     /// main process
     /// </summary>
-    public void GameProcess()
+    public async Task GameProcess()
     {
         int roundNumber = 1;
         while (true)
@@ -211,6 +212,7 @@ public class Game
             if(roundNumber != 1)
             {
                 // alert user that we sill start to pay tribute
+                await Task.Delay(5000);
 
                 PayTribute();
 

@@ -19,6 +19,8 @@ public class PlayerHub: Hub
     {
         if (Room.activeRoom.CanStartGame())
         {
+            // await here?
+            Clients.All.SendAsync("startGameFrontend");
             BackToFront.clients = Clients;
             // no need to wait here?
             Room.activeRoom.StartGame();

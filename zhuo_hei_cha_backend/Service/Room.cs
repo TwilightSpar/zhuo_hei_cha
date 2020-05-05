@@ -29,9 +29,9 @@ public class Room
         return playerList.Count >= 3 && playerList.Count <= 5;
     }
 
-    public void StartGame()
+    public async void StartGame()
     {
         activeGame = new Game(playerList);
-        activeGame.GameProcess();
+        await activeGame.GameProcess();
     }
 }
