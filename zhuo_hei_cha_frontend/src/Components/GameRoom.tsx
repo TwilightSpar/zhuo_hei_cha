@@ -1,11 +1,6 @@
-import React, { Fragment, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
-import PokerHand from './PokerHand';
-import _ from 'lodash';
-
-const testCards = _.flatten(_.range(3, 9).map(n => {
-    return ['C', 'D', 'H', 'S'].map(s => n + s)
-}));
+import GameCanvas from './GameCanvas';
 
 type IProps = {
     player: number
@@ -22,16 +17,6 @@ const GameRoom: React.FunctionComponent<{}> = () => {
     )
 }
 
-const GameCanvas: React.FunctionComponent<{}> = () => {
-    // return <label style={GameCanvasStyle}>Canvas here</label>
-    return (
-        <div style={GameCanvasStyle}>
-            <PokerHand cardNames={testCards}/>
-        </div>
-    )
-}
-
-
 const PlayerList: React.FunctionComponent<{}> = () => {
     const playerList = [1, 2, 3, 4, 5];
     return (
@@ -46,19 +31,6 @@ const PlayerItem: React.FunctionComponent<IProps> = (props) => {
         <li style={PlayerItemStyle}>props.player</li>
     )
 }
-
-// const GameRoomStyle: CSSProperties = {
-//     display: 'flex',
-//     flexDirection: 'row',
-// };
-
-const GameCanvasStyle: CSSProperties = {
-    // backgroundColor: 'grey',
-    // paddingTop: '56.25%',
-    paddingTop: '45%',
-    width: '100%'
-
-};
 
 const PlayerListStyle: CSSProperties = {
     listStyleType: 'none',

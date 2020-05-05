@@ -1,33 +1,41 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties } from 'react';
 
 const CARD_HEIGHT = 150;
 const CARD_WIDTH = 100;
 const CARD_WIDTH_OVERLAPPED = 20;
 
-const CARD_SELECTED_OFFSET = -50;
+const CARD_SELECTED_OFFSET = -30;
 
 type CardProps = {
-    cardName: string
+    cardName: string,
+    isSelected: boolean,
     style: CSSProperties
     selectCardCallback: (cardName: string, isSelected: boolean) => void
 }
 
 const PokerCard: React.FunctionComponent<CardProps> = (props) => {
-    const [selected, setSelected] = useState(false);
+    const { style, cardName, isSelected, selectCardCallback } = props;
     return (
-        <div style={props.style}>
+        <div style={style}>
             <img 
-                className={props.cardName}
-                style={{ height: CARD_HEIGHT, position: 'relative', top: selected ? CARD_SELECTED_OFFSET : 0}}
-                src={PokerCardImages[props.cardName]}
-                alt={props.cardName}
+                className={cardName}
+                style={getPokerCardImageStyle(isSelected)}
+                src={PokerCardImages[cardName]}
+                alt={cardName}
                 onClick={(e) => {
-                    props.selectCardCallback(e.currentTarget.className, !selected);
-                    setSelected(!selected);
+                    selectCardCallback(e.currentTarget.className, !isSelected);
                 }}
             />
         </div>
     )
+}
+
+const getPokerCardImageStyle = (isSelected: boolean): CSSProperties => {
+    return {
+        top: isSelected ? CARD_SELECTED_OFFSET : 0,
+        height: CARD_HEIGHT,
+        position: 'relative',
+    }
 }
 
 interface ImageKVP {
