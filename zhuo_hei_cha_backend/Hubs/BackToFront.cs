@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 
 public static class BackToFront
@@ -36,8 +37,13 @@ public static class BackToFront
         client.SendAsync("HandIsNotValidFrontend");
     }
 
-    public static void ReturnNotValidBackend(IClientProxy client)
+    public static void TributeReturnNotValidBackend(IClientProxy client)
     {
-        client.SendAsync("ReturnNotValidFrontend");
+        client.SendAsync("TributeReturnNotValidFrontend");
+    }
+
+    public static void SendCurrentCardListBackend(IClientProxy client, List<Card> currentCardList)
+    {
+        client.SendAsync("SendCurrentCardListFrontend", currentCardList);
     }
 }

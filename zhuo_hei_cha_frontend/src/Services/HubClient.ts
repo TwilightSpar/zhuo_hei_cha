@@ -11,27 +11,31 @@ export default class HubClient {
         alert('sampleClientMethod is being called by the server!')
     }
 
+
+    // invoke by backend, do something then return the value
     
     // return a list of card that users played
     private static AskForPlayFrontend = (conn: HubConnection): void => {
         alert('AskForPlayFrontend is being called by the server!');
         // get cards of user
-        // conn.on('ReturnUserHandBackend', cards)
+        // conn.invoke('ReturnUserHandBackend', cards)
     }
-    
-    // return a list of card of which users return tribute
-    private static AskReturnTributeFrontend = (conn: HubConnection): void => {
-        alert('AskReturnTributeFrontend is being called by the server!');
-        // return tirbutes
-        // conn.on('ReturnTributeBackend', cards)
-    }
-    
+
+     
     // return whether all users agree to play one more round
     private static AskPlayOneMoreRoundFrontend = (conn: HubConnection): void => {
         alert('AskPlayOneMoreRoundFrontend is being called by the server!');
         // PlayOneMore = user1 && user2 &&...&&userN 
         // if PlayOneMore == true
-        // conn.on('ReturnPlayOneMoreTimeBackend', PlayOneMore)
+        // conn.invoke('ReturnPlayOneMoreTimeBackend', PlayOneMore)
+    }
+
+    
+    // return a list of card of which users return tribute
+    private static AskReturnTributeFrontend = (conn: HubConnection): void => {
+        alert('AskReturnTributeFrontend is being called by the server!');
+        // return tirbutes
+        // conn.invoke('ReturnTributeBackend', cards)
     }
 
     // Ask the BlackAce user, whether go public
@@ -42,6 +46,11 @@ export default class HubClient {
         // conn.invoke('ReturnplayOneMoreTime', PlayOneMore)
     }
 
+
+
+
+
+    // invoke by backend, do not need to return value
     
     // alert it is valid
     private static HandIsValidFrontend = (): void => {
@@ -53,8 +62,15 @@ export default class HubClient {
         alert('HandIsValidFrontend is being called by the server!');        
     }
 
-    
-    private static ReturnNotValidFrontend = (): void => {
-        alert('ReturnNotValidFrontend is being called by the server!');        
+    // alert users that their tribute return is not valid
+    private static TributeReturnNotValidFrontend = (): void => {
+        alert('TributeReturnNotValidFrontend is being called by the server!');        
     }
+
+    // alert users that their cards have changed
+    private static SendCurrentCardListFrontend = (): void => {
+        alert('SendCurrentCardListFrontend is being called by the server!');
+    }
+
+    
 }

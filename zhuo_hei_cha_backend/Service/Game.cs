@@ -205,10 +205,20 @@ public class Game
         while (true)
         {
             InitCardList();
+
+            SendCurrentCardListBackend();
+
             if(roundNumber != 1)
             {
+                // alert user that we sill start to pay tribute
+
                 PayTribute();
+
+                SendCurrentCardListBackend();
+
                 ReturnTribute();
+
+                SendCurrentCardListBackend();
             }
             foreach(var p in playerList)
                 p.clearAce();
@@ -224,6 +234,9 @@ public class Game
 
                 AskForPlay();
                 checkEnded();
+
+                SendCurrentCardListBackend();
+
                 playerIndex = (playerIndex + 1) % playerList.Count;
             }
             reInital();
@@ -239,6 +252,18 @@ public class Game
     {
         // as what the name says.
         return PlayerHubTempData.playOneMoreTime;
+    }
+
+    /// <summary>
+    /// Not only do some change in backend, also change layout in frontend
+    /// </summary>
+    private void SendCurrentCardListBackend()
+    {
+        foreach(var p in playerList)
+        {
+            p.SendCurrentCardListBackend();
+
+        }
     }
 
     private void reInital()

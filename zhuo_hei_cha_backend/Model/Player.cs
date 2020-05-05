@@ -111,7 +111,7 @@ public class Player
             var userReturn = PlayerHubTempData.returnCards;
         
             if(userReturn.Count != returnNumber)
-                BackToFront.ReturnNotValidBackend(_client);
+                BackToFront.TributeReturnNotValidBackend(_client);
             else
                 valid = true;
         }
@@ -152,5 +152,10 @@ public class Player
     public void GetPlayerHand()
     {
         BackToFront.AskForPlayBackend(_client);
+    }
+
+    public void SendCurrentCardListBackend()
+    {
+        BackToFront.SendCurrentCardListBackend(_client, cardsInHand);
     }
 }
