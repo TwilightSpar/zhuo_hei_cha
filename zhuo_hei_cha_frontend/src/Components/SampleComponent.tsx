@@ -23,7 +23,9 @@ const SampleComponent: React.FunctionComponent<ISampleProps> = () => {
     );
 };
 
-// helper methods below
+
+
+// helper methods below. Directly invoke backend methods
 
 const initConnection = async (callback: any) => {
     const conn = new HubConnectionBuilder()
@@ -64,6 +66,15 @@ const enterRoom = async (conn: HubConnection | null) => {
         return;
     }
     await conn.invoke('CreatePlayerBackend',"aaa");
+};
+
+// end game at anytime, but how to stop backend?
+const EndGameFrontend = async (conn: HubConnection | null) => {
+    if (!conn) {
+        alert('Please connect to the server first!');
+        return;
+    }
+    await conn.invoke('EndGameBackend');
 };
 
 export default SampleComponent;

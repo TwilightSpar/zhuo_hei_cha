@@ -25,7 +25,7 @@ public class Game
 
 
     // add AnnounceBlackACE button
-    public void InitCardList()	// shuffle the deck and distribute to players
+    private void InitCardList()	// shuffle the deck and distribute to players
     {
         List<Card> wholeCard = new List<Card> { };
         for (int i = 0; i < 54; i++)
@@ -178,7 +178,7 @@ public class Game
 
     }
 
-    public void checkEnded()
+    private void checkEnded()
     {
         int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce()).GroupBy(x => x).Count();
         if (remainingGroupCount == 1)
