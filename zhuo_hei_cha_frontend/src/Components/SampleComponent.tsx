@@ -70,11 +70,7 @@ const enterRoom = async (conn: HubConnection | null) => {
 
 // end game at anytime, but how to stop backend?
 const EndGameFrontend = async (conn: HubConnection | null) => {
-    if (!conn) {
-        alert('Please connect to the server first!');
-        return;
-    }
-    await conn.invoke('EndGameBackend');
+    conn?.stop();
 };
 
 export default SampleComponent;
