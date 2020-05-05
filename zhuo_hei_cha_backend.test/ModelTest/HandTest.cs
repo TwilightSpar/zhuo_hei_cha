@@ -2,16 +2,20 @@ using System;
 using Xunit;
 using System.Collections.Generic;
 
-namespace HandTest
+namespace ModelTest
 {
     public class HandTest
     {
         private static readonly Card THREE_OF_SPADE = new Card(0);
+        private static readonly Card FOUR_OF_SPADE = new Card(1);
+        private static readonly Card FIVE_OF_SPADE = new Card(2);
         private static readonly Card QUEEN_OF_SPADE = new Card(9);
         private static readonly Card KING_OF_SPADE = new Card(10);
         private static readonly Card ACE_OF_SPADE = new Card(11);
         private static readonly Card TWO_OF_SPADE = new Card(12);
         private static readonly Card THREE_OF_HEART = new Card(13);
+        private static readonly Card FOUR_OF_HEART = new Card(14);
+        private static readonly Card FIVE_OF_HEART = new Card(15);
         private static readonly Card QUEEN_OF_HEART = new Card(22);
         private static readonly Card KING_OF_HEART = new Card(23);
         private static readonly Card ACE_OF_HEART = new Card(24);
@@ -26,13 +30,22 @@ namespace HandTest
         private static readonly Card KING_OF_CLUB = new Card(49);
         private static readonly Card ACE_OF_CLUB = new Card(50);
         private static readonly Card TWO_OF_CLUB = new Card(51);
+        private static readonly Card SMALL_JOKER = new Card(52);
+        private static readonly Card BIG_JOKER = new Card(53);
 
+        [Fact]
+        public void ThreeIsGreaterThanEmptyHand()
+        {
+            var emptyHand = new Hand(new List<Card>(){});
+            var three = new Hand(new List<Card>(){THREE_OF_CLUB});
+            Assert.True(three.CompareHand(emptyHand));
+        }
         
         [Fact]
         public void OnePairIsGreaterThanThreePair()
         {   
-            var onePair = new Hand(new List<Card>{new Card(11), new Card(24)});
-            var threePair = new Hand(new List<Card>{new Card(0), new Card(13)});
+            var onePair = new Hand(new List<Card>{ACE_OF_SPADE, ACE_OF_HEART});
+            var threePair = new Hand(new List<Card>{THREE_OF_SPADE, THREE_OF_HEART});
             Assert.True(onePair.CompareHand(threePair));
             
         }
@@ -40,8 +53,8 @@ namespace HandTest
         [Fact]
         public void QToAPairIsGreaterThan3To5Pair()
         {   
-            var QToAPair = new Hand(new List<Card>{new Card(11), new Card(24), new Card(10), new Card(23), new Card(9), new Card(22)});
-            var threeToFivePair = new Hand(new List<Card>{new Card(0), new Card(13), new Card(1), new Card(14), new Card(2), new Card(15)});
+            var QToAPair = new Hand(new List<Card>{ACE_OF_SPADE, ACE_OF_HEART, KING_OF_SPADE, KING_OF_HEART, QUEEN_OF_SPADE, QUEEN_OF_HEART});
+            var threeToFivePair = new Hand(new List<Card>{THREE_OF_SPADE, THREE_OF_HEART, FOUR_OF_SPADE, FOUR_OF_HEART, FIVE_OF_SPADE, FIVE_OF_HEART});
             Assert.True(QToAPair.CompareHand(threeToFivePair));
             
         }
@@ -52,8 +65,8 @@ namespace HandTest
             int exception = 0;
             try
             { 
-                var KA2 = new Hand(new List<Card>{new Card(10), new Card(11), new Card(12)});
-                var threeToFivePair = new Hand(new List<Card>{new Card(0), new Card(1), new Card(2)});
+                var KA2 = new Hand(new List<Card>{KING_OF_SPADE, ACE_OF_SPADE, TWO_OF_SPADE});
+                var threeToFivePair = new Hand(new List<Card>{THREE_OF_SPADE, FOUR_OF_SPADE, FIVE_OF_SPADE});
                 Assert.True(KA2.CompareHand(threeToFivePair));
             }
             catch(Exception e){
@@ -67,8 +80,8 @@ namespace HandTest
         [Fact]
         public void QToAFlushIsGreaterThan3To5Flush()
         {   
-            var QToAFlush = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9)});
-            var threeToFiveFlush = new Hand(new List<Card>{new Card(0), new Card(1),new Card(2)});
+            var QToAFlush = new Hand(new List<Card>{ACE_OF_SPADE, KING_OF_SPADE, QUEEN_OF_SPADE});
+            var threeToFiveFlush = new Hand(new List<Card>{THREE_OF_SPADE, FOUR_OF_SPADE, FIVE_OF_SPADE});
             Assert.True(QToAFlush.CompareHand(threeToFiveFlush));
             
         }
@@ -76,8 +89,8 @@ namespace HandTest
         [Fact]
         public void QToAFlushIsGreaterThanA23Flush()
         {   
-            var QToAFlush = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9)});
-            var A23Flush = new Hand(new List<Card>{new Card(11), new Card(12),new Card(13)});
+            var QToAFlush = new Hand(new List<Card>{ACE_OF_SPADE, KING_OF_SPADE, QUEEN_OF_SPADE});
+            var A23Flush = new Hand(new List<Card>{ACE_OF_SPADE, TWO_OF_SPADE, THREE_OF_SPADE});
             Assert.True(QToAFlush.CompareHand(A23Flush));
             
         }
@@ -85,8 +98,8 @@ namespace HandTest
         [Fact]
         public void QToAPairIsGreaterThanA23Pair()
         {   
-            var QToAPair = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24) });
-            var A23Pair = new Hand(new List<Card>{new Card(11), new Card(12),new Card(13), new Card(24), new Card(25), new Card(26) });
+            var QToAPair = new Hand(new List<Card>{ACE_OF_SPADE, ACE_OF_HEART, KING_OF_SPADE, KING_OF_HEART, QUEEN_OF_SPADE, QUEEN_OF_HEART});
+            var A23Pair = new Hand(new List<Card>{ACE_OF_SPADE, ACE_OF_HEART, TWO_OF_SPADE, TWO_OF_HEART, THREE_OF_SPADE, THREE_OF_HEART});
             Assert.True(QToAPair.CompareHand(A23Pair));
             
         }
@@ -162,8 +175,8 @@ namespace HandTest
         [Fact]
         public void CatsIsTheBiggest()
         {   
-            var QToAPair = new Hand(new List<Card>{new Card(11), new Card(10), new Card(9), new Card(22), new Card(23), new Card(24) });
-            var Cat = new Hand(new List<Card>{new Card(52), new Card(53)});
+            var QToAPair = new Hand(new List<Card>{ACE_OF_SPADE, ACE_OF_HEART, KING_OF_SPADE, KING_OF_HEART, QUEEN_OF_SPADE, QUEEN_OF_HEART});
+            var Cat = new Hand(new List<Card>{SMALL_JOKER, BIG_JOKER});
             Assert.False(QToAPair.CompareHand(Cat));
             
         }
