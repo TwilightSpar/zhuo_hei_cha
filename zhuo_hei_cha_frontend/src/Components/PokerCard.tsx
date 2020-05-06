@@ -10,11 +10,11 @@ type CardProps = {
     cardName: string,
     isSelected: boolean,
     style: CSSProperties
-    selectCardCallback: (cardName: string, isSelected: boolean) => void
+    onSelectCard: (cardName: string, isSelected: boolean) => void
 }
 
 const PokerCard: React.FunctionComponent<CardProps> = (props) => {
-    const { style, cardName, isSelected, selectCardCallback } = props;
+    const { style, cardName, isSelected, onSelectCard } = props;
     return (
         <div style={style}>
             <img 
@@ -23,7 +23,7 @@ const PokerCard: React.FunctionComponent<CardProps> = (props) => {
                 src={PokerCardImages[cardName]}
                 alt={cardName}
                 onClick={(e) => {
-                    selectCardCallback(e.currentTarget.className, !isSelected);
+                    onSelectCard(e.currentTarget.className, !isSelected);
                 }}
             />
         </div>
