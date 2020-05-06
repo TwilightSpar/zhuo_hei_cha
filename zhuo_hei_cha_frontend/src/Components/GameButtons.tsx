@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 
 type IGameButtonsProps = {
     handlePlayHandClick: () => void,
-    handleSkipClick: () => void
+    handleSkipClick: () => void,
+    handleAceGoPublicClick: () => void
 };
 
 const GameButtons: FunctionComponent<IGameButtonsProps> = (props) => {
@@ -15,6 +16,9 @@ const GameButtons: FunctionComponent<IGameButtonsProps> = (props) => {
             <Button variant="light" style={buttonStyle} onClick={props.handleSkipClick}>
                 Skip
             </Button>
+            <Button variant="light" style={buttonStyle} onClick={props.handleAceGoPublicClick}>
+                Ace Go Public
+            </Button>
         </div>
     )
 }
@@ -25,8 +29,8 @@ const buttonStyle: CSSProperties = {
 };
 
 const style: CSSProperties = {
-    marginBottom: 40,
-    marginTop: 40,
+    marginBottom: 15,
+    marginTop: 15,
     marginLeft: 'auto',
     marginRight: 'auto'
 }
