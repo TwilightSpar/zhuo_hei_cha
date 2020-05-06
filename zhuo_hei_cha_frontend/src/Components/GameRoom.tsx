@@ -1,25 +1,16 @@
-import React, { CSSProperties } from 'react';
-import { Container, Col, Row, ListGroup } from 'react-bootstrap';
+import React from 'react';
+import { Container, Col, Row } from 'react-bootstrap';
 import GameCanvas from './GameCanvas';
 import PlayerModel from '../Models/PlayerModel';
-
-type IPlayerListProps = {
-    playerList: PlayerModel[],
-    activePlayerIndex: number
-};
-
-type IPlayerListItemProps = {
-    player: PlayerModel,
-    isActivePlayer: boolean
-};
-
-const BLACK_ACE_CHARACTER = '\u2660';
+import PlayerList from './PlayerList';
 
 const getTempPlayerList = (): PlayerModel[] => {
     const p1 = new PlayerModel(1, 'Player1');
     p1.cardCount = 10;
     p1.lastHand = ['3H', '4C', '4S', '6C', '7C', '8C', 'JD', 'AS'];
     p1.isPublicBlackAce = true;
+    p1.isCurrentClient = true;
+    p1.remainingHand = ['9H', '9C', '10S', '10C', 'JC', 'JC', 'QD', 'QS', 'KD', 'KH'];
 
     const p2 = new PlayerModel(2, 'Player2');
     p2.cardCount = 7;
@@ -46,55 +37,13 @@ const GameRoom: React.FunctionComponent<{}> = () => {
         <Container fluid>
             <Row style={{height: '100%'}}>
                 <Col lg={10} style={{backgroundColor: 'green' }}><GameCanvas playerList={getTempPlayerList()} /></Col>
-                <Col lg={2} 
-                // style={{backgroundColor: 'red'}}
-                >
+                <Col lg={2}>
                     <PlayerList playerList={getTempPlayerList()} activePlayerIndex={activePlayerIndex} />
                     <hr />
                 </Col>
             </Row>
         </Container>
     )
-}
-
-const PlayerList: React.FunctionComponent<IPlayerListProps> = (props) => {
-    const playerList = props.playerList.map((p, index) => 
-        <PlayerListItem 
-            player={p}
-            isActivePlayer={props.activePlayerIndex === index}
-        />
-    );
-    return (
-        <ListGroup style={PlayerListStyle}>
-            {playerList}
-        </ListGroup>
-    )
-}
-
-const PlayerListItem: React.FunctionComponent<IPlayerListItemProps> = (props) => {
-    return (
-        <ListGroup.Item
-            style={playerItemStyle}
-            active={props.isActivePlayer}
-        >
-            <text>{props.player.name}</text>
-            {props.player.isPublicBlackAce ?
-                <text style={{float: 'right'}}>{BLACK_ACE_CHARACTER}</text> :
-                null}
-        </ListGroup.Item>
-    )
-}
-
-const PlayerListStyle: CSSProperties = {
-    listStyleType: 'none',
-    width: '100%',
-    padding: 10,
-}
-
-const playerItemStyle: CSSProperties = {
-    fontSize: 16,
-    paddingTop: 15,
-    textAlign: 'start'
 }
 
 export default GameRoom;

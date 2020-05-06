@@ -9,6 +9,7 @@ type IReadOnlyPokerHandProps = {
 const ReadOnlyPokerHand: React.FunctionComponent<IReadOnlyPokerHandProps> = (props) => {
     const cards = props.hand.map((name, index) =>
         <PokerCard
+            key={name}
             cardName={name}
             style={getImageStyle(index)}
             isSelected={false}

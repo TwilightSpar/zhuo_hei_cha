@@ -1,5 +1,4 @@
-import React, { Fragment, CSSProperties } from 'react';
-import { Row, Col } from 'react-bootstrap';
+import React, { CSSProperties } from 'react';
 import ReadOnlyPokerHand from './ReadOnlyPokerHand';
 import PlayerModel from '../Models/PlayerModel';
 
@@ -14,7 +13,7 @@ const CardDisplayArea: React.FunctionComponent<ICardDisplayArea> = (props) => {
     return (
         <div style={cardDisplayAreaStyle}>
             {opponents.map((player, index) =>
-                <div style={{flexBasis: '50%', backgroundColor: tempColors[index]}}>
+                <div style={{flexBasis: '50%', backgroundColor: tempColors[index]}} key={player.id}>
                     <ReadOnlyPokerHand hand={player.lastHand} />
                 </div>
             )}

@@ -12,6 +12,7 @@ const PokerHand: React.FunctionComponent<IPokerHandProps> = (props) => {
 
     const cards = hand.map((name, index) => 
         <PokerCard
+            key={name}
             cardName={name}
             style={getImageStyle(index)}
             isSelected={selectedHand.has(name)}

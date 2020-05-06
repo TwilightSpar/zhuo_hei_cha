@@ -4,6 +4,10 @@ export default class PlayerModel {
     cardCount: number
     lastHand: string[]
     isPublicBlackAce: boolean
+    isCurrentClient: boolean
+
+    // the following property will have value only when isCurrentClient is true
+    remainingHand?: string[]
 
     constructor(id: number, name: string) {
         this.id = id;
@@ -11,5 +15,6 @@ export default class PlayerModel {
         this.cardCount = 0;
         this.lastHand = [];
         this.isPublicBlackAce = false;
+        this.isCurrentClient = false;
     }
 }
