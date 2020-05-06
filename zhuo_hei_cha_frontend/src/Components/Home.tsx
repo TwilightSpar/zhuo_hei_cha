@@ -1,15 +1,28 @@
-import React, { Fragment } from 'react';
-import Header from './Header';
-import GameRoom from './GameRoom';
+import React from 'react';
+import SampleComponent from './SampleComponent';
+import logo from '../logo.svg';
 
 type IProps = {};
 
 const Home: React.FunctionComponent<IProps> = () => {
     return (
-        <Fragment>
-            <Header />
-            <GameRoom />
-        </Fragment>
+        <div className="App">
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                <p>
+                Edit <code>src/App.tsx</code> and save to reload.
+                </p>
+                <a
+                className="App-link"
+                href="https://reactjs.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                >
+                Learn React
+                </a>
+                <SampleComponent />
+            </header>
+        </div>
     )
 }
 

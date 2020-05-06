@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import HubClient from '../Services/HubClient';
+import { Link } from 'react-router-dom';
 
 const signalREndpointUrl = 'http://localhost:5000/playerhub';
 
@@ -17,7 +18,9 @@ const SampleComponent: React.FunctionComponent<ISampleProps> = () => {
             <br />
             <button onClick={() => StartGameFrontend(connection)}>StartGame</button>
             <br />
-            <button onClick={() => enterRoom(connection)}>enter room</button>
+            <Link to='/game'>
+                <button onClick={() => enterRoom(connection)}>enter room</button>
+            </Link>
             
         </div>
     );
