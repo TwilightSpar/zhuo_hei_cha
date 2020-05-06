@@ -5,6 +5,11 @@ export default class HubClient {
     // register all the methods to be called by the server
     public static registerClientMethods(conn: HubConnection) {
         conn.on('sampleClientMethod', HubClient.sampleClientMethod);
+        conn.on('startGameFrontend', HubClient.startGameFrontend);
+    }
+
+    private static startGameFrontend = (): void => {
+        alert('startGameFrontend is called');
     }
 
     private static sampleClientMethod = (): void => {
