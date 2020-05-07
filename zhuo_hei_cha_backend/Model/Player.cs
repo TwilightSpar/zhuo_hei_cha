@@ -4,101 +4,102 @@ using Microsoft.AspNetCore.SignalR;
 
 public class Player 
 {
-    string _name;
+    #region fields
     private IClientProxy _client;
-    bool isBlackAce = false;
-    bool isPublic = false;
-    List<Card> cardsInHand;
+    private List<Card> _cardsInHand;
+    #endregion
+
+    #region properties
+    public string Name { get; }
+    public bool IsBlackAce { get; private set; }
+    public bool IsBlackAcePublic { get; private set; }
+    public int CardCount { get{ return _cardsInHand.Count; } }
+    public IReadOnlyCollection<Card> CardsInHand { get{ return _cardsInHand.AsReadOnly(); } }
+    #endregion
 
     public Player(string name, IClientProxy client)
     {
-        cardsInHand = new List<Card>{};
-        _name = name;
         _client = client;
+        _cardsInHand = new List<Card>{};
+        Name = name;
+        IsBlackAce = false;
+        IsBlackAcePublic = false;
     }
 
     public void CheckAce()
     {
-        foreach(var card in cardsInHand)
+        foreach(var card in _cardsInHand)
         {
             if(card.Equals(Card.BLACK_ACE))
-                isBlackAce = true;
+                IsBlackAce = true;
         }
     }
 
-    public bool IsBlackAce()
-    {
-        return isBlackAce;
-    }
-    public bool IsPublicAce()
-    {
-        return isPublic;
-    }
     public bool IsTwoCats()
     {
-        return cardsInHand.Contains(new Card(52)) && cardsInHand.Contains(new Card(53));
+        return _cardsInHand.Contains(new Card(52)) && _cardsInHand.Contains(new Card(53));
     }
 
     public bool IsFourTwo()
     {
-        return cardsInHand.Contains(new Card(12)) && cardsInHand.Contains(new Card(25))
-            && cardsInHand.Contains(new Card(38)) && cardsInHand.Contains(new Card(51));
+        return _cardsInHand.Contains(new Card(12)) && _cardsInHand.Contains(new Card(25))
+            && _cardsInHand.Contains(new Card(38)) && _cardsInHand.Contains(new Card(51));
     }
 
     // return true if go public, otherwise not.
     // if one player has two ace, no solution now
     public void AceGoPublic()
     {
-        if (isBlackAce)
+        if (IsBlackAce)
         {
             BackToFront.AskAceGoPublicBackend(_client);
-            isPublic = PlayerHubTempData.aceGoPublic;
+            IsBlackAcePublic = PlayerHubTempData.aceGoPublic;
             PlayerHubTempData.aceGoPublic = false;
         }
     }
 
     public void AddCards(List<Card> cards)
     {
-        cardsInHand.AddRange(cards);
+        _cardsInHand.AddRange(cards);
     }
     public void ClearCard() 
     {
-        cardsInHand.Clear();
+        _cardsInHand.Clear();
     }
     public void clearAce()
     {
-        isBlackAce = false;
-        isPublic = false;
+        IsBlackAce = false;
+        IsBlackAcePublic = false;
     }
 
     public bool hasCard()
     {
-        return cardsInHand.Count != 0;
+        return _cardsInHand.Count != 0;
     }
 
     public bool isFinished()
     {
-        return this.cardsInHand.Count == 0;
+        return this._cardsInHand.Count == 0;
     }
 
     // sort(descending order) + set black ace
     public void OrganizeHand() 
     {
-        cardsInHand.Sort((x, y) => y.Number.CompareTo(x.Number));
-        if(cardsInHand.Contains(Card.BLACK_ACE))
-            isBlackAce = true;
+        _cardsInHand.Sort((x, y) => y.Number.CompareTo(x.Number));
+        if(_cardsInHand.Contains(Card.BLACK_ACE))
+            IsBlackAce = true;
     }
 
     // exclude Black Ace for now
     public void PayTribute(Player p) {
-        Card tribute = cardsInHand[0];
+        Card tribute = _cardsInHand[0];
         int i = 0;
         while(tribute == Card.BLACK_ACE)
         {
             i++;
-            tribute = cardsInHand[i];
+            tribute = _cardsInHand[i];
         }
-        cardsInHand.Remove(tribute);
+        _cardsInHand.Remove(tribute);
         p.AddCards(new List<Card>{tribute});
         p.OrganizeHand();
     }
@@ -140,7 +141,7 @@ public class Player
         if(hand.CompareHand(lastHand))
         {
             foreach(var card in cards)
-                cardsInHand.Remove(card);
+                _cardsInHand.Remove(card);
             BackToFront.HandIsValidBackend(_client);
             return true;
         }
@@ -156,6 +157,6 @@ public class Player
 
     public void SendCurrentCardListBackend()
     {
-        BackToFront.SendCurrentCardListBackend(_client, cardsInHand);
+        BackToFront.SendCurrentCardListBackend(_client, _cardsInHand);
     }
 }

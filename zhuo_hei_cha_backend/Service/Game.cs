@@ -78,8 +78,8 @@ public class Game
             for (int j = i+1; j < finishOrder.Count; j++)
             {
                 var otherPlayer = finishOrder[j];
-                if(thisPlayer.IsBlackAce() != otherPlayer.IsBlackAce())
-                    if(thisPlayer.IsPublicAce() || otherPlayer.IsPublicAce())
+                if(thisPlayer.IsBlackAce != otherPlayer.IsBlackAce)
+                    if(thisPlayer.IsBlackAcePublic || otherPlayer.IsBlackAcePublic)
                     {
                         tributeList[i][j] = 2;
                         tributeList[j][i] = 2;
@@ -181,7 +181,7 @@ public class Game
 
     private void checkEnded()
     {
-        int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce()).GroupBy(x => x).Count();
+        int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x).Count();
         if (remainingGroupCount == 1)
         {
             finishOrder.AddRange(stillPlay);

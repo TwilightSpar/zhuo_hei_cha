@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class PlayerHub: Hub
 {
-    public void CreatePlayerBackend(string name)
+    public Player CreatePlayerBackend(string name)
     {
         // connectionid and other attributes of player
         Player player = new Player(name, Clients.Caller);
@@ -13,6 +13,8 @@ public class PlayerHub: Hub
         }
         Room.activeRoom.AddPlayer(player);
 
+        // return the created Player object to frontend
+        return player;
     }
 
     public async void StartGameBackend()
