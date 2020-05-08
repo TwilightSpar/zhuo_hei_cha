@@ -11,17 +11,19 @@ public class Player
 
     #region properties
     public string Name { get; }
+    public string ConnectionId { get; }
     public bool IsBlackAce { get; private set; }
     public bool IsBlackAcePublic { get; private set; }
     public int CardCount { get{ return _cardsInHand.Count; } }
     public IReadOnlyCollection<Card> CardsInHand { get{ return _cardsInHand.AsReadOnly(); } }
     #endregion
 
-    public Player(string name, IClientProxy client)
+    public Player(string name, IClientProxy client, string connectionId)
     {
         _client = client;
         _cardsInHand = new List<Card>{};
         Name = name;
+        ConnectionId = connectionId;
         IsBlackAce = false;
         IsBlackAcePublic = false;
     }
@@ -158,5 +160,29 @@ public class Player
     public void SendCurrentCardListBackend()
     {
         BackToFront.SendCurrentCardListBackend(_client, _cardsInHand);
+    }
+
+    // override object.Equals
+    public override bool Equals(object obj)
+    {
+        //
+        // See the full list of guidelines at
+        //   http://go.microsoft.com/fwlink/?LinkID=85237
+        // and also the guidance for operator== at
+        //   http://go.microsoft.com/fwlink/?LinkId=85238
+        //
+        
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+        
+        return ((Player)obj).ConnectionId.Equals(this.ConnectionId);
+    }
+    
+    // override object.GetHashCode
+    public override int GetHashCode()
+    {
+        return this.ConnectionId.GetHashCode();
     }
 }

@@ -5,15 +5,13 @@ public class PlayerHub: Hub
 {
     public Player CreatePlayerBackend(string name)
     {
-        // connectionid and other attributes of player
-        Player player = new Player(name, Clients.Caller);
+        Player player = new Player(name, Clients.Caller, Context.ConnectionId);
         if (Room.activeRoom == null)
         {
             Room.activeRoom = new Room();
         }
         Room.activeRoom.AddPlayer(player);
 
-        // return the created Player object to frontend
         return player;
     }
 
