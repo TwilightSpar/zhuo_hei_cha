@@ -57,7 +57,6 @@ namespace zhuo_hei_cha_backend
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<SampleHub>("/samplehub");
                 endpoints.MapHub<PlayerHub>("/playerhub");
             });
         }

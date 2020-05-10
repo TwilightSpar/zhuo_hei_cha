@@ -112,4 +112,17 @@ public class Card{
     {
         return this._id.GetHashCode();
     }
+
+    public string Tostring()
+    {
+        string s = "";
+        switch(this.Suit)
+        {
+            case Suit.Spade: s = "S"; break;
+            case Suit.Heart: s = "H"; break;
+            case Suit.Diamond: s = "D"; break;
+            case Suit.Club: s = "C"; break;
+        }
+        return s + this.Number;
+;    }
 }

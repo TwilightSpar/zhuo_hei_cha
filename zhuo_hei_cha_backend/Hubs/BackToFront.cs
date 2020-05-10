@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
+using System.Linq;
 
 public static class BackToFront
 {
@@ -44,6 +45,7 @@ public static class BackToFront
 
     public static void SendCurrentCardListBackend(IClientProxy client, List<Card> currentCardList)
     {
-        client.SendAsync("SendCurrentCardListFrontend", currentCardList);
+        var formattedCards = currentCardList.Select(card => card.ToString()).ToList();
+        client.SendAsync("SendCurrentCardListFrontend", formattedCards);
     }
 }

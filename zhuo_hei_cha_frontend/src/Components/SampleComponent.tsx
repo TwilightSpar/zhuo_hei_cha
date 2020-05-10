@@ -14,19 +14,21 @@ const SampleComponent: React.FunctionComponent<ISampleProps> = () => {
         <div>
             <button onClick={() => initConnection(setConnection)}>Connect to server</button>
             <br />
-            <button onClick={() => invokeServerMethod(connection)}>Invoke server method</button>
-            <br />
-            <button onClick={() => StartGameFrontend(connection)}>StartGame</button>
-            <br />
+
             <Link to='/game'>
-                <button onClick={() => enterRoom(connection)}>enter room</button>
+                <button onClick={() => StartGameFrontend(connection)}>StartGame</button>
+            <br />
             </Link>
+
+            <button onClick={() => enterRoom(connection)}>enter room</button>
             
         </div>
     );
 };
 
-
+const startGameFrontend = async ()=>{
+    
+}
 
 // helper methods below. Directly invoke backend methods
 
@@ -45,14 +47,6 @@ const initConnection = async (callback: any) => {
     callback(conn);
 };
 
-const invokeServerMethod = async (conn: HubConnection | null) => {
-    if (!conn) {
-        alert('Please connect to the server first!');
-        return;
-    }
-
-    await conn.invoke('SendMessage');
-};
 
 const StartGameFrontend = async (conn: HubConnection | null) => {
     alert('invoke startgame on the server!');
