@@ -4,7 +4,6 @@ import PlayerModel from '../Models/PlayerModel';
 
 type ICardDisplayArea = {
     playerList: PlayerModel[],
-    lastHand: string[]
 }
 
 const CardDisplayArea: React.FunctionComponent<ICardDisplayArea> = (props) => {

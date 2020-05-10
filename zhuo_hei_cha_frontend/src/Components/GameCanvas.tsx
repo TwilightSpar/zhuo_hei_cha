@@ -1,23 +1,15 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { Container } from 'react-bootstrap';
-import PlayerModel from '../Models/PlayerModel';
-import CardDisplayArea from './CardDisplayArea';
-import PlayerControlArea from './PlayerControlArea';
 
 type IGameCanvasProps = {
-    playerList: PlayerModel[]
+    children: React.ReactNodeArray
 }
 
 const GameCanvas: React.FunctionComponent<IGameCanvasProps> = (props) => {
-    const [lastHand, setLastHand] = useState<string[]>([]);
-
     return (
         <Container style={GameCanvasStyle}>
-            <CardDisplayArea lastHand={lastHand} playerList={props.playerList} />
-            <PlayerControlArea setLastHand={(hand) => {
-                setLastHand(hand);
-
-            }} />
+            {props.children[0]}
+            {props.children[1]}
         </Container>
     )
 }

@@ -1,57 +1,21 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Row } from 'react-bootstrap';
 import _ from 'lodash';
-import GameButtons from './GameButtons';
-import PokerHand from './PokerHand';
-
 
 type IPlayerControlAreProps = {
-    setLastHand: (lastHand: string[]) => void
+    children: React.ReactNodeArray
 }
 
-const testCards = _.flatten(_.range(3, 11).map(n => n.toString()).concat('J', 'Q', 'K', 'A', '2').map(n => {
-    return ['C', 'D', 'H', 'S'].map(s => n + s)
-}));
-
 const PlayerControlArea: React.FunctionComponent<IPlayerControlAreProps> = (props) => {
-    const [hand, setHand] = useState<string[]>(testCards);
-    const [selectedHand, setSelectedHand] = useState<Set<string>>(new Set());
-
     return (
         <Fragment>
             <Row style={{backgroundColor: 'blue'}}>
-                <GameButtons
-                    handlePlayHandClick={() => {
-                        // remove cards from hand and clear selectedHand
-                        
-                        // need server validation here
-                        const isValid = true;
-                        if (selectedHand.size !== 0 && isValid) {
-                            setHand(hand.filter(card => !selectedHand.has(card)));
-                            props.setLastHand(Array.from(selectedHand).sort(cardComparator));
-                            setSelectedHand(new Set());
-                        }
-                    }}
-                    handleSkipClick={() => {}}
-                    handleAceGoPublicClick={() => {}}
-                />
+                {props.children[0]}
             </Row>
             <Row style={{backgroundColor: 'purple'}}>
-                <PokerHand
-                    hand={hand}
-                    selectedHand={selectedHand}
-                    onSelectCard={(cardName: string, isSelected: boolean) => {
-                        if (isSelected) {
-                            setSelectedHand(new Set(selectedHand.add(cardName)));
-                        } else {
-                            const tempSet = new Set(selectedHand);
-                            tempSet.delete(cardName);
-                            setSelectedHand(tempSet);
-                        }
-                    }}
-                />
+                {props.children[1]}
             </Row>
-    </Fragment>
+        </Fragment>
     )
 }
 

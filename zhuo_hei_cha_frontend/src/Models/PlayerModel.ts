@@ -1,6 +1,6 @@
 export default class PlayerModel {
-    id: number
-    name: string
+    readonly id: number
+    readonly name: string
     cardCount: number
     lastHand: string[]
     isPublicBlackAce: boolean

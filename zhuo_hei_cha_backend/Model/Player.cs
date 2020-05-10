@@ -15,7 +15,7 @@ public class Player
     public bool IsBlackAce { get; private set; }
     public bool IsBlackAcePublic { get; private set; }
     public int CardCount { get{ return _cardsInHand.Count; } }
-    public IReadOnlyCollection<Card> CardsInHand { get{ return _cardsInHand.AsReadOnly(); } }
+    // public IReadOnlyCollection<Card> CardsInHand { get{ return _cardsInHand.AsReadOnly(); } }
     #endregion
 
     public Player(string name, IClientProxy client, string connectionId)

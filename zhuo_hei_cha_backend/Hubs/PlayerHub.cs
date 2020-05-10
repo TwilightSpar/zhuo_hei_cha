@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class PlayerHub: Hub
 {
@@ -27,13 +29,35 @@ public class PlayerHub: Hub
         }
         else
         {
-            await Clients.Caller.SendAsync("createErrorMessage", "Cannot start the game!");
+            await Clients.Caller.SendAsync("showErrorMessage", "Cannot start the game!");
         }
     }
 
-    public static void ReturnUserHandBackend(List<Card> cards)
+    public void Test()
     {
-        PlayerHubTempData.userHand = cards;
+        Clients.All.SendAsync("AskAceGoPublicFrontend");
+        // await Task.Delay(2000);
+        Clients.All.SendAsync("HideAceGoPublicButton");
+    }
+
+    public IReadOnlyCollection<Player> GetAllPlayers()
+    {
+        return Room.activeRoom.PlayerList;
+    }
+
+    public async Task ReturnUserHandBackend(List<string> cards)
+    {
+        var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
+        PlayerHubTempData.userHand = formattedCards;
+
+        // await Task.Delay(1000);
+
+        Clients.Caller.SendAsync("onPlayHandSuccess");
+        // Clients.Caller.SendAsync("onPlayerListUpdate", new {
+        //     PlayerId = Context.ConnectionId,
+        //     LastHand = cards
+        // });
+        // Clients.Caller.SendAsync("showErrorMessage", "Hand not valid");
     }
     public static void ReturnTributeBackend(List<Card> cards)
     {
@@ -49,8 +73,7 @@ public class PlayerHub: Hub
         if(returnvalue)
             PlayerHubTempData.aceGoPublic = returnvalue;
     }
-
-
+    
 }
 
 // a => b => client
