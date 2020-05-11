@@ -156,9 +156,9 @@ public class Player
     }
 
 
-    public void GetPlayerHand()
+    public async Task GetPlayerHand()
     {
-        BackToFront.AskForPlayBackend(_client);
+        await BackToFront.AskForPlayBackend(_client);
     }
 
     public void SendCurrentCardListBackend()

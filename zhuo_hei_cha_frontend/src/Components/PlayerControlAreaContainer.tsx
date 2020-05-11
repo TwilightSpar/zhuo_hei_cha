@@ -40,6 +40,7 @@ class PlayerControlAreaContainer extends React.Component<
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
         this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
+        this.props.conn.on('HidePlayHandButton', this.HidePlayHandButton);
         this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
         this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
     }
@@ -50,16 +51,6 @@ class PlayerControlAreaContainer extends React.Component<
             ...this.state,
             isAskingBlackAceGoPublic: true
         });
-
-        // sleeps for 5 seconds
-        // await new Promise((resolve, reject) => {
-        //     setTimeout(resolve, 5000);
-        // })
-
-        // this.setState({
-        //     ...this.state,
-        //     isAskingBlackAceGoPublic: false
-        // });
     }
 
     AskForPlayFrontend = () => {
@@ -84,6 +75,13 @@ class PlayerControlAreaContainer extends React.Component<
             ...this.state,
             isAskingBlackAceGoPublic: false
         });
+    }
+
+    HidePlayHandButton = () => {
+        this.setState({
+            ...this.state,
+            isCurrentPlayerTurn: false
+        })
     }
 
     SendCurrentCardListFrontend = (cards: string[]) => {

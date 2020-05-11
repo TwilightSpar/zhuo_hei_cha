@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 public static class BackToFront
 {
     public static IHubCallerClients clients;
-    public static async void AskForPlayBackend(IClientProxy client)
+    public static async Task AskForPlayBackend(IClientProxy client)
     {
         await client.SendAsync("AskForPlayFrontend");
+        await Task.Delay(10000);
+        await client.SendAsync("HidePlayHandButton");
     }
 
     public static async void AskPlayOneMoreRoundBackend()

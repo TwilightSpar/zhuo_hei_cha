@@ -155,13 +155,13 @@ public class Game
     /// 
     /// </summary>
     /// <param name="playerId"></param>
-    private void AskForPlay()
+    private async Task AskForPlay()
     {
         bool valid = false;
         while (!valid)
         {
             // front-end invoke this method
-            playerList[playerIndex].GetPlayerHand();
+            await playerList[playerIndex].GetPlayerHand();
 
             List<Card> userHand = PlayerHubTempData.userHand;
 
@@ -233,7 +233,7 @@ public class Game
                 if (dealerIndex == playerIndex)
                     lastHand = EMPTY_HAND;
 
-                AskForPlay();
+                await AskForPlay();
                 checkEnded();
 
                 SendCurrentCardListBackend();
