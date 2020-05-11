@@ -44,7 +44,6 @@ class GameRoomContainer extends React.Component<{}, IGameRoomContainerState> {
 
             // initialize state
             // this.initPlayerList();
-            this.state.conn.invoke('CreatePlayerBackend', 'blaname');
         });
     }
 

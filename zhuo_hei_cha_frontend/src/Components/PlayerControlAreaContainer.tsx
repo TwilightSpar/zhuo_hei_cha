@@ -41,6 +41,7 @@ class PlayerControlAreaContainer extends React.Component<
     }
 
     AskAceGoPublicFrontend = () => {
+        alert("backend invoke ask ace!");
         this.setState({
             ...this.state,
             isAskingBlackAceGoPublic: true

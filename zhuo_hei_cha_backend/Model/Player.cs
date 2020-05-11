@@ -32,8 +32,11 @@ public class Player
     {
         foreach(var card in _cardsInHand)
         {
-            if(card.Equals(Card.BLACK_ACE))
+            if(card.Equals(Card.BLACK_ACE)){
                 IsBlackAce = true;
+                break;
+            }                
+            
         }
     }
 

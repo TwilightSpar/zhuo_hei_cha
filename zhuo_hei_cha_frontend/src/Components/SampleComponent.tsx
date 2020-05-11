@@ -9,7 +9,7 @@ type ISampleProps = {}
 
 const SampleComponent: React.FunctionComponent<ISampleProps> = () => {
     const [connection, setConnection] = useState<HubConnection | null>(null);
-    
+    const [target, setTarget] = useState<boolean>(false);
     return(
         <div>
             <button onClick={() => initConnection(setConnection)}>Connect to server</button>
@@ -19,14 +19,14 @@ const SampleComponent: React.FunctionComponent<ISampleProps> = () => {
                 <button onClick={() => StartGameFrontend(connection)}>StartGame</button>
             <br />
             </Link>
-
+            <button></button>
             <button onClick={() => enterRoom(connection)}>enter room</button>
             
         </div>
     );
 };
 
-const startGameFrontend = async ()=>{
+const NotifyOthersFrontend = async ()=>{
     
 }
 

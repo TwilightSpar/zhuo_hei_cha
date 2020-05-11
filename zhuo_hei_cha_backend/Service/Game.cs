@@ -222,8 +222,7 @@ public class Game
 
                 SendCurrentCardListBackend();
             }
-            foreach(var p in playerList)
-                p.clearAce();
+            
             finishOrder = new List<Player> { };   // init tributeList
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
@@ -270,10 +269,14 @@ public class Game
 
     private void reInital()
     {
-        foreach(var p in playerList)
+        foreach(var p in playerList){
             p.ClearCard();
+            p.clearAce();
+        }
+           
         stillPlay = new List<Player> { };
         dealerIndex = 0;
         playerIndex = 0;
+            
     }
 }
