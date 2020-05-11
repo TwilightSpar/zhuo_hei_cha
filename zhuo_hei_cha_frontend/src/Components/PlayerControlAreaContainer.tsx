@@ -40,7 +40,7 @@ class PlayerControlAreaContainer extends React.Component<
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
         this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
-        // this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
+        this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
         this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
     }
 
@@ -76,6 +76,13 @@ class PlayerControlAreaContainer extends React.Component<
         this.setState({
             hand: newHand,
             selectedHand: new Set()
+        });
+    }
+
+    HideAceGoPublicButton = () => {
+        this.setState({
+            ...this.state,
+            isAskingBlackAceGoPublic: false
         });
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using System.Linq;
+using System.Threading.Tasks;
 
 public static class BackToFront
 {
@@ -21,9 +22,11 @@ public static class BackToFront
         await client.SendAsync("AskReturnTributeFrontend");
     }
 
-    public static async void AskAceGoPublicBackend(IClientProxy client)
+    public static async Task AskAceGoPublicBackend(IClientProxy client)
     {
         await client.SendAsync("AskAceGoPublicFrontend");
+        await Task.Delay(5000);
+        await client.SendAsync("HideAceGoPublicButton");
     }
 
     // alert, do not need respond

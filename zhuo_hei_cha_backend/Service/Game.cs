@@ -143,11 +143,10 @@ public class Game
 
     // get invoked if player decided to announce Ace before game starts
     // add to public ace list
-    private void AceGoPublic()
+    private async Task AceGoPublic()
     {
         foreach (var p in playerList)
-            p.AceGoPublic();
-
+            await p.AceGoPublic();
     }
 
     /// <summary>
@@ -227,7 +226,7 @@ public class Game
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
             PlayerHubTempData.userHand = new List<Card>{};
-            AceGoPublic();
+            await AceGoPublic();
 
             while (isGameStarted)   // skip means hand are empty
             {

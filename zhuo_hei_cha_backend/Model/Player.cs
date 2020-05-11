@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 public class Player 
 {
@@ -53,11 +54,11 @@ public class Player
 
     // return true if go public, otherwise not.
     // if one player has two ace, no solution now
-    public void AceGoPublic()
+    public async Task AceGoPublic()
     {
         if (IsBlackAce)
         {
-            BackToFront.AskAceGoPublicBackend(_client);
+            await BackToFront.AskAceGoPublicBackend(_client);
             IsBlackAcePublic = PlayerHubTempData.aceGoPublic;
             PlayerHubTempData.aceGoPublic = false;
         }
