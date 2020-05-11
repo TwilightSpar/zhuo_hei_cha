@@ -19,12 +19,14 @@ export default class HubClient {
 
     // invoke by backend, do something then return the value
     
+    // ***********************************************************************
     // return a list of card that users played
     private static AskForPlayFrontend = (conn: HubConnection): void => {
         alert('AskForPlayFrontend is being called by the server!');
         // get cards of user
         // conn.invoke('ReturnUserHandBackend', cards)
     }
+    // ***********************************************************************
 
      
     // return whether all users agree to play one more round
@@ -56,11 +58,6 @@ export default class HubClient {
 
 
     // invoke by backend, do not need to return value
-    
-    // alert it is valid
-    private static HandIsValidFrontend = (): void => {
-        alert('HandIsValidFrontend is being called by the server!');        
-    }
 
     // alert it is not valid
     private static HandIsNotValidFrontend = (): void => {

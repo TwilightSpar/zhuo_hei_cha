@@ -226,6 +226,7 @@ public class Game
             finishOrder = new List<Player> { };   // init tributeList
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
+            PlayerHubTempData.userHand = new List<Card>{};
             AceGoPublic();
 
             while (isGameStarted)   // skip means hand are empty

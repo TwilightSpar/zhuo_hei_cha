@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
-import { Redirect } from "react-router-dom";
-import { connect } from 'http2';
+import GameRoomContainer from './GameRoomContainer';
 
 
 const signalREndpointUrl = 'http://localhost:5000/playerhub';
@@ -46,7 +44,7 @@ class Home extends React.Component<{}, IHomeState> {
 
     render() {
         if (this.state.isGameStarted)
-            return <Redirect to="/game" Connect=conn/>
+            return <GameRoomContainer conn={this.state.conn} />
 
         else return (
             <div>

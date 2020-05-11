@@ -5,13 +5,19 @@ type IGameButtonsProps = {
     onPlayHandClick: () => void,
     onSkipClick: () => void,
     onAceGoPublicClick: () => void,
-    isAskingBlackAceGoPublic: boolean
+    isAskingBlackAceGoPublic: boolean,
+    isCurrentPlayerTurn: boolean
 };
 
 const GameButtons: FunctionComponent<IGameButtonsProps> = (props) => {
     return (
         <div style={style}>
-            <Button variant="light" style={buttonStyle} onClick={props.onPlayHandClick}>
+            <Button
+                variant="light"
+                style={buttonStyle}
+                onClick={props.onPlayHandClick}
+                disabled={!props.isCurrentPlayerTurn}
+            >
                 Play Hand
             </Button>
             <Button variant="light" style={buttonStyle} onClick={props.onSkipClick}>

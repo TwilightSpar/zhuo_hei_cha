@@ -140,7 +140,7 @@ public class Player
         }
         catch(Exception e)
         {
-            BackToFront.HandIsNotValidBackend(_client);
+            BackToFront.CreateErrorMessage(_client, "Hand is not valid");
             return false;
         }
         if(hand.CompareHand(lastHand))
@@ -150,7 +150,7 @@ public class Player
             BackToFront.HandIsValidBackend(_client);
             return true;
         }
-        BackToFront.HandIsNotValidBackend(_client);
+        BackToFront.CreateErrorMessage(_client, "Hand is not greater than the previous one");
         return false;
     }
 

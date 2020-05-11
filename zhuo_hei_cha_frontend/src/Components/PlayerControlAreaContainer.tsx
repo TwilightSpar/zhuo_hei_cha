@@ -12,7 +12,8 @@ type IPlayerControlAreaContainerProps = {
 type IPlayerControlAreaContainerState = {
     hand: string[],
     selectedHand: Set<string>,
-    isAskingBlackAceGoPublic: boolean
+    isAskingBlackAceGoPublic: boolean,
+    isCurrentPlayerTurn: boolean
 }
 
 const testCards = _.flatten(_.range(3, 11).map(n => n.toString()).concat('J', 'Q', 'K', 'A', '2').map(n => {
@@ -29,7 +30,8 @@ class PlayerControlAreaContainer extends React.Component<
         this.state = {
             hand: testCards,
             selectedHand: new Set(),
-            isAskingBlackAceGoPublic: false
+            isAskingBlackAceGoPublic: false,
+            isCurrentPlayerTurn: false
         }
     }
 
@@ -37,14 +39,33 @@ class PlayerControlAreaContainer extends React.Component<
         // register methods used by this component
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
-        this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
+        this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
+        // this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
+        this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
     }
 
-    AskAceGoPublicFrontend = () => {
+    AskAceGoPublicFrontend = async () => {
         alert("backend invoke ask ace!");
         this.setState({
             ...this.state,
             isAskingBlackAceGoPublic: true
+        });
+
+        // sleeps for 5 seconds
+        // await new Promise((resolve, reject) => {
+        //     setTimeout(resolve, 5000);
+        // })
+
+        // this.setState({
+        //     ...this.state,
+        //     isAskingBlackAceGoPublic: false
+        // });
+    }
+
+    AskForPlayFrontend = () => {
+        this.setState({
+            ...this.state,
+            isCurrentPlayerTurn: true
         })
     }
 
@@ -58,13 +79,11 @@ class PlayerControlAreaContainer extends React.Component<
         });
     }
 
-    HideAceGoPublicButton = () => {
-        setTimeout(() => {
-            this.setState({
-                ...this.state,
-                isAskingBlackAceGoPublic: false
-            })
-        }, 2000)
+    SendCurrentCardListFrontend = (cards: string[]) => {
+        alert('Hello from SendCurrentCardListFrontend');
+        this.setState({
+            hand: cards
+        })
     }
 
     onAceGoPublicClick = () => {
@@ -73,8 +92,7 @@ class PlayerControlAreaContainer extends React.Component<
 
     // send the hand to backend for validation
     onPlayHandClick = () => {
-        // this.props.conn.invoke('ReturnUserHandBackend', Array.from(this.state.selectedHand));
-        this.props.conn.invoke('Test');
+        this.props.conn.invoke('ReturnUserHandBackend', Array.from(this.state.selectedHand));
     }
 
     onSelectCard = (cardName: string, isSelected: boolean) => {
@@ -102,6 +120,7 @@ class PlayerControlAreaContainer extends React.Component<
                     onSkipClick={this.onSkipClick}
                     onAceGoPublicClick={this.onAceGoPublicClick}
                     isAskingBlackAceGoPublic={this.state.isAskingBlackAceGoPublic}
+                    isCurrentPlayerTurn={this.state.isCurrentPlayerTurn}
                 />
                 <PokerHand
                     hand={this.state.hand}

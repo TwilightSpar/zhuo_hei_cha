@@ -7,8 +7,14 @@ import CardDisplayArea from './CardDisplayArea';
 import PlayerControlAreaContainer from './PlayerControlAreaContainer';
 import PlayerModel from '../Models/PlayerModel';
 import Alert from 'react-bootstrap/Alert';
+import { RouteComponentProps } from 'react-router-dom';
 
-type IGameRoomContainerState = {
+interface IGameRoomContainerProps {
+    conn: HubConnection
+    // history: History
+}
+
+interface IGameRoomContainerState {
     conn: HubConnection,
     playerList: PlayerModel[],
     activePlayerIndex: number,
@@ -22,13 +28,16 @@ type PlayerListUpdateObject = {
 }
 
 
-class GameRoomContainer extends React.Component<{}, IGameRoomContainerState> {
+class GameRoomContainer extends React.Component<
+    IGameRoomContainerProps, IGameRoomContainerState
+> {
 
-    constructor(props: {}) {
+    constructor(props: IGameRoomContainerProps) {
         super(props);
-
+        
         this.state = {
-            conn: new HubConnectionBuilder().withUrl('http://localhost:5000/playerhub').build(),
+            conn: this.props.conn,
+            //new HubConnectionBuilder().withUrl('http://localhost:5000/playerhub').build(),
             playerList: getTempPlayerList(),
             activePlayerIndex: 0,
             errorMessage: '',
@@ -37,14 +46,14 @@ class GameRoomContainer extends React.Component<{}, IGameRoomContainerState> {
     }
 
     componentDidMount() {
-        this.state.conn.start().then(() => {
+        // this.state.conn.start().then(() => {
             // registering methods
             // this.state.conn.on('onPlayerListUpdate', this.onPlayerListUpdate);
-            this.state.conn.on('showErrorMessage', this.showErrorMessage);
-
+            
             // initialize state
             // this.initPlayerList();
-        });
+        // });
+        this.state.conn.on('showErrorMessage', this.showErrorMessage);
     }
 
     initPlayerList = () => {

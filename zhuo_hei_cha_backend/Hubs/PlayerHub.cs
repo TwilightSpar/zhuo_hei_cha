@@ -33,13 +33,6 @@ public class PlayerHub: Hub
         }
     }
 
-    public void Test()
-    {
-        Clients.All.SendAsync("AskAceGoPublicFrontend");
-        // await Task.Delay(2000);
-        Clients.All.SendAsync("HideAceGoPublicButton");
-    }
-
     public IReadOnlyCollection<Player> GetAllPlayers()
     {
         return Room.activeRoom.PlayerList;
@@ -52,7 +45,7 @@ public class PlayerHub: Hub
 
         // await Task.Delay(1000);
 
-        Clients.Caller.SendAsync("onPlayHandSuccess");
+        // Clients.Caller.SendAsync("onPlayHandSuccess");
         // Clients.Caller.SendAsync("onPlayerListUpdate", new {
         //     PlayerId = Context.ConnectionId,
         //     LastHand = cards
@@ -73,7 +66,6 @@ public class PlayerHub: Hub
         if(returnvalue)
             PlayerHubTempData.aceGoPublic = returnvalue;
     }
-    
 }
 
 // a => b => client

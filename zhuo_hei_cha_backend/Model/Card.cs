@@ -113,7 +113,7 @@ public class Card{
         return this._id.GetHashCode();
     }
 
-    public string Tostring()
+    public override string ToString()
     {
         string s = "";
         switch(this.Suit)
@@ -123,6 +123,6 @@ public class Card{
             case Suit.Diamond: s = "D"; break;
             case Suit.Club: s = "C"; break;
         }
-        return s + this.Number;
+        return this.Number + s;
 ;    }
 }

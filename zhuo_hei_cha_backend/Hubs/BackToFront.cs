@@ -32,10 +32,9 @@ public static class BackToFront
         client.SendAsync("HandIsValidFrontend");
     }
 
-    // alert, do not need respond
-    public static void HandIsNotValidBackend(IClientProxy client)
+    public static void CreateErrorMessage(IClientProxy client, string errorMessage)
     {
-        client.SendAsync("HandIsNotValidFrontend");
+        client.SendAsync("showErrorMessage", errorMessage);
     }
 
     public static void TributeReturnNotValidBackend(IClientProxy client)
