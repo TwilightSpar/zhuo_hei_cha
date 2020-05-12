@@ -116,6 +116,7 @@ public class Card{
     public override string ToString()
     {
         string s = "";
+        string n = "";
         switch(this.Suit)
         {
             case Suit.Spade: s = "S"; break;
@@ -123,6 +124,23 @@ public class Card{
             case Suit.Diamond: s = "D"; break;
             case Suit.Club: s = "C"; break;
         }
-        return this.Number + s;
+        if(this.Number>2 && this.Number<11)
+            n = this.Number.ToString();
+        else if(this.Number == 11)
+            n = "J";
+        else if(this.Number == 12)
+            n = "Q";
+        else if(this.Number == 13)
+            n = "K";
+        else if(this.Number == 14)
+            n = "A";
+        else if(this.Number == 15)
+            n = "2";
+        else if(this.Number == 52)
+            n = "SmallCat";
+        else if(this.Number == 53)
+            n = "BigCat";
+        
+        return n + s;
 ;    }
 }

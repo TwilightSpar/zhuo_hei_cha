@@ -161,13 +161,15 @@ public class Game
         bool valid = false;
         while (!valid)
         {
-            // front-end invoke this method
             await playerList[playerIndex].GetPlayerHand();
 
             List<Card> userHand = PlayerHubTempData.userHand;
 
-            if (userHand.Count == 0)
+            if (userHand.Count == 0 && dealerIndex != playerIndex)    // dealer cannot skip
                 return;
+
+            if (dealerIndex == playerIndex)
+                lastHand = EMPTY_HAND;
 
             if (playerList[playerIndex].PlayHand(userHand, this.lastHand))
             {
@@ -175,6 +177,7 @@ public class Game
                 lastHand = new Hand(userHand);
                 valid = true;
             }
+            PlayerHubTempData.userHand = new List<Card>{};
         }
 
     }
@@ -231,9 +234,6 @@ public class Game
 
             while (isGameStarted)   // skip means hand are empty
             {
-                if (dealerIndex == playerIndex)
-                    lastHand = EMPTY_HAND;
-
                 ShowCurrentPlayerTurn();
                 await AskForPlay();
                 checkEnded();
