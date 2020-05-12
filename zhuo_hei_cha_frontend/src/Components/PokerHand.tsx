@@ -1,29 +1,27 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import PokerCard, { CARD_HEIGHT, CARD_WIDTH, CARD_WIDTH_OVERLAPPED } from './PokerCard';
 
-type HandProps = {
-    cardNames: string[]
+type IPokerHandProps = {
+    hand: string[],         // hand should be already sorted
+    selectedHand: Set<string>,
+    onSelectCard: (cardName: string, isSelected: boolean) => void
 }
 
-const PokerHand: React.FunctionComponent<HandProps> = (props) => {
-    const [hand, setHand] = useState<string[]>(props.cardNames)
-    const [selectedHand, setSelectedHand] = useState<string[]>([]);
+const PokerHand: React.FunctionComponent<IPokerHandProps> = (props) => {
+    const { hand, selectedHand, onSelectCard } = props;
 
     const cards = hand.map((name, index) => 
         <PokerCard
+            key={name}
             cardName={name}
             style={getImageStyle(index)}
-            selectCardCallback={(cardName:string, isSelected: boolean) => {
-                if (isSelected) {
-                    setSelectedHand(selectedHand.concat(cardName));
-                } else {
-                    setSelectedHand(selectedHand.filter(name => name !== cardName))
-                }
-            }} 
+            isSelected={selectedHand.has(name)}
+            onSelectCard={onSelectCard}
         />
     );
     return (
-        <div style={getHandStyle(hand.length)}>
+        <div style={getPokerHandStyle(hand.length)}>
+            {/* Document flow placeholder */}
             <div style={{ height: CARD_HEIGHT, width: '100%' }} />
             {cards}
         </div>
@@ -43,7 +41,7 @@ const getImageStyle = (index: number): CSSProperties => {
     }
 };
 
-const getHandStyle = (n: number): CSSProperties => {
+const getPokerHandStyle = (n: number): CSSProperties => {
     return {
         width: (n - 1) * CARD_WIDTH_OVERLAPPED + CARD_WIDTH,
         height: '100%',
@@ -51,7 +49,13 @@ const getHandStyle = (n: number): CSSProperties => {
         // backgroundColor: 'blue',
         marginLeft: 'auto',
         marginRight: 'auto',
+        marginTop: 25,
+        marginBottom: 20
     };
 };
 
+
 export default PokerHand;
+export {
+    getImageStyle
+}

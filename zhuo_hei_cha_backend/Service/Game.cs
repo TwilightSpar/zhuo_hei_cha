@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class Game
 {
@@ -77,8 +78,8 @@ public class Game
             for (int j = i+1; j < finishOrder.Count; j++)
             {
                 var otherPlayer = finishOrder[j];
-                if(thisPlayer.IsBlackAce() != otherPlayer.IsBlackAce())
-                    if(thisPlayer.IsPublicAce() || otherPlayer.IsPublicAce())
+                if(thisPlayer.IsBlackAce != otherPlayer.IsBlackAce)
+                    if(thisPlayer.IsBlackAcePublic || otherPlayer.IsBlackAcePublic)
                     {
                         tributeList[i][j] = 2;
                         tributeList[j][i] = 2;
@@ -142,11 +143,11 @@ public class Game
 
     // get invoked if player decided to announce Ace before game starts
     // add to public ace list
-    private void AceGoPublic()
+    private async Task AceGoPublic()
     {
         foreach (var p in playerList)
-            p.AceGoPublic();
-
+            await p.AceGoPublic();
+        
     }
 
     /// <summary>
@@ -155,18 +156,20 @@ public class Game
     /// 
     /// </summary>
     /// <param name="playerId"></param>
-    private void AskForPlay()
+    private async Task AskForPlay()
     {
         bool valid = false;
         while (!valid)
         {
-            // front-end invoke this method
-            playerList[playerIndex].GetPlayerHand();
+            await playerList[playerIndex].GetPlayerHand();
 
             List<Card> userHand = PlayerHubTempData.userHand;
 
-            if (userHand.Count == 0)
+            if (userHand.Count == 0 && dealerIndex != playerIndex)    // dealer cannot skip
                 return;
+
+            if (dealerIndex == playerIndex)
+                lastHand = EMPTY_HAND;
 
             if (playerList[playerIndex].PlayHand(userHand, this.lastHand))
             {
@@ -174,13 +177,14 @@ public class Game
                 lastHand = new Hand(userHand);
                 valid = true;
             }
+            PlayerHubTempData.userHand = new List<Card>{};
         }
 
     }
 
     private void checkEnded()
     {
-        int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce()).GroupBy(x => x).Count();
+        int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x).Count();
         if (remainingGroupCount == 1)
         {
             finishOrder.AddRange(stillPlay);
@@ -199,7 +203,7 @@ public class Game
     /// <summary>
     /// main process
     /// </summary>
-    public void GameProcess()
+    public async Task GameProcess()
     {
         int roundNumber = 1;
         while (true)
@@ -211,6 +215,7 @@ public class Game
             if(roundNumber != 1)
             {
                 // alert user that we sill start to pay tribute
+                await Task.Delay(5000);
 
                 PayTribute();
 
@@ -220,19 +225,17 @@ public class Game
 
                 SendCurrentCardListBackend();
             }
-            foreach(var p in playerList)
-                p.clearAce();
+            
             finishOrder = new List<Player> { };   // init tributeList
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
-            AceGoPublic();
+            PlayerHubTempData.userHand = new List<Card>{};
+            await AceGoPublic();
 
             while (isGameStarted)   // skip means hand are empty
             {
-                if (dealerIndex == playerIndex)
-                    lastHand = EMPTY_HAND;
-
-                AskForPlay();
+                ShowCurrentPlayerTurn();
+                await AskForPlay();
                 checkEnded();
 
                 SendCurrentCardListBackend();
@@ -246,8 +249,16 @@ public class Game
             roundNumber += 1;
         }
 
-    }   
-    
+    }
+
+    private void ShowCurrentPlayerTurn()
+    {
+        foreach(var p in playerList)
+        {
+           p.ShowCurrentPlayerTurn(playerIndex);
+        }
+    }
+
     private bool toPlayOneMoreRound()
     {
         // as what the name says.
@@ -268,10 +279,14 @@ public class Game
 
     private void reInital()
     {
-        foreach(var p in playerList)
+        foreach(var p in playerList){
             p.ClearCard();
+            p.clearAce();
+        }
+           
         stillPlay = new List<Player> { };
         dealerIndex = 0;
         playerIndex = 0;
+            
     }
 }

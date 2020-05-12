@@ -1,33 +1,41 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties } from 'react';
 
 const CARD_HEIGHT = 150;
 const CARD_WIDTH = 100;
 const CARD_WIDTH_OVERLAPPED = 20;
 
-const CARD_SELECTED_OFFSET = -50;
+const CARD_SELECTED_OFFSET = -30;
 
 type CardProps = {
-    cardName: string
+    cardName: string,
+    isSelected: boolean,
     style: CSSProperties
-    selectCardCallback: (cardName: string, isSelected: boolean) => void
+    onSelectCard: (cardName: string, isSelected: boolean) => void
 }
 
 const PokerCard: React.FunctionComponent<CardProps> = (props) => {
-    const [selected, setSelected] = useState(false);
+    const { style, cardName, isSelected, onSelectCard } = props;
     return (
-        <div style={props.style}>
+        <div style={style}>
             <img 
-                className={props.cardName}
-                style={{ height: CARD_HEIGHT, position: 'relative', top: selected ? CARD_SELECTED_OFFSET : 0}}
-                src={PokerCardImages[props.cardName]}
-                alt={props.cardName}
+                className={cardName}
+                style={getPokerCardImageStyle(isSelected)}
+                src={PokerCardImages[cardName]}
+                alt={cardName}
                 onClick={(e) => {
-                    props.selectCardCallback(e.currentTarget.className, !selected);
-                    setSelected(!selected);
+                    onSelectCard(e.currentTarget.className, !isSelected);
                 }}
             />
         </div>
     )
+}
+
+const getPokerCardImageStyle = (isSelected: boolean): CSSProperties => {
+    return {
+        top: isSelected ? CARD_SELECTED_OFFSET : 0,
+        height: CARD_HEIGHT,
+        position: 'relative',
+    }
 }
 
 interface ImageKVP {
@@ -87,7 +95,8 @@ const PokerCardImages: ImageKVP = {
     '2D': require('../res/cards/2D.png'),
     '2H': require('../res/cards/2H.png'),
     '2S': require('../res/cards/2S.png'),
-    // cats
+    '52J': require('../res/cards/52J.png'),
+    '53J': require('../res/cards/53J.png')
 };
 
 export default PokerCard;

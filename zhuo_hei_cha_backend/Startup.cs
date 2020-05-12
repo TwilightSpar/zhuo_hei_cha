@@ -30,9 +30,9 @@ namespace zhuo_hei_cha_backend
             services.AddControllers();
             services.AddSignalR();
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder => {
-                    builder.WithOrigins("http://localhost:3000")
-                        .AllowAnyHeader()
+                    builder.AllowAnyHeader()
                         .AllowAnyMethod()
+                        .SetIsOriginAllowed(_ => true)
                         .AllowCredentials();
                 }));
             // services.AddSingleton<IHubContext<Pla>>();
@@ -57,7 +57,6 @@ namespace zhuo_hei_cha_backend
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<SampleHub>("/samplehub");
                 endpoints.MapHub<PlayerHub>("/playerhub");
             });
         }

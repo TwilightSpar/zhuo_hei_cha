@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
+using System.Linq;
+using System.Threading.Tasks;
 
 public static class BackToFront
 {
     public static IHubCallerClients clients;
-    public static async void AskForPlayBackend(IClientProxy client)
+    public static async Task AskForPlayBackend(IClientProxy client)
     {
         await client.SendAsync("AskForPlayFrontend");
+        await Task.Delay(10000);
+        await client.SendAsync("HidePlayHandButton");
     }
 
     public static async void AskPlayOneMoreRoundBackend()
@@ -20,9 +24,11 @@ public static class BackToFront
         await client.SendAsync("AskReturnTributeFrontend");
     }
 
-    public static async void AskAceGoPublicBackend(IClientProxy client)
+    public static async Task AskAceGoPublicBackend(IClientProxy client)
     {
         await client.SendAsync("AskAceGoPublicFrontend");
+        await Task.Delay(5000);
+        await client.SendAsync("HideAceGoPublicButton");
     }
 
     // alert, do not need respond
@@ -31,10 +37,9 @@ public static class BackToFront
         client.SendAsync("HandIsValidFrontend");
     }
 
-    // alert, do not need respond
-    public static void HandIsNotValidBackend(IClientProxy client)
+    public static void CreateErrorMessage(IClientProxy client, string errorMessage)
     {
-        client.SendAsync("HandIsNotValidFrontend");
+        client.SendAsync("showErrorMessage", errorMessage);
     }
 
     public static void TributeReturnNotValidBackend(IClientProxy client)
@@ -44,6 +49,12 @@ public static class BackToFront
 
     public static void SendCurrentCardListBackend(IClientProxy client, List<Card> currentCardList)
     {
-        client.SendAsync("SendCurrentCardListFrontend", currentCardList);
+        var formattedCards = currentCardList.Select(card => card.ToString()).ToList();
+        client.SendAsync("SendCurrentCardListFrontend", formattedCards);
+    }
+
+    public static void ShowCurrentPlayerTurnBackend(int currentPlayerIndex, IClientProxy client)
+    {
+        client.SendAsync("ShowCurrentPlayerTurnFront", currentPlayerIndex);
     }
 }

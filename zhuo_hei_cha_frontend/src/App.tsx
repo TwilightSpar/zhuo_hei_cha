@@ -1,30 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import SampleComponent from './Components/SampleComponent';
-// import Home from './Components/Home';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import Home from './Components/Home';
+import { Switch, Route } from 'react-router-dom';
+import ErrorPage from './Components/ErrorPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import GameRoomContainer from './Components/GameRoomContainer';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <SampleComponent />
-        {/* <Home /> */}
-      </header>
-    </div>
+    <Switch>
+      <Route path='/' component={Home} exact />
+      <Route path='/game' component={GameRoomContainer} />
+      <Route component={ErrorPage} />
+    </Switch>
   );
 }
 

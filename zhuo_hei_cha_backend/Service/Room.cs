@@ -5,17 +5,18 @@ public class Room
     public static Room activeRoom; 
 
     int id;
-    List<Player> playerList;
+    private List<Player> _playerList;
+    public IReadOnlyCollection<Player> PlayerList { get{ return _playerList.AsReadOnly(); } }
     Game activeGame;
 
     public Room()
     {
-        playerList = new List<Player>();
+        _playerList = new List<Player>();
     }
 
     public void AddPlayer(Player p)
     {
-        playerList.Add(p);
+        _playerList.Add(p);
     }
 
     public void AskPlayOneMoreRound()
@@ -26,12 +27,12 @@ public class Room
     public bool CanStartGame()
     {
         // return true;
-        return playerList.Count >= 3 && playerList.Count <= 5;
+        return _playerList.Count >= 3 && _playerList.Count <= 5;
     }
 
-    public void StartGame()
+    public async void StartGame()
     {
-        activeGame = new Game(playerList);
-        activeGame.GameProcess();
+        activeGame = new Game(_playerList);
+        await activeGame.GameProcess();
     }
 }

@@ -5,6 +5,11 @@ export default class HubClient {
     // register all the methods to be called by the server
     public static registerClientMethods(conn: HubConnection) {
         conn.on('sampleClientMethod', HubClient.sampleClientMethod);
+        conn.on('startGameFrontend', HubClient.startGameFrontend);
+    }
+
+    private static startGameFrontend = (): void => {
+        alert('startGameFrontend is called');
     }
 
     private static sampleClientMethod = (): void => {
@@ -14,12 +19,14 @@ export default class HubClient {
 
     // invoke by backend, do something then return the value
     
+    // ***********************************************************************
     // return a list of card that users played
     private static AskForPlayFrontend = (conn: HubConnection): void => {
         alert('AskForPlayFrontend is being called by the server!');
         // get cards of user
         // conn.invoke('ReturnUserHandBackend', cards)
     }
+    // ***********************************************************************
 
      
     // return whether all users agree to play one more round
@@ -43,7 +50,7 @@ export default class HubClient {
         alert('AskAceGoPublicFrontend is being called by the server!');
         // PlayOneMore = user1 && user2 &&...&&userN 
         // if PlayOneMore == true
-        // conn.invoke('ReturnplayOneMoreTime', PlayOneMore)
+        // conn.invoke('ReturnAceGoPublicBackend', PlayOneMore)
     }
 
 
@@ -51,11 +58,6 @@ export default class HubClient {
 
 
     // invoke by backend, do not need to return value
-    
-    // alert it is valid
-    private static HandIsValidFrontend = (): void => {
-        alert('HandIsValidFrontend is being called by the server!');        
-    }
 
     // alert it is not valid
     private static HandIsNotValidFrontend = (): void => {
