@@ -95,8 +95,8 @@ const PokerCardImages: ImageKVP = {
     '2D': require('../res/cards/2D.png'),
     '2H': require('../res/cards/2H.png'),
     '2S': require('../res/cards/2S.png'),
-    'SmallCat': require('../res/cards/SmallCat.png'),
-    'BigCat': require('../res/cards/BigCat.png')
+    '52J': require('../res/cards/52J.png'),
+    '53J': require('../res/cards/53J.png')
 };
 
 export default PokerCard;

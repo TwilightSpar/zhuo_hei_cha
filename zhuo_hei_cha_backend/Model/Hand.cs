@@ -271,6 +271,8 @@ public class Hand
     // 先比大级别，级别一样但是类型不一样，先出的上家大，如果类别一样，进入比值环节。
     public bool CompareHand(Hand LastHand)
     {
+        if(this.group == 0 && LastHand.group == 0)
+            return false;
 		if(this.group != LastHand.group)
         {
 	        return this.group > LastHand.group;

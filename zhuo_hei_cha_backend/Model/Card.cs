@@ -34,6 +34,9 @@ public class Card{
             case 'S':
                 suit = Suit.Spade;
                 break;
+            case 'J':
+                suit = Suit.Joker;
+                break;
             default:
                 throw new Exception("Invalid suit in cardName");
         }
@@ -66,7 +69,12 @@ public class Card{
             }
         }
 
-        _id = (int)suit * 13 + cardNumber - 3;
+        if(cardNumber >= 52)
+        {
+            _id = cardNumber;
+        }
+        else
+            _id = (int)suit * 13 + cardNumber - 3;
     }
 
     public Card(Card previousCard)
@@ -123,6 +131,7 @@ public class Card{
             case Suit.Heart: s = "H"; break;
             case Suit.Diamond: s = "D"; break;
             case Suit.Club: s = "C"; break;
+            case Suit.Joker: s = "J"; break;
         }
         if(this.Number>2 && this.Number<11)
             n = this.Number.ToString();
@@ -137,9 +146,9 @@ public class Card{
         else if(this.Number == 15)
             n = "2";
         else if(this.Number == 52)
-            n = "SmallCat";
+            n = "52";
         else if(this.Number == 53)
-            n = "BigCat";
+            n = "53";
         
         return n + s;
 ;    }
