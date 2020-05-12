@@ -189,4 +189,9 @@ public class Player
     {
         return this.ConnectionId.GetHashCode();
     }
+
+    public void ShowCurrentPlayerTurn(int currentPlayerIndex)
+    {
+        BackToFront.ShowCurrentPlayerTurnBackend(currentPlayerIndex, _client);
+    }
 }

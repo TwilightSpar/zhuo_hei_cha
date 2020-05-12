@@ -147,6 +147,7 @@ public class Game
     {
         foreach (var p in playerList)
             await p.AceGoPublic();
+        
     }
 
     /// <summary>
@@ -233,6 +234,7 @@ public class Game
                 if (dealerIndex == playerIndex)
                     lastHand = EMPTY_HAND;
 
+                ShowCurrentPlayerTurn();
                 await AskForPlay();
                 checkEnded();
 
@@ -247,8 +249,16 @@ public class Game
             roundNumber += 1;
         }
 
-    }   
-    
+    }
+
+    private void ShowCurrentPlayerTurn()
+    {
+        foreach(var p in playerList)
+        {
+           p.ShowCurrentPlayerTurn(playerIndex);
+        }
+    }
+
     private bool toPlayOneMoreRound()
     {
         // as what the name says.

@@ -54,6 +54,7 @@ class GameRoomContainer extends React.Component<
             // this.initPlayerList();
         // });
         this.state.conn.on('showErrorMessage', this.showErrorMessage);
+        this.state.conn.on('ShowCurrentPlayerTurnFront', this.ShowCurrentPlayerTurnFront);
     }
 
     initPlayerList = () => {
@@ -94,6 +95,12 @@ class GameRoomContainer extends React.Component<
             })
         }, 2000)
     }
+    ShowCurrentPlayerTurnFront = (currentPlayerIndex: number) => {
+        this.setState({
+            ...this.state,
+            activePlayerIndex: currentPlayerIndex
+        })
+    }
 
     render() {
         return (
@@ -112,7 +119,7 @@ class GameRoomContainer extends React.Component<
                         <CardDisplayArea playerList={this.state.playerList} />
                         <PlayerControlAreaContainer conn={this.state.conn} />
                     </GameCanvas>
-                    <PlayerList playerList={this.state.playerList} activePlayerIndex={this.state.activePlayerIndex} />
+                    <PlayerList playerList={this.state.playerList} activePlayerIndex={this.state.activePlayerIndex}/>
                 </GameRoom>
             </Fragment>
         )

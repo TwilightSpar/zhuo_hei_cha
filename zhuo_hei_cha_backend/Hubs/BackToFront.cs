@@ -52,4 +52,9 @@ public static class BackToFront
         var formattedCards = currentCardList.Select(card => card.ToString()).ToList();
         client.SendAsync("SendCurrentCardListFrontend", formattedCards);
     }
+
+    public static void ShowCurrentPlayerTurnBackend(int currentPlayerIndex, IClientProxy client)
+    {
+        client.SendAsync("ShowCurrentPlayerTurnFront", currentPlayerIndex);
+    }
 }
