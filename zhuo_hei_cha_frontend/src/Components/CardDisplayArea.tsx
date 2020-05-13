@@ -1,18 +1,20 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, Fragment } from 'react';
 import ReadOnlyPokerHand from './ReadOnlyPokerHand';
 import PlayerModel from '../Models/PlayerModel';
 
 type ICardDisplayArea = {
-    playerList: PlayerModel[],
+    playerList: PlayerModel[]
 }
 
 const CardDisplayArea: React.FunctionComponent<ICardDisplayArea> = (props) => {
-    const opponents = props.playerList.slice(0, props.playerList.length - 1);
-    const currentPlayer = props.playerList[props.playerList.length - 1];
+    if(props.playerList.length === 0)
+        return(<Fragment/>);
+    const opponents = props.playerList.filter(p => !p.isMe);
+    const currentPlayer = props.playerList.filter(p => p.isMe)[0];
     return (
         <div style={cardDisplayAreaStyle}>
             {opponents.map((player, index) =>
-                <div style={{flexBasis: '50%', backgroundColor: tempColors[index]}} key={player.id}>
+                <div style={{flexBasis: '50%', backgroundColor: tempColors[index]}} key={player.connectionId}>
                     <ReadOnlyPokerHand hand={player.lastHand} />
                 </div>
             )}

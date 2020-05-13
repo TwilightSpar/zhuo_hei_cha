@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, Fragment } from 'react';
 import PokerCard, { CARD_HEIGHT, CARD_WIDTH, CARD_WIDTH_OVERLAPPED } from './PokerCard';
 import { getImageStyle } from './PokerHand';
 
@@ -7,6 +7,8 @@ type IReadOnlyPokerHandProps = {
 }
 
 const ReadOnlyPokerHand: React.FunctionComponent<IReadOnlyPokerHandProps> = (props) => {
+    if(props.hand.length === 0)
+        return(<Fragment/>)
     const cards = props.hand.map((name, index) =>
         <PokerCard
             key={name}

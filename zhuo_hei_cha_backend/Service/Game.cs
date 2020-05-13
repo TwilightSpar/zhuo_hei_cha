@@ -42,6 +42,7 @@ public class Game
         for (int i = 0; i < playerList.Count; i++)
         {
             playerList[i].AddCards(deckForUser[i]);
+            playerList[i].OrganizeHand();
             playerList[i].CheckAce();
         }
 
@@ -166,7 +167,10 @@ public class Game
             List<Card> userHand = PlayerHubTempData.userHand;
 
             if (userHand.Count == 0 && dealerIndex != playerIndex)    // dealer cannot skip
+            {
+                playerList[playerIndex].PlayerListUpdateBackend(new List<Card>{});
                 return;
+            }
 
             if (dealerIndex == playerIndex)
                 lastHand = EMPTY_HAND;
@@ -176,6 +180,7 @@ public class Game
                 dealerIndex = playerIndex;
                 lastHand = new Hand(userHand);
                 valid = true;
+                playerList[playerIndex].PlayerListUpdateBackend(userHand);
             }
             PlayerHubTempData.userHand = new List<Card>{};
         }
@@ -272,6 +277,8 @@ public class Game
     {
         foreach(var p in playerList)
         {
+            p.OrganizeHand();
+            p.CheckAce();
             p.SendCurrentCardListBackend();
 
         }

@@ -18,7 +18,7 @@ type IPlayerListItemProps = {
 const PlayerList: React.FunctionComponent<IPlayerListProps> = (props) => {
     const playerList = props.playerList.map((p, index) => 
         <PlayerListItem
-            key={p.id}
+            key={p.connectionId}
             player={p}
             isActivePlayer={props.activePlayerIndex === index}
         />
@@ -37,10 +37,10 @@ const PlayerListItem: React.FunctionComponent<IPlayerListItemProps> = (props) =>
             active={props.isActivePlayer}
         >
             {props.player.name}
-            {props.player.isCurrentClient ?
+            {props.player.isMe?
                 <span style={{padding: 5, fontSize: 20}}>{CURRENT_CLIENT_STAR_CHARACTER}</span> :
                 null}
-            {props.player.isPublicBlackAce ?
+            {props.player.isBlackAcePublic?
                 <span style={{float: 'right', fontSize: 20}}>{BLACK_ACE_CHARACTER}</span> :
                 null}
         </ListGroup.Item>

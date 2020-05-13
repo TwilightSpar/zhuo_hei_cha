@@ -31,14 +31,8 @@ public class Player
 
     public void CheckAce()
     {
-        foreach(var card in _cardsInHand)
-        {
-            if(card.Equals(Card.BLACK_ACE)){
-                IsBlackAce = true;
-                break;
-            }                
-            
-        }
+        if(_cardsInHand.Contains(Card.BLACK_ACE))
+            IsBlackAce = true;
     }
 
     public bool IsTwoCats()
@@ -92,8 +86,6 @@ public class Player
     public void OrganizeHand() 
     {
         _cardsInHand.Sort((x, y) => y.Number.CompareTo(x.Number));
-        if(_cardsInHand.Contains(Card.BLACK_ACE))
-            IsBlackAce = true;
     }
 
     // exclude Black Ace for now
@@ -193,5 +185,10 @@ public class Player
     public void ShowCurrentPlayerTurn(int currentPlayerIndex)
     {
         BackToFront.ShowCurrentPlayerTurnBackend(currentPlayerIndex, _client);
+    }
+
+    public void PlayerListUpdateBackend(List<Card> userHand)
+    {
+        BackToFront.PlayerListUpdateBackend(userHand, this.ConnectionId);
     }
 }

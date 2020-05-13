@@ -33,9 +33,12 @@ public class PlayerHub: Hub
         }
     }
 
-    public IReadOnlyCollection<Player> GetAllPlayers()
+    public List<object> GetAllPlayers()
     {
-        return Room.activeRoom.PlayerList;
+        return Room.activeRoom.PlayerList.Select((o)=>new {
+            connectionId = o.ConnectionId,
+            name = o.Name
+        }).ToList<object>();
     }
 
     public async Task ReturnUserHandBackend(List<string> cards)
@@ -66,6 +69,15 @@ public class PlayerHub: Hub
         if(returnvalue)
             PlayerHubTempData.aceGoPublic = returnvalue;
     }
+    public string getMyConnectionId()
+    {
+        return Context.ConnectionId;
+    }
+    public void showAceIdPlayerListBackend()
+    {
+        BackToFront.showAceIdPlayerListBackend(Context.ConnectionId);
+    }
+
 }
 
 // a => b => client
