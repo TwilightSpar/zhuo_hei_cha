@@ -7,7 +7,6 @@ import CardDisplayArea from './CardDisplayArea';
 import PlayerControlAreaContainer from './PlayerControlAreaContainer';
 import PlayerModel, { IPlayerObject } from '../Models/PlayerModel';
 import Alert from 'react-bootstrap/Alert';
-import { RouteComponentProps } from 'react-router-dom';
 
 interface IGameRoomContainerProps {
     conn: HubConnection
@@ -73,11 +72,10 @@ class GameRoomContainer extends React.Component<
     PlayerListUpdateFrontend = (lastHand: string[], lastPlayerId: string) => {
         this.setState({
             ...this.state,
-            playerList: this.state.playerList.map(p => {
-                const player = new PlayerModel(p);
+            playerList: this.state.playerList.map(p => {                
                 if (p.connectionId === lastPlayerId)
-                    player.lastHand = lastHand;
-                return player;
+                    p.lastHand = lastHand;
+                return p;
             })
         })
     }
@@ -105,11 +103,10 @@ class GameRoomContainer extends React.Component<
     showAceIdPlayerListFrontend = (aceId: string) => {
         this.setState({
             ...this.state,
-            playerList: this.state.playerList.map((p: IPlayerObject) => {
-                const player = new PlayerModel(p);
-                if (player.connectionId === aceId)
-                    player.isBlackAcePublic = true;
-                return player;
+            playerList: this.state.playerList.map(p => {                
+                if (p.connectionId === aceId)
+                    p.isBlackAcePublic = true;
+                return p;
             })
         })
     }
@@ -128,7 +125,7 @@ class GameRoomContainer extends React.Component<
                 </div>
                 <GameRoom>
                     <GameCanvas>
-                        <CardDisplayArea playerList={this.state.playerList} />
+                        <CardDisplayArea playerList= {this.state.playerList} />
                         <PlayerControlAreaContainer conn={this.state.conn} playerList={this.state.playerList}/>
                     </GameCanvas>
                     <PlayerList playerList={this.state.playerList} activePlayerIndex={this.state.activePlayerIndex}/>

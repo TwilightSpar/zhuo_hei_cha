@@ -7,8 +7,6 @@ type IReadOnlyPokerHandProps = {
 }
 
 const ReadOnlyPokerHand: React.FunctionComponent<IReadOnlyPokerHandProps> = (props) => {
-    if(props.hand.length === 0)
-        return(<Fragment/>)
     const cards = props.hand.map((name, index) =>
         <PokerCard
             key={name}

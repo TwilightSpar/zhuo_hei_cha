@@ -45,15 +45,7 @@ public class PlayerHub: Hub
     {
         var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
         PlayerHubTempData.userHand = formattedCards;
-
-        // await Task.Delay(1000);
-
-        // Clients.Caller.SendAsync("onPlayHandSuccess");
-        // Clients.Caller.SendAsync("onPlayerListUpdate", new {
-        //     PlayerId = Context.ConnectionId,
-        //     LastHand = cards
-        // });
-        // Clients.Caller.SendAsync("showErrorMessage", "Hand not valid");
+        PlayerHubTempData.finishPlay = true;
     }
     public static void ReturnTributeBackend(List<Card> cards)
     {

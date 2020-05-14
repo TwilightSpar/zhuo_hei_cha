@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using System.Diagnostics;
 
 public static class BackToFront
 {
@@ -10,7 +11,13 @@ public static class BackToFront
     public static async Task AskForPlayBackend(IClientProxy client)
     {
         await client.SendAsync("AskForPlayFrontend");
-        await Task.Delay(10000);
+
+        DateTime startTime = DateTime.Now;
+        while(!PlayerHubTempData.finishPlay)
+            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 100000)
+                break;
+                
+        PlayerHubTempData.finishPlay = false;
         await client.SendAsync("HidePlayHandButton");
     }
 

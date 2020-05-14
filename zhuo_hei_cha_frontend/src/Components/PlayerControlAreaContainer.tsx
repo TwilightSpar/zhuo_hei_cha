@@ -48,7 +48,6 @@ class PlayerControlAreaContainer extends React.Component<
     }
 
     AskAceGoPublicFrontend = async () => {
-        alert("backend invoke ask ace!");
         this.setState({
             ...this.state,
             isAskingBlackAceGoPublic: true
@@ -87,7 +86,6 @@ class PlayerControlAreaContainer extends React.Component<
     }
 
     SendCurrentCardListFrontend = (cards: string[]) => {
-        alert('Hello from SendCurrentCardListFrontend');
         this.setState({
             hand: cards
         })
@@ -117,7 +115,9 @@ class PlayerControlAreaContainer extends React.Component<
         }
     }
 
-    onSkipClick = () => {}
+    onSkipClick = () => {
+        this.props.conn.invoke('ReturnUserHandBackend', []);
+    }
 
     render() {
 
