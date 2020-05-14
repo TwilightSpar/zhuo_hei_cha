@@ -1,20 +1,23 @@
+
+export interface IPlayerObject{
+    connectionId: string
+    name: string
+}
+
 export default class PlayerModel {
-    readonly id: number
+    readonly connectionId: string
     readonly name: string
     cardCount: number
+    isBlackAcePublic: boolean
+    isMe: boolean
     lastHand: string[]
-    isPublicBlackAce: boolean
-    isCurrentClient: boolean
 
-    // the following property will have value only when isCurrentClient is true
-    remainingHand?: string[]
-
-    constructor(id: number, name: string) {
-        this.id = id;
-        this.name = name;
+    constructor(player: IPlayerObject) {
+        this.connectionId = player.connectionId;
+        this.name = player.name;
         this.cardCount = 0;
-        this.lastHand = [];
-        this.isPublicBlackAce = false;
-        this.isCurrentClient = false;
+        this.isBlackAcePublic = false;
+        this.isMe = false;
+        this.lastHand = []
     }
 }

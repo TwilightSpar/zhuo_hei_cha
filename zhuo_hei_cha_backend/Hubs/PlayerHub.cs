@@ -33,24 +33,19 @@ public class PlayerHub: Hub
         }
     }
 
-    public IReadOnlyCollection<Player> GetAllPlayers()
+    public List<object> GetAllPlayers()
     {
-        return Room.activeRoom.PlayerList;
+        return Room.activeRoom.PlayerList.Select((o)=>new {
+            connectionId = o.ConnectionId,
+            name = o.Name
+        }).ToList<object>();
     }
 
     public async Task ReturnUserHandBackend(List<string> cards)
     {
         var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
         PlayerHubTempData.userHand = formattedCards;
-
-        // await Task.Delay(1000);
-
-        // Clients.Caller.SendAsync("onPlayHandSuccess");
-        // Clients.Caller.SendAsync("onPlayerListUpdate", new {
-        //     PlayerId = Context.ConnectionId,
-        //     LastHand = cards
-        // });
-        // Clients.Caller.SendAsync("showErrorMessage", "Hand not valid");
+        PlayerHubTempData.finishPlay = true;
     }
     public static void ReturnTributeBackend(List<Card> cards)
     {
@@ -66,6 +61,15 @@ public class PlayerHub: Hub
         if(returnvalue)
             PlayerHubTempData.aceGoPublic = returnvalue;
     }
+    public string getMyConnectionId()
+    {
+        return Context.ConnectionId;
+    }
+    public void showAceIdPlayerListBackend()
+    {
+        BackToFront.showAceIdPlayerListBackend(Context.ConnectionId);
+    }
+
 }
 
 // a => b => client

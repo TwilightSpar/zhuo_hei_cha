@@ -4,9 +4,11 @@ import GameButtons from './GameButtons';
 import PokerHand from './PokerHand';
 import { HubConnection } from '@aspnet/signalr';
 import _ from 'lodash';
+import PlayerModel from '../Models/PlayerModel';
 
 type IPlayerControlAreaContainerProps = {
-    conn: HubConnection
+    conn: HubConnection,
+    playerList: PlayerModel[]
 }
 
 type IPlayerControlAreaContainerState = {
@@ -46,7 +48,6 @@ class PlayerControlAreaContainer extends React.Component<
     }
 
     AskAceGoPublicFrontend = async () => {
-        alert("backend invoke ask ace!");
         this.setState({
             ...this.state,
             isAskingBlackAceGoPublic: true
@@ -85,14 +86,14 @@ class PlayerControlAreaContainer extends React.Component<
     }
 
     SendCurrentCardListFrontend = (cards: string[]) => {
-        alert('Hello from SendCurrentCardListFrontend');
         this.setState({
             hand: cards
         })
     }
 
     onAceGoPublicClick = () => {
-        this.props.conn.invoke('ReturnAceGoPublicBackend', true)
+        this.props.conn.invoke('ReturnAceGoPublicBackend', true);
+        this.props.conn.invoke('showAceIdPlayerListBackend');
     }
 
     // send the hand to backend for validation
@@ -114,7 +115,9 @@ class PlayerControlAreaContainer extends React.Component<
         }
     }
 
-    onSkipClick = () => {}
+    onSkipClick = () => {
+        this.props.conn.invoke('ReturnUserHandBackend', []);
+    }
 
     render() {
 
