@@ -97,6 +97,13 @@ class PlayerControlAreaContainer extends React.Component<
         })
     }
 
+    HidePlayOneMoreRoundFrontend = () => {
+        this.setState({
+            ...this.state,
+            isAskingPlayOneMoreRound: false
+        });
+    }
+
     SendCurrentCardListFrontend = (cards: string[]) => {
         this.setState({
             hand: cards
@@ -132,12 +139,6 @@ class PlayerControlAreaContainer extends React.Component<
     }
     onPlayOneMoreRoundClick = () => {
         this.props.conn.invoke('ReturnPlayOneMoreRoundBackend', true);
-        this.setState({
-            ...this.state,
-            isAskingPlayOneMoreRound: false
-        });
-    }
-    HidePlayOneMoreRoundFrontend() {
         this.setState({
             ...this.state,
             isAskingPlayOneMoreRound: false

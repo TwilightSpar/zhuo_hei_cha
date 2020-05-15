@@ -14,7 +14,7 @@ public static class BackToFront
 
         DateTime startTime = DateTime.Now;
         while(!PlayerHubTempData.finishPlay)
-            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 10000)
+            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 30000)
                 break;
         
         PlayerHubTempData.finishPlay = false;
@@ -24,7 +24,7 @@ public static class BackToFront
     public static async Task AskPlayOneMoreRoundBackend()
     {
         await clients.All.SendAsync("AskPlayOneMoreRoundFrontend");
-        await Task.Delay(7000);
+        await Task.Delay(15000);
         await clients.All.SendAsync("HidePlayOneMoreRoundFrontend");
     }
 
@@ -82,4 +82,5 @@ public static class BackToFront
     {
         clients.All.SendAsync("GameOverFrontend", blackAceLose);
     }
+
 }

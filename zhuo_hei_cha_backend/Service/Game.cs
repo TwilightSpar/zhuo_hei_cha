@@ -221,19 +221,19 @@ public class Game
 
             SendCurrentCardListBackend();
 
-            if(roundNumber != 1)
-            {
-                // alert user that we sill start to pay tribute
-                await Task.Delay(5000);
+            // if(roundNumber != 1)
+            // {
+            //     // alert user that we sill start to pay tribute
+            //     await Task.Delay(5000);
 
-                PayTribute();
+            //     PayTribute();
 
-                SendCurrentCardListBackend();
+            //     SendCurrentCardListBackend();
 
-                ReturnTribute();
+            //     ReturnTribute();
 
-                SendCurrentCardListBackend();
-            }
+            //     SendCurrentCardListBackend();
+            // }
             
             finishOrder = new List<Player> { };   // init tributeList
             isGameStarted = true;
@@ -258,9 +258,17 @@ public class Game
             await Room.AskPlayOneMoreRound();
             if (!toPlayOneMoreRound())
                 break;
+            PlayerHubTempData.playOneMoreRound = false;
             roundNumber += 1;
+            ClearLastHandBackend();
         }
 
+    }
+
+    private void ClearLastHandBackend()
+    {
+        foreach(var p in playerList)
+            p.PlayerListUpdateBackend(new List<Card>{});
     }
 
     private void ShowCurrentPlayerTurn()
