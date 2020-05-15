@@ -22,7 +22,7 @@ public class PlayerHub: Hub
         if (Room.activeRoom.CanStartGame())
         {
             // await here?
-            await Clients.All.SendAsync("NotifyOthersFrontend");
+            Clients.All.SendAsync("NotifyOthersFrontend");
             BackToFront.clients = Clients;
             // no need to wait here?
             Room.activeRoom.StartGame();
@@ -41,7 +41,7 @@ public class PlayerHub: Hub
         }).ToList<object>();
     }
 
-    public void ReturnUserHandBackend(List<string> cards)
+    public async Task ReturnUserHandBackend(List<string> cards)
     {
         var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
         PlayerHubTempData.userHand = formattedCards;
@@ -70,6 +70,12 @@ public class PlayerHub: Hub
         BackToFront.showAceIdPlayerListBackend(Context.ConnectionId);
     }
 
+    public override async Task OnDisconnectedAsync(System.Exception exception)
+    {
+        await Clients.All.SendAsync("showErrorMessage", "Someone disconnected from the game. The game will be restarted in 5 seconds");
+        await Task.Delay(5000);
+        await Clients.All.SendAsync("BreakGameFrontend");
+    }
 }
 
 // a => b => client
