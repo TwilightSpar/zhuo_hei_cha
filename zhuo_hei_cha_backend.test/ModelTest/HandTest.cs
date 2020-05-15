@@ -34,6 +34,14 @@ namespace ModelTest
         private static readonly Card BIG_JOKER = new Card(53);
 
         [Fact]
+        public void TwoTwoIsGreaterThanTwoK()
+        {
+            var Two2 = new Hand(new List<Card>(){TWO_OF_CLUB, TWO_OF_DIAMOND});
+            var TwoK = new Hand(new List<Card>(){KING_OF_CLUB, KING_OF_DIAMOND});
+            Assert.True(Two2.CompareHand(TwoK));
+        }
+
+        [Fact]
         public void ThreeIsGreaterThanEmptyHand()
         {
             var emptyHand = new Hand(new List<Card>(){});

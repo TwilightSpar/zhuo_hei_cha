@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class Room
 {
     public static Room activeRoom; 
 
-    int id;
+    int roomId;
     private List<Player> _playerList;
     public IReadOnlyCollection<Player> PlayerList { get{ return _playerList.AsReadOnly(); } }
     Game activeGame;
@@ -19,9 +20,9 @@ public class Room
         _playerList.Add(p);
     }
 
-    public void AskPlayOneMoreRound()
+    public static async Task AskPlayOneMoreRound()
     {
-        BackToFront.AskPlayOneMoreRoundBackend();
+        await BackToFront.AskPlayOneMoreRoundBackend();
     }
 
     public bool CanStartGame()

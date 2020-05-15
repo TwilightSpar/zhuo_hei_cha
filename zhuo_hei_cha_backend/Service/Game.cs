@@ -189,12 +189,15 @@ public class Game
 
     private void checkEnded()
     {
-        int remainingGroupCount = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x).Count();
+        var group = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x);
+        bool blackAceLose = group.SelectMany(o=>o).ToList()[0];
+        int remainingGroupCount = group.Count();
         if (remainingGroupCount == 1)
         {
             finishOrder.AddRange(stillPlay);
             stillPlay.Clear();
             this.isGameStarted = false;
+            BackToFront.GameOverBackend(blackAceLose);
             return;
         }
         Player p = playerList[playerIndex];
@@ -202,6 +205,7 @@ public class Game
         {
             finishOrder.Add(p);
             stillPlay.Remove(p);
+            lastHand = EMPTY_HAND;
         }
     }
 
@@ -246,9 +250,12 @@ public class Game
                 SendCurrentCardListBackend();
 
                 playerIndex = (playerIndex + 1) % playerList.Count;
+                while(playerList[playerIndex].isFinished() && isGameStarted == true)
+                    playerIndex = (playerIndex + 1) % playerList.Count;
             }
             reInital();
             
+            await Room.AskPlayOneMoreRound();
             if (!toPlayOneMoreRound())
                 break;
             roundNumber += 1;
@@ -267,7 +274,7 @@ public class Game
     private bool toPlayOneMoreRound()
     {
         // as what the name says.
-        return PlayerHubTempData.playOneMoreTime;
+        return PlayerHubTempData.playOneMoreRound;
     }
 
     /// <summary>

@@ -52,9 +52,9 @@ public class PlayerHub: Hub
         PlayerHubTempData.returnCards = cards;
     }
 
-    public void ReturnPlayOneMoreTimeBackend(bool returnvalue)
+    public void ReturnPlayOneMoreRoundBackend(bool returnvalue)
     {
-        PlayerHubTempData.playOneMoreTime = returnvalue;
+        PlayerHubTempData.playOneMoreRound &= returnvalue;
     }
     public void ReturnAceGoPublicBackend(bool returnvalue)
     {
