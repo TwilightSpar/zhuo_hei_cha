@@ -144,6 +144,13 @@ class PlayerControlAreaContainer extends React.Component<
             isAskingPlayOneMoreRound: false
         });
     }
+    onQuit = () => {
+        this.props.conn.invoke('ReturnPlayOneMoreRoundBackend', false);
+        this.setState({
+            ...this.state,
+            isAskingPlayOneMoreRound: false
+        });
+    }
 
     render() {
 
@@ -154,6 +161,7 @@ class PlayerControlAreaContainer extends React.Component<
                     onSkipClick={this.onSkipClick}
                     onAceGoPublicClick={this.onAceGoPublicClick}
                     onPlayOneMoreRoundClick = {this.onPlayOneMoreRoundClick}
+                    onQuit = {this.onQuit}
                     isAskingBlackAceGoPublic={this.state.isAskingBlackAceGoPublic}
                     isCurrentPlayerTurn={this.state.isCurrentPlayerTurn}
                     isAskingPlayOneMoreRound = {this.state.isAskingPlayOneMoreRound}

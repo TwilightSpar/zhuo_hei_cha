@@ -218,7 +218,7 @@ public class Game
         while (true)
         {
             InitCardList();
-            
+
             SendCurrentCardListBackend();
 
             // if(roundNumber != 1)
@@ -257,11 +257,15 @@ public class Game
             
             await Room.AskPlayOneMoreRound();
             if (!toPlayOneMoreRound())
+            {
+                BackToFront.BreakGameBackend();
                 break;
+            }
             PlayerHubTempData.playOneMoreRound = true;
             roundNumber += 1;
             ClearLastHandBackend();
         }
+
 
     }
 

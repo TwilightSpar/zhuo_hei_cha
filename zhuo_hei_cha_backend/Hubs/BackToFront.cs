@@ -83,4 +83,8 @@ public static class BackToFront
         clients.All.SendAsync("GameOverFrontend", blackAceLose);
     }
 
+    public static void BreakGameBackend()
+    {
+        clients.All.SendAsync("BreakGameFrontend");
+    }
 }
