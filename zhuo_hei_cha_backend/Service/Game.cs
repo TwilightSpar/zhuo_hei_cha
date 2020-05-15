@@ -218,7 +218,7 @@ public class Game
         while (true)
         {
             InitCardList();
-
+            
             SendCurrentCardListBackend();
 
             // if(roundNumber != 1)
@@ -235,7 +235,7 @@ public class Game
             //     SendCurrentCardListBackend();
             // }
             
-            finishOrder = new List<Player> { };   // init tributeList
+            finishOrder = new List<Player> {};   // init tributeList
             isGameStarted = true;
             stillPlay = playerList.Select(x => x).ToList();
             PlayerHubTempData.userHand = new List<Card>{};
@@ -258,7 +258,7 @@ public class Game
             await Room.AskPlayOneMoreRound();
             if (!toPlayOneMoreRound())
                 break;
-            PlayerHubTempData.playOneMoreRound = false;
+            PlayerHubTempData.playOneMoreRound = true;
             roundNumber += 1;
             ClearLastHandBackend();
         }

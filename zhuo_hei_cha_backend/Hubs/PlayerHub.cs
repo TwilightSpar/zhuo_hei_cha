@@ -22,7 +22,7 @@ public class PlayerHub: Hub
         if (Room.activeRoom.CanStartGame())
         {
             // await here?
-            Clients.All.SendAsync("NotifyOthersFrontend");
+            await Clients.All.SendAsync("NotifyOthersFrontend");
             BackToFront.clients = Clients;
             // no need to wait here?
             Room.activeRoom.StartGame();
@@ -41,7 +41,7 @@ public class PlayerHub: Hub
         }).ToList<object>();
     }
 
-    public async Task ReturnUserHandBackend(List<string> cards)
+    public void ReturnUserHandBackend(List<string> cards)
     {
         var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
         PlayerHubTempData.userHand = formattedCards;
