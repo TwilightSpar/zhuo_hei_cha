@@ -23,7 +23,12 @@ const GameButtons: FunctionComponent<IGameButtonsProps> = (props) => {
             >
                 Play Hand
             </Button>
-            <Button variant="light" style={buttonStyle} onClick={props.onSkipClick}>
+            <Button
+                variant="light"
+                style={buttonStyle}
+                onClick={props.onSkipClick}
+                disabled={!props.isCurrentPlayerTurn}
+            >
                 Skip
             </Button>
             {props.isAskingBlackAceGoPublic ?            

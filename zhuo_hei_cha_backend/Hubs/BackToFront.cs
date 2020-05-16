@@ -18,7 +18,7 @@ public static class BackToFront
                 break;
         
         PlayerHubTempData.finishPlay = false;
-        await client.SendAsync("HidePlayHandButton");
+        await client.SendAsync("DisablePlayerButtons");
     }
 
     public static async Task AskPlayOneMoreRoundBackend()

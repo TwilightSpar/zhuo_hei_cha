@@ -44,7 +44,7 @@ class PlayerControlAreaContainer extends React.Component<
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
         this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
-        this.props.conn.on('HidePlayHandButton', this.HidePlayHandButton);
+        this.props.conn.on('DisablePlayerButtons', this.DisablePlayerButtons);
         this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
         this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
         this.props.conn.on('AskPlayOneMoreRoundFrontend', this.AskPlayOneMoreRoundFrontend);
@@ -90,7 +90,7 @@ class PlayerControlAreaContainer extends React.Component<
         });
     }
 
-    HidePlayHandButton = () => {
+    DisablePlayerButtons = () => {
         this.setState({
             ...this.state,
             isCurrentPlayerTurn: false
