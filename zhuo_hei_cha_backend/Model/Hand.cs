@@ -117,7 +117,7 @@ public class Hand
             tempCards.Insert(0, Ace2);
         }
         
-        else if(tempCards[cardLength-1].Number == 15)     // no KKAA22
+        else if(tempCards[cardLength-1].Number == 15 && cardLength != 2)     // no KKAA22
             return -1;
         
         // check pair

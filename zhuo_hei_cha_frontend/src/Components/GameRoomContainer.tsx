@@ -21,11 +21,6 @@ interface IGameRoomContainerState {
     errorVisible: boolean
 }
 
-type PlayerListUpdateObject = {
-    playerId: string;
-    lastHand: string[];
-}
-
 
 class GameRoomContainer extends React.Component<
     IGameRoomContainerProps, IGameRoomContainerState
@@ -47,10 +42,16 @@ class GameRoomContainer extends React.Component<
     componentDidMount() {
 
         this.state.conn.on('PlayerListUpdateFrontend', this.PlayerListUpdateFrontend);
-
+        this.state.conn.on('GameOverFrontend', this.GameOverFrontend);        
         this.state.conn.on('showErrorMessage', this.showErrorMessage);
         this.state.conn.on('ShowCurrentPlayerTurnFront', this.ShowCurrentPlayerTurnFront);
         this.state.conn.on('showAceIdPlayerListFrontend', this.showAceIdPlayerListFrontend);
+    }
+    GameOverFrontend(blackAceLose: boolean) {
+        if(blackAceLose)
+            alert("GameOver,and non-blackAce win");
+        else
+            alert("GameOver,and blackAce win");
     }
 
     initPlayerList = () => {

@@ -1,12 +1,15 @@
-import React, { FunctionComponent, CSSProperties } from 'react';
+import React, { FunctionComponent, CSSProperties, Fragment } from 'react';
 import Button from 'react-bootstrap/Button';
 
 type IGameButtonsProps = {
     onPlayHandClick: () => void,
     onSkipClick: () => void,
     onAceGoPublicClick: () => void,
+    onPlayOneMoreRoundClick: () => void,
+    onQuit: () => void,
     isAskingBlackAceGoPublic: boolean,
-    isCurrentPlayerTurn: boolean
+    isCurrentPlayerTurn: boolean,
+    isAskingPlayOneMoreRound: boolean,
 };
 
 const GameButtons: FunctionComponent<IGameButtonsProps> = (props) => {
@@ -27,6 +30,17 @@ const GameButtons: FunctionComponent<IGameButtonsProps> = (props) => {
                 <Button variant="light" style={buttonStyle} onClick={props.onAceGoPublicClick}>
                     Ace Go Public
                 </Button> 
+                : null
+            }
+            {props.isAskingPlayOneMoreRound ?            
+                <Fragment>
+                    <Button variant="light" style={buttonStyle} onClick={props.onPlayOneMoreRoundClick}>
+                    play one more round
+                    </Button>
+                    <Button variant="light" style={buttonStyle} onClick={props.onQuit}>
+                    quit
+                    </Button>
+                </Fragment>
                 : null
             }
         </div>

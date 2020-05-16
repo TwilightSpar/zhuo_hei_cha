@@ -52,9 +52,9 @@ public class PlayerHub: Hub
         PlayerHubTempData.returnCards = cards;
     }
 
-    public void ReturnPlayOneMoreTimeBackend(bool returnvalue)
+    public void ReturnPlayOneMoreRoundBackend(bool returnvalue)
     {
-        PlayerHubTempData.playOneMoreTime = returnvalue;
+        PlayerHubTempData.playOneMoreRound &= returnvalue;
     }
     public void ReturnAceGoPublicBackend(bool returnvalue)
     {
@@ -70,6 +70,12 @@ public class PlayerHub: Hub
         BackToFront.showAceIdPlayerListBackend(Context.ConnectionId);
     }
 
+    public override async Task OnDisconnectedAsync(System.Exception exception)
+    {
+        await Clients.All.SendAsync("showErrorMessage", "Someone disconnected from the game. The game will be restarted in 5 seconds");
+        await Task.Delay(5000);
+        await Clients.All.SendAsync("BreakGameFrontend");
+    }
 }
 
 // a => b => client

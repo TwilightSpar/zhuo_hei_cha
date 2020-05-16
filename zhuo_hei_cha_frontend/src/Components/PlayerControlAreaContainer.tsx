@@ -15,7 +15,8 @@ type IPlayerControlAreaContainerState = {
     hand: string[],
     selectedHand: Set<string>,
     isAskingBlackAceGoPublic: boolean,
-    isCurrentPlayerTurn: boolean
+    isCurrentPlayerTurn: boolean,
+    isAskingPlayOneMoreRound: boolean
 }
 
 const testCards = _.flatten(_.range(3, 11).map(n => n.toString()).concat('J', 'Q', 'K', 'A', '2').map(n => {
@@ -33,7 +34,8 @@ class PlayerControlAreaContainer extends React.Component<
             hand: testCards,
             selectedHand: new Set(),
             isAskingBlackAceGoPublic: false,
-            isCurrentPlayerTurn: false
+            isCurrentPlayerTurn: false,
+            isAskingPlayOneMoreRound: false
         }
     }
 
@@ -45,6 +47,16 @@ class PlayerControlAreaContainer extends React.Component<
         this.props.conn.on('HidePlayHandButton', this.HidePlayHandButton);
         this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
         this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
+        this.props.conn.on('AskPlayOneMoreRoundFrontend', this.AskPlayOneMoreRoundFrontend);
+        this.props.conn.on('HidePlayOneMoreRoundFrontend', this.HidePlayOneMoreRoundFrontend);
+        
+    }
+    
+    AskPlayOneMoreRoundFrontend= async () => {
+        this.setState({
+            ...this.state,
+            isAskingPlayOneMoreRound: true
+        });
     }
 
     AskAceGoPublicFrontend = async () => {
@@ -85,6 +97,13 @@ class PlayerControlAreaContainer extends React.Component<
         })
     }
 
+    HidePlayOneMoreRoundFrontend = () => {
+        this.setState({
+            ...this.state,
+            isAskingPlayOneMoreRound: false
+        });
+    }
+
     SendCurrentCardListFrontend = (cards: string[]) => {
         this.setState({
             hand: cards
@@ -118,6 +137,20 @@ class PlayerControlAreaContainer extends React.Component<
     onSkipClick = () => {
         this.props.conn.invoke('ReturnUserHandBackend', []);
     }
+    onPlayOneMoreRoundClick = () => {
+        this.props.conn.invoke('ReturnPlayOneMoreRoundBackend', true);
+        this.setState({
+            ...this.state,
+            isAskingPlayOneMoreRound: false
+        });
+    }
+    onQuit = () => {
+        this.props.conn.invoke('ReturnPlayOneMoreRoundBackend', false);
+        this.setState({
+            ...this.state,
+            isAskingPlayOneMoreRound: false
+        });
+    }
 
     render() {
 
@@ -127,8 +160,11 @@ class PlayerControlAreaContainer extends React.Component<
                     onPlayHandClick={this.onPlayHandClick}
                     onSkipClick={this.onSkipClick}
                     onAceGoPublicClick={this.onAceGoPublicClick}
+                    onPlayOneMoreRoundClick = {this.onPlayOneMoreRoundClick}
+                    onQuit = {this.onQuit}
                     isAskingBlackAceGoPublic={this.state.isAskingBlackAceGoPublic}
                     isCurrentPlayerTurn={this.state.isCurrentPlayerTurn}
+                    isAskingPlayOneMoreRound = {this.state.isAskingPlayOneMoreRound}
                 />
                 <PokerHand
                     hand={this.state.hand}

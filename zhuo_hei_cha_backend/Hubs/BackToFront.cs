@@ -14,16 +14,18 @@ public static class BackToFront
 
         DateTime startTime = DateTime.Now;
         while(!PlayerHubTempData.finishPlay)
-            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 100000)
+            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 30000)
                 break;
-                
+        
         PlayerHubTempData.finishPlay = false;
         await client.SendAsync("HidePlayHandButton");
     }
 
-    public static async void AskPlayOneMoreRoundBackend()
+    public static async Task AskPlayOneMoreRoundBackend()
     {
         await clients.All.SendAsync("AskPlayOneMoreRoundFrontend");
+        await Task.Delay(15000);
+        await clients.All.SendAsync("HidePlayOneMoreRoundFrontend");
     }
 
     public static async void AskReturnTributeBackend(IClientProxy client)
@@ -74,5 +76,15 @@ public static class BackToFront
     public static void showAceIdPlayerListBackend(string aceId)
     {
         clients.All.SendAsync("showAceIdPlayerListFrontend", aceId);
+    }
+
+    public static void GameOverBackend(bool blackAceLose)
+    {
+        clients.All.SendAsync("GameOverFrontend", blackAceLose);
+    }
+
+    public static void BreakGameBackend()
+    {
+        clients.All.SendAsync("BreakGameFrontend");
     }
 }

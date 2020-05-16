@@ -3,7 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import PlayerModel from '../Models/PlayerModel';
 
 const BLACK_ACE_CHARACTER = '\u2660';
-const CURRENT_CLIENT_STAR_CHARACTER = '\u2B51'
+const DEALER_ARROW = '\u261A'
 
 type IPlayerListProps = {
     playerList: PlayerModel[],
@@ -34,11 +34,11 @@ const PlayerListItem: React.FunctionComponent<IPlayerListItemProps> = (props) =>
     return (
         <ListGroup.Item
             style={playerItemStyle}
-            active={props.isActivePlayer}
+            active={props.player.isMe}
         >
             {props.player.name}
-            {props.player.isMe?
-                <span style={{padding: 5, fontSize: 20}}>{CURRENT_CLIENT_STAR_CHARACTER}</span> :
+            {props.isActivePlayer?
+                <span style={{padding: 5, fontSize: 20}}>{DEALER_ARROW}</span> :
                 null}
             {props.player.isBlackAcePublic?
                 <span style={{float: 'right', fontSize: 20}}>{BLACK_ACE_CHARACTER}</span> :
