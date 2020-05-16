@@ -34,12 +34,11 @@ class GameRoomContainer extends React.Component<
             activePlayerIndex: 0,
             errorMessage: '',
             errorVisible: false,
-        };
-
-        this.initPlayerList();
+        };        
     }
 
     componentDidMount() {
+        this.initPlayerList();
 
         this.state.conn.on('PlayerListUpdateFrontend', this.PlayerListUpdateFrontend);
         this.state.conn.on('GameOverFrontend', this.GameOverFrontend);        
