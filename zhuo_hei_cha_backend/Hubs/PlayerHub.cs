@@ -75,6 +75,7 @@ public class PlayerHub: Hub
         await Clients.All.SendAsync("showErrorMessage", "Someone disconnected from the game. The game will be restarted in 5 seconds");
         await Task.Delay(5000);
         await Clients.All.SendAsync("BreakGameFrontend");
+        Room.activeRoom = new Room();
     }
 }
 
