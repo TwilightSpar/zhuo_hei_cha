@@ -189,6 +189,6 @@ public class Player
 
     public void PlayerListUpdateBackend(List<Card> userHand)
     {
-        BackToFront.PlayerListUpdateBackend(userHand, this.ConnectionId);
+        BackToFront.PlayerListUpdateBackend(userHand, this.ConnectionId, CardCount);
     }
 }

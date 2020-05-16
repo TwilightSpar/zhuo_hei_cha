@@ -15,11 +15,12 @@ const CardDisplayArea: React.FunctionComponent<ICardDisplayArea> = (props) => {
         <div style={cardDisplayAreaStyle}>
             {opponents.map((player, index) =>
                 <div style={{flexBasis: '50%', backgroundColor: tempColors[index]}} key={player.connectionId}>
+                    <label>Cards Remaining: {player.cardCount}</label>
                     <ReadOnlyPokerHand hand={player.lastHand} />
                 </div>
             )}
             <hr style={{width: '100%', visibility: 'hidden'}} />
-            <div style={{flexBasis: '50%', backgroundColor: 'purple'}}>
+            <div style={{flexBasis: '50%'}}>
                 <ReadOnlyPokerHand hand={currentPlayer.lastHand} />
             </div>
         </div>

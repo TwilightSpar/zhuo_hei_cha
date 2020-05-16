@@ -67,10 +67,10 @@ public static class BackToFront
         client.SendAsync("ShowCurrentPlayerTurnFront", currentPlayerIndex);
     }
 
-    public static void PlayerListUpdateBackend(List<Card> userHand, string connectionId)
+    public static void PlayerListUpdateBackend(List<Card> userHand, string connectionId, int cardCount)
     {
         var handString = userHand.Select(c => c.ToString()).ToList();
-        clients.All.SendAsync("PlayerListUpdateFrontend", handString, connectionId);
+        clients.All.SendAsync("PlayerListUpdateFrontend", handString, connectionId, cardCount);
     }
 
     public static void showAceIdPlayerListBackend(string aceId)

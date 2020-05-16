@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
 import GameRoom from './GameRoom';
 import GameCanvas from './GameCanvas';
 import PlayerList from './PlayerList';
@@ -69,12 +69,14 @@ class GameRoomContainer extends React.Component<
         });
     }
 
-    PlayerListUpdateFrontend = (lastHand: string[], lastPlayerId: string) => {
+    PlayerListUpdateFrontend = (lastHand: string[], lastPlayerId: string, cardCount: number) => {
         this.setState({
             ...this.state,
-            playerList: this.state.playerList.map(p => {                
-                if (p.connectionId === lastPlayerId)
+            playerList: this.state.playerList.map(p => {
+                if (p.connectionId === lastPlayerId) {
                     p.lastHand = lastHand;
+                    p.cardCount = cardCount;
+                }
                 return p;
             })
         })
