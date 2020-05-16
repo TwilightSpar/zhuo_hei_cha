@@ -3,7 +3,6 @@ import PlayerControlArea from './PlayerControlArea';
 import GameButtons from './GameButtons';
 import PokerHand from './PokerHand';
 import { HubConnection } from '@aspnet/signalr';
-import _ from 'lodash';
 import PlayerModel from '../Models/PlayerModel';
 
 type IPlayerControlAreaContainerProps = {
@@ -19,10 +18,6 @@ type IPlayerControlAreaContainerState = {
     isAskingPlayOneMoreRound: boolean
 }
 
-const testCards = _.flatten(_.range(3, 11).map(n => n.toString()).concat('J', 'Q', 'K', 'A', '2').map(n => {
-    return ['C', 'D', 'H', 'S'].map(s => n + s)
-}));
-
 // A container component for PlayerControlArea that handles the data manipulation
 class PlayerControlAreaContainer extends React.Component<
     IPlayerControlAreaContainerProps, IPlayerControlAreaContainerState
@@ -31,7 +26,7 @@ class PlayerControlAreaContainer extends React.Component<
     constructor(props: IPlayerControlAreaContainerProps) {
         super(props);
         this.state = {
-            hand: testCards,
+            hand: [],
             selectedHand: new Set(),
             isAskingBlackAceGoPublic: false,
             isCurrentPlayerTurn: false,

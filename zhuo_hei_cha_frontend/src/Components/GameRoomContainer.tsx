@@ -10,7 +10,6 @@ import Alert from 'react-bootstrap/Alert';
 
 interface IGameRoomContainerProps {
     conn: HubConnection
-    // history: History
 }
 
 interface IGameRoomContainerState {
