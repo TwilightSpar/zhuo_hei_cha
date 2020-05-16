@@ -38,10 +38,12 @@ class Home extends React.Component<{}, IHomeState> {
     }
 
     BreakGameFrontend = () => {
-        this.setState({
-            ...this.state,
-            isGameStarted: false,
-            isEnterRoomAble: true
+        this.state.conn.stop().then(() => {
+            this.setState({
+                ...this.state,
+                isGameStarted: false,
+                isEnterRoomAble: true
+            })
         })
     }
 
@@ -63,11 +65,6 @@ class Home extends React.Component<{}, IHomeState> {
             isGameStarted: true
         })
     }
-
-    // end game at anytime, but how to stop backend?
-    EndGameFrontend = async () => {
-        this.state.conn.stop();
-    };
 
     render() {
         if (this.state.isGameStarted)
