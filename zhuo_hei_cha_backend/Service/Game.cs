@@ -305,6 +305,7 @@ public class Game
 
     private void reInital()
     {
+        BackToFront.ResetState();
         foreach(var p in playerList){
             p.ClearCard();
             p.clearAce();

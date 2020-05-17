@@ -87,4 +87,9 @@ public static class BackToFront
     {
         clients.All.SendAsync("BreakGameFrontend");
     }
+
+    public static void ResetState()
+    {
+        clients.All.SendAsync("ResetStateFrontend");
+    }
 }
