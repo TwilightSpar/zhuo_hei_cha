@@ -113,6 +113,10 @@ class PlayerControlAreaContainer extends React.Component<
     // send the hand to backend for validation
     onPlayHandClick = () => {
         this.props.conn.invoke('ReturnUserHandBackend', Array.from(this.state.selectedHand));
+        this.setState({
+            ...this.state,
+            isCurrentPlayerTurn: false      // temperory disable button.
+        })
     }
 
     onSelectCard = (cardName: string, isSelected: boolean) => {
@@ -131,6 +135,10 @@ class PlayerControlAreaContainer extends React.Component<
 
     onSkipClick = () => {
         this.props.conn.invoke('ReturnUserHandBackend', []);
+        this.setState({
+            ...this.state,
+            isCurrentPlayerTurn: false      // temperory disable button.
+        })
     }
     onPlayOneMoreRoundClick = () => {
         this.props.conn.invoke('ReturnPlayOneMoreRoundBackend', true);

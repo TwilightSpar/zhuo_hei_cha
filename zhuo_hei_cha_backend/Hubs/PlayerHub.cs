@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ public class PlayerHub: Hub
         }
         Room.activeRoom.AddPlayer(player);
 
+        Console.WriteLine("createplayer"+name);
         return player;
     }
 
@@ -21,11 +23,13 @@ public class PlayerHub: Hub
     {
         if (Room.activeRoom.CanStartGame())
         {
+            Console.WriteLine("can start game");
             // await here?
-            Clients.All.SendAsync("NotifyOthersFrontend");
             BackToFront.clients = Clients;
+            BackToFront.NotifyOthersBackend();
             // no need to wait here?
             Room.activeRoom.StartGame();
+            Console.WriteLine("finish start game");
         }
         else
         {
@@ -72,10 +76,16 @@ public class PlayerHub: Hub
 
     public override async Task OnDisconnectedAsync(System.Exception exception)
     {
+        Console.WriteLine("disconnected");
+        Console.WriteLine();
+        Room.activeRoom = new Room();
         await Clients.All.SendAsync("showErrorMessage", "Someone disconnected from the game. The game will be restarted in 5 seconds");
         await Task.Delay(5000);
         await Clients.All.SendAsync("BreakGameFrontend");
-        Room.activeRoom = new Room();
+        
+        // we should reinit some static variable and static class. Because they are not reset into default 
+        // value when the connection is stopped.
+        PlayerHubTempData.reinitTempData();
     }
 }
 

@@ -26,7 +26,7 @@ class GameRoomContainer extends React.Component<
     > {
     constructor(props: IGameRoomContainerProps) {
         super(props);
-
+        console.log("new GameContainer");
         this.state = {
             conn: this.props.conn,
             playerList: [],
@@ -45,12 +45,13 @@ class GameRoomContainer extends React.Component<
         this.state.conn.on('showErrorMessage', this.showErrorMessage);
         this.state.conn.on('ShowCurrentPlayerTurnFront', this.ShowCurrentPlayerTurnFront);
         this.state.conn.on('showAceIdPlayerListFrontend', this.showAceIdPlayerListFrontend);
+        console.log(this.state.playerList);
     }
     GameOverFrontend(blackAceLose: boolean) {
         if(blackAceLose)
             alert("GameOver,and non-blackAce win");
         else
-            alert("GameOver,and blackAce win");
+            alert("GameOver,and blackAce escaped");
     }
 
     initPlayerList = () => {

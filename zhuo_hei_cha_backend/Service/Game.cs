@@ -165,7 +165,6 @@ public class Game
             await playerList[playerIndex].GetPlayerHand();
 
             List<Card> userHand = PlayerHubTempData.userHand;
-
             if (userHand.Count == 0 && dealerIndex != playerIndex)    // dealer cannot skip
             {
                 playerList[playerIndex].PlayerListUpdateBackend(new List<Card>{});
@@ -206,6 +205,7 @@ public class Game
             finishOrder.Add(p);
             stillPlay.Remove(p);
             lastHand = EMPTY_HAND;
+            p.PlayerListUpdateBackend(new List<Card>{});
         }
     }
 
@@ -245,9 +245,9 @@ public class Game
             {
                 ShowCurrentPlayerTurn();
                 await AskForPlay();
-                checkEnded();
-
                 SendCurrentCardListBackend();
+
+                checkEnded();
 
                 playerIndex = (playerIndex + 1) % playerList.Count;
                 while(playerList[playerIndex].isFinished() && isGameStarted == true)

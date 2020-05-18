@@ -21,6 +21,11 @@ public static class BackToFront
         await client.SendAsync("DisablePlayerButtons");
     }
 
+    public static void NotifyOthersBackend()
+    {        
+        clients.All.SendAsync("NotifyOthersFrontend");
+    }
+
     public static async Task AskPlayOneMoreRoundBackend()
     {
         await clients.All.SendAsync("AskPlayOneMoreRoundFrontend");
