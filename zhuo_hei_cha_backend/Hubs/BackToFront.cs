@@ -15,7 +15,10 @@ public static class BackToFront
         DateTime startTime = DateTime.Now;
         while(!PlayerHubTempData.finishPlay)
             if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 30000)
+            {
+                PlayerHubTempData.finishPlay = false;
                 break;
+            }
         
         PlayerHubTempData.finishPlay = false;
         await client.SendAsync("DisablePlayerButtons");
@@ -36,6 +39,16 @@ public static class BackToFront
     public static async void AskReturnTributeBackend(IClientProxy client)
     {
         await client.SendAsync("AskReturnTributeFrontend");
+
+        DateTime startTime = DateTime.Now;
+        while(!PlayerHubTempData.finishTribute)
+            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 15000)
+            {
+                PlayerHubTempData.finishTribute = false;
+                break;
+            }
+        
+        PlayerHubTempData.finishTribute = false;
     }
 
     public static async Task AskAceGoPublicBackend(IClientProxy client)
@@ -54,11 +67,6 @@ public static class BackToFront
     public static void CreateErrorMessage(IClientProxy client, string errorMessage)
     {
         client.SendAsync("showErrorMessage", errorMessage);
-    }
-
-    public static void TributeReturnNotValidBackend(IClientProxy client)
-    {
-        client.SendAsync("TributeReturnNotValidFrontend");
     }
 
     public static void SendCurrentCardListBackend(IClientProxy client, List<Card> currentCardList)
@@ -97,4 +105,5 @@ public static class BackToFront
     {
         clients.All.SendAsync("ResetStateFrontend");
     }
+
 }

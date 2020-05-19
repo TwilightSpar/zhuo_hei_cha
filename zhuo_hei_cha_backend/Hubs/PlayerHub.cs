@@ -45,15 +45,17 @@ public class PlayerHub: Hub
         }).ToList<object>();
     }
 
-    public async Task ReturnUserHandBackend(List<string> cards)
+    public void ReturnUserHandBackend(List<string> cards)
     {
         var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
         PlayerHubTempData.userHand = formattedCards;
         PlayerHubTempData.finishPlay = true;
     }
-    public static void ReturnTributeBackend(List<Card> cards)
+    public void ReturnTributeBackend(List<string> cards)
     {
-        PlayerHubTempData.returnCards = cards;
+        var formattedCards = cards.Select(cardString => new Card(cardString)).ToList();
+        PlayerHubTempData.returnCards = formattedCards;
+        PlayerHubTempData.finishTribute = true;
     }
 
     public void ReturnPlayOneMoreRoundBackend(bool returnvalue)

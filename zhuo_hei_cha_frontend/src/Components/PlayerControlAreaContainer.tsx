@@ -15,7 +15,8 @@ type IPlayerControlAreaContainerState = {
     selectedHand: Set<string>,
     isAskingBlackAceGoPublic: boolean,
     isCurrentPlayerTurn: boolean,
-    isAskingPlayOneMoreRound: boolean
+    isAskingPlayOneMoreRound: boolean,
+    isAskingReturnTribute: boolean
 }
 
 // A container component for PlayerControlArea that handles the data manipulation
@@ -30,7 +31,8 @@ class PlayerControlAreaContainer extends React.Component<
             selectedHand: new Set(),
             isAskingBlackAceGoPublic: false,
             isCurrentPlayerTurn: false,
-            isAskingPlayOneMoreRound: false
+            isAskingPlayOneMoreRound: false,
+            isAskingReturnTribute: false
         }
     }
 
@@ -39,12 +41,19 @@ class PlayerControlAreaContainer extends React.Component<
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
         this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
+        this.props.conn.on('AskReturnTributeFrontend', this.AskReturnTributeFrontend);
         this.props.conn.on('DisablePlayerButtons', this.DisablePlayerButtons);
         this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
         this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
         this.props.conn.on('AskPlayOneMoreRoundFrontend', this.AskPlayOneMoreRoundFrontend);
         this.props.conn.on('HidePlayOneMoreRoundFrontend', this.HidePlayOneMoreRoundFrontend);
         
+    }
+    AskReturnTributeFrontend = async () =>  {
+        this.setState({
+            ...this.state,
+            isAskingReturnTribute: true
+        });
     }
     
     AskPlayOneMoreRoundFrontend= async () => {
@@ -119,6 +128,15 @@ class PlayerControlAreaContainer extends React.Component<
         })
     }
 
+    // return tribute cards
+    onReturnTributeClick = () => {
+        this.props.conn.invoke('ReturnTributeBackend', Array.from(this.state.selectedHand));
+        this.setState({
+            ...this.state,
+            isAskingReturnTribute: false      // temperory disable button.
+        })
+    }
+
     onSelectCard = (cardName: string, isSelected: boolean) => {
         if (isSelected) {
             this.setState({
@@ -164,10 +182,12 @@ class PlayerControlAreaContainer extends React.Component<
                     onSkipClick={this.onSkipClick}
                     onAceGoPublicClick={this.onAceGoPublicClick}
                     onPlayOneMoreRoundClick = {this.onPlayOneMoreRoundClick}
+                    onReturnTributeClick = {this.onReturnTributeClick}
                     onQuit = {this.onQuit}
                     isAskingBlackAceGoPublic={this.state.isAskingBlackAceGoPublic}
                     isCurrentPlayerTurn={this.state.isCurrentPlayerTurn}
                     isAskingPlayOneMoreRound = {this.state.isAskingPlayOneMoreRound}
+                    isAskingReturnTribute = {this.state.isAskingReturnTribute}
                 />
                 <PokerHand
                     hand={this.state.hand}

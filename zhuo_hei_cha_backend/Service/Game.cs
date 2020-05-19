@@ -65,30 +65,34 @@ public class Game
 
     private void SetTributeList()
     {
-        for (int i = 1; i < finishOrder.Count; i++)
+        for (int i = 0; i < finishOrder.Count; i++)
         {
             tributeList.Add(new List<int>{});
             for (int j = 0; j < finishOrder.Count; j++)
                 tributeList[i].Add(0);
 
         }
-
-        for (int i = 1; i < finishOrder.Count; i++)
+        if(finishOrder.Any(x => x.IsFourTwo()) && !finishOrder[0].IsFourTwo())
+            return;
+        for (int i = 0; i < finishOrder.Count; i++)
         {
             var thisPlayer = finishOrder[i];
             for (int j = i+1; j < finishOrder.Count; j++)
             {
                 var otherPlayer = finishOrder[j];
+                if(finishOrder[i].IsTwoCats())
+                {
+                    tributeList[i][j] = 0;
+                    continue;
+                }
                 if(thisPlayer.IsBlackAce != otherPlayer.IsBlackAce)
                     if(thisPlayer.IsBlackAcePublic || otherPlayer.IsBlackAcePublic)
                     {
                         tributeList[i][j] = 2;
-                        tributeList[j][i] = 2;
                     }
                     else
                     {
                         tributeList[i][j] = 1;
-                        tributeList[j][i] = 1;
                     }
             }
         }
@@ -104,12 +108,8 @@ public class Game
         // consider sotuations that do not need totribute
         // player1.PayTribute(player2) only tribute one card
         // if one person have two black ace
-        if(finishOrder.Any(x => x.IsFourTwo()))
-            return;
         for (int i = 0; i < finishOrder.Count-1; i++)
-        {
-            if(finishOrder[i].IsTwoCats())
-                continue;
+        {            
             var thisPlayer = finishOrder[i];
             for(int j = i+1; j<playerList.Count; j++)
             {
@@ -125,18 +125,17 @@ public class Game
     /// call returnTribute in reverse order
     /// </summary>
     private void ReturnTribute()
-    {
-        if(finishOrder.Any(x => x.IsFourTwo()))
-            return;
-        for (int i = finishOrder.Count-1; i > 0; i++)
+    {        
+        for (int i = finishOrder.Count-1; i > 0; i--)
         {
-            if(finishOrder[i].IsTwoCats())
-                continue;
             var thisPlayer = finishOrder[i];
             for(int j = i-1; j>=0; j--)
             {
                 var otherPlayer = finishOrder[j];
-                otherPlayer.ReturnTribute(thisPlayer, tributeList[i][j]);
+                if(tributeList[j][i] == 0)
+                    continue;
+                otherPlayer.ReturnTribute(thisPlayer, tributeList[j][i]);
+                SendCurrentCardListBackend();
             }
             
         }
@@ -217,26 +216,34 @@ public class Game
         int roundNumber = 1;
         while (true)
         {
-            InitCardList();
-
-            SendCurrentCardListBackend();
-
-            // if(roundNumber != 1)
-            // {
-            //     // alert user that we sill start to pay tribute
-            //     await Task.Delay(5000);
-
-            //     PayTribute();
-
-            //     SendCurrentCardListBackend();
-
-            //     ReturnTribute();
-
-            //     SendCurrentCardListBackend();
-            // }
+            if(roundNumber != 1)
+                SetTributeList();
             
-            finishOrder = new List<Player> {};   // init tributeList
+            foreach(var p in playerList)
+                p.clearAce();
+            
+            InitCardList();
+            SendCurrentCardListBackend();
+            
+            await Task.Delay(5000);
+            if(roundNumber != 1)
+            {
+                // alert user that we sill start to pay tribute
+                foreach(var p in playerList)
+                {
+                    p.PaytributeBegin(finishOrder);                      
+                }
+                await Task.Delay(2000);                
+                PayTribute();
+                SendCurrentCardListBackend();
+
+                ReturnTribute();
+            }
+
             isGameStarted = true;
+
+            finishOrder = new List<Player> {};   // init tributeList
+            PlayerHubTempData.returnCards = new List<Card>{};
             stillPlay = playerList.Select(x => x).ToList();
             PlayerHubTempData.userHand = new List<Card>{};
             await AceGoPublic();
@@ -265,7 +272,6 @@ public class Game
             roundNumber += 1;
             ClearLastHandBackend();
         }
-
 
     }
 
@@ -307,13 +313,17 @@ public class Game
     {
         BackToFront.ResetState();
         foreach(var p in playerList){
-            p.ClearCard();
-            p.clearAce();
+            p.ClearCard();            
         }
            
         stillPlay = new List<Player> { };
-        dealerIndex = 0;
-        playerIndex = 0;
+        for(int i = 0; i<playerList.Count; i++)
+            if(playerList[i].IsBlackAce)
+            {
+                dealerIndex = i;
+                playerIndex = i;
+                break;
+            }
             
     }
 }
