@@ -91,11 +91,6 @@ public static class BackToFront
         clients.All.SendAsync("showAceIdPlayerListFrontend", aceId);
     }
 
-    public static void GameOverBackend(bool blackAceLose)
-    {
-        clients.All.SendAsync("GameOverFrontend", blackAceLose);
-    }
-
     public static void BreakGameBackend()
     {
         clients.All.SendAsync("BreakGameFrontend");

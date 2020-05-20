@@ -15,7 +15,8 @@ const CardDisplayArea: React.FunctionComponent<ICardDisplayArea> = (props) => {
         <div style={cardDisplayAreaStyle}>
             {opponents.map((player, index) =>
                 <div style={{flexBasis: '50%', backgroundColor: tempColors[index]}} key={player.connectionId}>
-                    <label>Cards Remaining: {player.cardCount}</label>
+                    <label style={{paddingLeft: 20}}> Cards Remaining: {player.cardCount}</label>
+                    <div style={{float: "right", paddingRight: 20}}>{player.name}</div>
                     <ReadOnlyPokerHand hand={player.lastHand} />
                 </div>
             )}

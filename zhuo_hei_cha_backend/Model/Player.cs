@@ -201,4 +201,9 @@ public class Player
         var list = finishOrder.Select(o=>o.Name).ToList();
         BackToFront.CreateErrorMessage(_client, String.Join("<- ", list.ToArray()));
     }
+
+    public void GameOverBackend(string message)
+    {
+        BackToFront.CreateErrorMessage(_client, message);
+    }
 }

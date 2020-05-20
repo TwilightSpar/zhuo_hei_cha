@@ -187,17 +187,6 @@ public class Game
 
     private void checkEnded()
     {
-        var group = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x);
-        bool blackAceLose = group.SelectMany(o=>o).ToList()[0];
-        int remainingGroupCount = group.Count();
-        if (remainingGroupCount == 1)
-        {
-            finishOrder.AddRange(stillPlay);
-            stillPlay.Clear();
-            this.isGameStarted = false;
-            BackToFront.GameOverBackend(blackAceLose);
-            return;
-        }
         Player p = playerList[playerIndex];
         if (p.isFinished())
         {
@@ -206,6 +195,30 @@ public class Game
             lastHand = EMPTY_HAND;
             p.PlayerListUpdateBackend(new List<Card>{});
         }
+        
+        var group = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x);
+        bool blackAceLose = group.SelectMany(o=>o).ToList()[0];
+        int remainingGroupCount = group.Count();
+        if (remainingGroupCount == 1)
+        {
+            finishOrder.AddRange(stillPlay);
+            stillPlay.Clear();
+            this.isGameStarted = false;
+            GameOverBackend(blackAceLose);
+            return;
+        }
+        
+    }
+
+    private void GameOverBackend(bool blackAceLose)
+    {
+        string message = "";
+        if(blackAceLose)
+            message = "GameOver,and non-blackAce win";
+        else
+            message = "GameOver,and blackAce escaped";
+        foreach(var p in playerList)
+            p.GameOverBackend(message);
     }
 
     /// <summary>
