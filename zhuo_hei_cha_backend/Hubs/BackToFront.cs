@@ -15,10 +15,18 @@ public static class BackToFront
         DateTime startTime = DateTime.Now;
         while(!PlayerHubTempData.finishPlay)
             if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 30000)
+            {
+                PlayerHubTempData.finishPlay = false;
                 break;
+            }
         
         PlayerHubTempData.finishPlay = false;
-        await client.SendAsync("HidePlayHandButton");
+        await client.SendAsync("DisablePlayerButtons");
+    }
+
+    public static void NotifyOthersBackend()
+    {        
+        clients.All.SendAsync("NotifyOthersFrontend");
     }
 
     public static async Task AskPlayOneMoreRoundBackend()
@@ -31,6 +39,16 @@ public static class BackToFront
     public static async void AskReturnTributeBackend(IClientProxy client)
     {
         await client.SendAsync("AskReturnTributeFrontend");
+
+        DateTime startTime = DateTime.Now;
+        while(!PlayerHubTempData.finishTribute)
+            if(((TimeSpan)(DateTime.Now - startTime)).TotalMilliseconds > 15000)
+            {
+                PlayerHubTempData.finishTribute = false;
+                break;
+            }
+        
+        PlayerHubTempData.finishTribute = false;
     }
 
     public static async Task AskAceGoPublicBackend(IClientProxy client)
@@ -51,11 +69,6 @@ public static class BackToFront
         client.SendAsync("showErrorMessage", errorMessage);
     }
 
-    public static void TributeReturnNotValidBackend(IClientProxy client)
-    {
-        client.SendAsync("TributeReturnNotValidFrontend");
-    }
-
     public static void SendCurrentCardListBackend(IClientProxy client, List<Card> currentCardList)
     {
         var formattedCards = currentCardList.Select(card => card.ToString()).ToList();
@@ -67,10 +80,10 @@ public static class BackToFront
         client.SendAsync("ShowCurrentPlayerTurnFront", currentPlayerIndex);
     }
 
-    public static void PlayerListUpdateBackend(List<Card> userHand, string connectionId)
+    public static void PlayerListUpdateBackend(List<Card> userHand, string connectionId, int cardCount)
     {
         var handString = userHand.Select(c => c.ToString()).ToList();
-        clients.All.SendAsync("PlayerListUpdateFrontend", handString, connectionId);
+        clients.All.SendAsync("PlayerListUpdateFrontend", handString, connectionId, cardCount);
     }
 
     public static void showAceIdPlayerListBackend(string aceId)
@@ -78,13 +91,14 @@ public static class BackToFront
         clients.All.SendAsync("showAceIdPlayerListFrontend", aceId);
     }
 
-    public static void GameOverBackend(bool blackAceLose)
-    {
-        clients.All.SendAsync("GameOverFrontend", blackAceLose);
-    }
-
     public static void BreakGameBackend()
     {
         clients.All.SendAsync("BreakGameFrontend");
     }
+
+    public static void ResetState()
+    {
+        clients.All.SendAsync("ResetStateFrontend");
+    }
+
 }

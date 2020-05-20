@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class Player 
 {
@@ -110,12 +111,15 @@ public class Player
             var userReturn = PlayerHubTempData.returnCards;
         
             if(userReturn.Count != returnNumber)
-                BackToFront.TributeReturnNotValidBackend(_client);
+                BackToFront.CreateErrorMessage(_client, "Tribute Return Not Valid");
             else
                 valid = true;
         }
+        foreach(var card in PlayerHubTempData.returnCards)
+                this._cardsInHand.Remove(card);
         p.AddCards(PlayerHubTempData.returnCards);
         p.OrganizeHand();
+        PlayerHubTempData.returnCards = new List<Card>{};
     }
 
     /// <summary>
@@ -189,6 +193,17 @@ public class Player
 
     public void PlayerListUpdateBackend(List<Card> userHand)
     {
-        BackToFront.PlayerListUpdateBackend(userHand, this.ConnectionId);
+        BackToFront.PlayerListUpdateBackend(userHand, this.ConnectionId, CardCount);
+    }
+
+    public void PaytributeBegin(List<Player> finishOrder)
+    {
+        var list = finishOrder.Select(o=>o.Name).ToList();
+        BackToFront.CreateErrorMessage(_client, String.Join("<- ", list.ToArray()));
+    }
+
+    public void GameOverBackend(string message)
+    {
+        BackToFront.CreateErrorMessage(_client, message);
     }
 }

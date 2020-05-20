@@ -3,7 +3,6 @@ import PlayerControlArea from './PlayerControlArea';
 import GameButtons from './GameButtons';
 import PokerHand from './PokerHand';
 import { HubConnection } from '@aspnet/signalr';
-import _ from 'lodash';
 import PlayerModel from '../Models/PlayerModel';
 
 type IPlayerControlAreaContainerProps = {
@@ -16,12 +15,9 @@ type IPlayerControlAreaContainerState = {
     selectedHand: Set<string>,
     isAskingBlackAceGoPublic: boolean,
     isCurrentPlayerTurn: boolean,
-    isAskingPlayOneMoreRound: boolean
+    isAskingPlayOneMoreRound: boolean,
+    isAskingReturnTribute: boolean
 }
-
-const testCards = _.flatten(_.range(3, 11).map(n => n.toString()).concat('J', 'Q', 'K', 'A', '2').map(n => {
-    return ['C', 'D', 'H', 'S'].map(s => n + s)
-}));
 
 // A container component for PlayerControlArea that handles the data manipulation
 class PlayerControlAreaContainer extends React.Component<
@@ -31,11 +27,12 @@ class PlayerControlAreaContainer extends React.Component<
     constructor(props: IPlayerControlAreaContainerProps) {
         super(props);
         this.state = {
-            hand: testCards,
+            hand: [],
             selectedHand: new Set(),
             isAskingBlackAceGoPublic: false,
             isCurrentPlayerTurn: false,
-            isAskingPlayOneMoreRound: false
+            isAskingPlayOneMoreRound: false,
+            isAskingReturnTribute: false
         }
     }
 
@@ -44,12 +41,19 @@ class PlayerControlAreaContainer extends React.Component<
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
         this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
-        this.props.conn.on('HidePlayHandButton', this.HidePlayHandButton);
+        this.props.conn.on('AskReturnTributeFrontend', this.AskReturnTributeFrontend);
+        this.props.conn.on('DisablePlayerButtons', this.DisablePlayerButtons);
         this.props.conn.on('HideAceGoPublicButton', this.HideAceGoPublicButton);
         this.props.conn.on('SendCurrentCardListFrontend', this.SendCurrentCardListFrontend);
         this.props.conn.on('AskPlayOneMoreRoundFrontend', this.AskPlayOneMoreRoundFrontend);
         this.props.conn.on('HidePlayOneMoreRoundFrontend', this.HidePlayOneMoreRoundFrontend);
         
+    }
+    AskReturnTributeFrontend = async () =>  {
+        this.setState({
+            ...this.state,
+            isAskingReturnTribute: true
+        });
     }
     
     AskPlayOneMoreRoundFrontend= async () => {
@@ -90,7 +94,7 @@ class PlayerControlAreaContainer extends React.Component<
         });
     }
 
-    HidePlayHandButton = () => {
+    DisablePlayerButtons = () => {
         this.setState({
             ...this.state,
             isCurrentPlayerTurn: false
@@ -118,6 +122,19 @@ class PlayerControlAreaContainer extends React.Component<
     // send the hand to backend for validation
     onPlayHandClick = () => {
         this.props.conn.invoke('ReturnUserHandBackend', Array.from(this.state.selectedHand));
+        this.setState({
+            ...this.state,
+            isCurrentPlayerTurn: false      // temperory disable button.
+        })
+    }
+
+    // return tribute cards
+    onReturnTributeClick = () => {
+        this.props.conn.invoke('ReturnTributeBackend', Array.from(this.state.selectedHand));
+        this.setState({
+            ...this.state,
+            isAskingReturnTribute: false      // temperory disable button.
+        })
     }
 
     onSelectCard = (cardName: string, isSelected: boolean) => {
@@ -136,6 +153,10 @@ class PlayerControlAreaContainer extends React.Component<
 
     onSkipClick = () => {
         this.props.conn.invoke('ReturnUserHandBackend', []);
+        this.setState({
+            ...this.state,
+            isCurrentPlayerTurn: false      // temperory disable button.
+        })
     }
     onPlayOneMoreRoundClick = () => {
         this.props.conn.invoke('ReturnPlayOneMoreRoundBackend', true);
@@ -161,10 +182,12 @@ class PlayerControlAreaContainer extends React.Component<
                     onSkipClick={this.onSkipClick}
                     onAceGoPublicClick={this.onAceGoPublicClick}
                     onPlayOneMoreRoundClick = {this.onPlayOneMoreRoundClick}
+                    onReturnTributeClick = {this.onReturnTributeClick}
                     onQuit = {this.onQuit}
                     isAskingBlackAceGoPublic={this.state.isAskingBlackAceGoPublic}
                     isCurrentPlayerTurn={this.state.isCurrentPlayerTurn}
                     isAskingPlayOneMoreRound = {this.state.isAskingPlayOneMoreRound}
+                    isAskingReturnTribute = {this.state.isAskingReturnTribute}
                 />
                 <PokerHand
                     hand={this.state.hand}

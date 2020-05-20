@@ -86,15 +86,4 @@ class Home extends React.Component<{}, IHomeState> {
 
 }
 
-// const Home: React.FunctionComponent<IProps> = () => {
-//     return (
-//         <div className="App">
-//             <header className="App-header">
-
-//                 <SampleComponent />
-//             </header>
-//         </div>
-//     )
-// }
-
 export default Home;

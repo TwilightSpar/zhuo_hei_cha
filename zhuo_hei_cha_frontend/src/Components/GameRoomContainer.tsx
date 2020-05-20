@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
 import GameRoom from './GameRoom';
 import GameCanvas from './GameCanvas';
 import PlayerList from './PlayerList';
@@ -10,7 +10,6 @@ import Alert from 'react-bootstrap/Alert';
 
 interface IGameRoomContainerProps {
     conn: HubConnection
-    // history: History
 }
 
 interface IGameRoomContainerState {
@@ -27,7 +26,7 @@ class GameRoomContainer extends React.Component<
     > {
     constructor(props: IGameRoomContainerProps) {
         super(props);
-
+        console.log("new GameContainer");
         this.state = {
             conn: this.props.conn,
             playerList: [],
@@ -39,18 +38,13 @@ class GameRoomContainer extends React.Component<
 
     componentDidMount() {
         this.initPlayerList();
-
         this.state.conn.on('PlayerListUpdateFrontend', this.PlayerListUpdateFrontend);
-        this.state.conn.on('GameOverFrontend', this.GameOverFrontend);        
+        this.state.conn.on('ResetStateFrontend', this.ResetStateFrontend);
         this.state.conn.on('showErrorMessage', this.showErrorMessage);
         this.state.conn.on('ShowCurrentPlayerTurnFront', this.ShowCurrentPlayerTurnFront);
         this.state.conn.on('showAceIdPlayerListFrontend', this.showAceIdPlayerListFrontend);
-    }
-    GameOverFrontend(blackAceLose: boolean) {
-        if(blackAceLose)
-            alert("GameOver,and non-blackAce win");
-        else
-            alert("GameOver,and blackAce win");
+        
+        console.log(this.state.playerList);
     }
 
     initPlayerList = () => {
@@ -69,12 +63,24 @@ class GameRoomContainer extends React.Component<
         });
     }
 
-    PlayerListUpdateFrontend = (lastHand: string[], lastPlayerId: string) => {
+    PlayerListUpdateFrontend = (lastHand: string[], lastPlayerId: string, cardCount: number) => {
         this.setState({
             ...this.state,
-            playerList: this.state.playerList.map(p => {                
-                if (p.connectionId === lastPlayerId)
+            playerList: this.state.playerList.map(p => {
+                if (p.connectionId === lastPlayerId) {
                     p.lastHand = lastHand;
+                    p.cardCount = cardCount;
+                }
+                return p;
+            })
+        })
+    }
+
+    ResetStateFrontend = () => {
+        this.setState({
+            ...this.state,
+            playerList: this.state.playerList.map((p: PlayerModel) => {
+                p.isBlackAcePublic = false;
                 return p;
             })
         })

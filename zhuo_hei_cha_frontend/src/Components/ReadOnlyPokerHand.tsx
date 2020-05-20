@@ -1,4 +1,4 @@
-import React, { CSSProperties, Fragment } from 'react';
+import React, { CSSProperties } from 'react';
 import PokerCard, { CARD_HEIGHT, CARD_WIDTH, CARD_WIDTH_OVERLAPPED } from './PokerCard';
 import { getImageStyle } from './PokerHand';
 
@@ -31,7 +31,6 @@ const getReadOnlyPokerHandStyle = (n: number): CSSProperties => {
         width: (n - 1) * CARD_WIDTH_OVERLAPPED + CARD_WIDTH,
         height: '100%',
         position: 'relative',
-        // backgroundColor: 'blue',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 10,

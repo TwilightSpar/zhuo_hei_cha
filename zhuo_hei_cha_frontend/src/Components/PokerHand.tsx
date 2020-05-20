@@ -36,8 +36,7 @@ const getImageStyle = (index: number): CSSProperties => {
         position: 'absolute',
         display: 'inline',
         whiteSpace: 'nowrap',
-        top: 0,
-        // backgroundColor: 'orange'
+        top: 0
     }
 };
 
@@ -46,7 +45,6 @@ const getPokerHandStyle = (n: number): CSSProperties => {
         width: (n - 1) * CARD_WIDTH_OVERLAPPED + CARD_WIDTH,
         height: '100%',
         position: 'relative',
-        // backgroundColor: 'blue',
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 25,

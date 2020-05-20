@@ -1,4 +1,3 @@
-
 export interface IPlayerObject{
     connectionId: string
     name: string
