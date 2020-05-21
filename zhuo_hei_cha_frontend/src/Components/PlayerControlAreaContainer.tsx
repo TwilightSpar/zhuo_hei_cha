@@ -39,6 +39,7 @@ class PlayerControlAreaContainer extends React.Component<
     componentDidMount() {
         // register methods used by this component
         this.props.conn.on('HandIsValidFrontend', this.HandIsValidFrontend);
+        this.props.conn.on('ReturnIsValidFrontend', this.ReturnIsValidFrontend);        
         this.props.conn.on('AskAceGoPublicFrontend', this.AskAceGoPublicFrontend);
         this.props.conn.on('AskForPlayFrontend', this.AskForPlayFrontend);
         this.props.conn.on('AskReturnTributeFrontend', this.AskReturnTributeFrontend);
@@ -79,6 +80,8 @@ class PlayerControlAreaContainer extends React.Component<
 
     // to be called by backend if hand validation succeeded
     // if validation failed, backend will call 
+    // The HandIsValidFrontend and ReturnIsValidFrontend is very important. 
+    // they set selectedHand to empty, so selected can be null in the next time.
     HandIsValidFrontend = () => {
         const newHand = this.state.hand.filter(card => !this.state.selectedHand.has(card));
         this.setState({
@@ -86,6 +89,15 @@ class PlayerControlAreaContainer extends React.Component<
             selectedHand: new Set()
         });
     }
+
+    ReturnIsValidFrontend = () => {
+        const newHand = this.state.hand.filter(card => !this.state.selectedHand.has(card));
+        this.setState({
+            hand: newHand,
+            selectedHand: new Set()
+        });
+    }
+    
 
     HideAceGoPublicButton = () => {
         this.setState({

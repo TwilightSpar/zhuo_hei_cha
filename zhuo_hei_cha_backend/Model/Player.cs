@@ -113,10 +113,13 @@ public class Player
             if(userReturn.Count != returnNumber)
                 BackToFront.CreateErrorMessage(_client, "Tribute Return Not Valid");
             else
+            {
+                BackToFront.ReturnIsValidBackend(_client);
                 valid = true;
+            }
         }
         foreach(var card in PlayerHubTempData.returnCards)
-                this._cardsInHand.Remove(card);
+            this._cardsInHand.Remove(card);
         p.AddCards(PlayerHubTempData.returnCards);
         p.OrganizeHand();
         PlayerHubTempData.returnCards = new List<Card>{};
