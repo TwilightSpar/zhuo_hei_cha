@@ -80,7 +80,7 @@ public class Game
             for (int j = i+1; j < finishOrder.Count; j++)
             {
                 var otherPlayer = finishOrder[j];
-                if(finishOrder[i].IsTwoCats())
+                if(otherPlayer.IsTwoCats())
                 {
                     tributeList[i][j] = 0;
                     continue;

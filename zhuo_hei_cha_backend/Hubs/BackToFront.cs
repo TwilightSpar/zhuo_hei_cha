@@ -64,6 +64,11 @@ public static class BackToFront
         client.SendAsync("HandIsValidFrontend");
     }
 
+    public static void ReturnIsValidBackend(IClientProxy client)
+    {
+        client.SendAsync("ReturnIsValidFrontend");
+    }
+
     public static void CreateErrorMessage(IClientProxy client, string errorMessage)
     {
         client.SendAsync("showErrorMessage", errorMessage);
