@@ -42,8 +42,7 @@ public class Game
         for (int i = 0; i < playerList.Count; i++)
         {
             playerList[i].AddCards(deckForUser[i]);
-            playerList[i].OrganizeHand();
-            playerList[i].CheckAce();
+            playerList[i].OrganizeHand();            
         }
 
     }
@@ -193,7 +192,7 @@ public class Game
             finishOrder.Add(p);
             stillPlay.Remove(p);
             lastHand = EMPTY_HAND;
-            p.PlayerListUpdateBackend(new List<Card>{});
+            // p.PlayerListUpdateBackend(new List<Card>{});  other can see his/her last hands
         }
         
         var group = stillPlay.Select(x => x.IsBlackAce).GroupBy(x => x);
@@ -229,13 +228,11 @@ public class Game
         int roundNumber = 1;
         while (true)
         {
+            
+            InitCardList();
             if(roundNumber != 1)
                 SetTributeList();
             
-            foreach(var p in playerList)
-                p.clearAce();
-            
-            InitCardList();
             SendCurrentCardListBackend();
             
             await Task.Delay(5000);
@@ -316,6 +313,7 @@ public class Game
         foreach(var p in playerList)
         {
             p.OrganizeHand();
+            p.CheckAce();            
             p.CheckAce();
             p.SendCurrentCardListBackend();
 
@@ -337,6 +335,7 @@ public class Game
                 playerIndex = i;
                 break;
             }
-            
+        
+        tributeList = new List<List<int>>{};
     }
 }
